@@ -1,0 +1,424 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bffda79e5a9aa8b4887ba28b6d00594e, type: 3}
+  m_Name: SkillDatabase
+  m_EditorClassIdentifier: 
+  skills:
+  - skillName: Fireball
+    skillIcon: {fileID: 21300000, guid: 29e8af9dcf60ea3459944644c3cd7c7e, type: 3}
+    baseDamage: 1
+    damagePerLevel: 0.2
+    baseHeal: 0
+    healPerLevel: 0
+    cooldown: 2
+    castTime: 2
+    manaCost: 15
+    manaCostPerLevel: 15
+    skillLevel: 0
+    skillMaxLevel: 5
+    totalHeal: 0
+    totalDamage: 0
+    addCrit: 0
+    addDodge: 0
+    isPassive: 0
+    infoText: 'Deals damage 0,8 * MATK (<color=red>4,8</color>)
+
+      Increase damage
+      20% per level
+
+      Increase manacost <color=#1C81CF>15</color> per level'
+    element: 0
+    spellType: 0
+    skillType: 2
+    isLearned: 1
+    canInterrup: 0
+  - skillName: Frostbolt
+    skillIcon: {fileID: 21300000, guid: 0e41490ac768a7740a413995072820e4, type: 3}
+    baseDamage: 1.5
+    damagePerLevel: 0.3
+    baseHeal: 0
+    healPerLevel: 0
+    cooldown: 3
+    castTime: 2
+    manaCost: 25
+    manaCostPerLevel: 25
+    skillLevel: 0
+    skillMaxLevel: 5
+    totalHeal: 0
+    totalDamage: 0
+    addCrit: 0
+    addDodge: 0
+    isPassive: 0
+    infoText: 'Deals damage 1,2 * MATK (<color=red>7,2</color>)
+
+      Increase damage
+      30% per level
+
+      Increase manacost <color=#1C81CF>25</color> per level'
+    element: 1
+    spellType: 0
+    skillType: 2
+    isLearned: 1
+    canInterrup: 0
+  - skillName: Chaosbolt
+    skillIcon: {fileID: 21300000, guid: b8bfd2170e096904b8a4f2102b842a41, type: 3}
+    baseDamage: 1.6
+    damagePerLevel: 0.3
+    baseHeal: 0
+    healPerLevel: 0
+    cooldown: 4
+    castTime: 3
+    manaCost: 25
+    manaCostPerLevel: 25
+    skillLevel: 0
+    skillMaxLevel: 5
+    totalHeal: 0
+    totalDamage: 0
+    addCrit: 0
+    addDodge: 0
+    isPassive: 0
+    infoText: 'Deals damage 1,3 * MATK (<color=red>7,8</color>)
+
+      Increase damage
+      30% per level
+
+      Increase manacost <color=#1C81CF>25</color> per level'
+    element: 4
+    spellType: 0
+    skillType: 2
+    isLearned: 1
+    canInterrup: 0
+  - skillName: Improved Accuracy
+    skillIcon: {fileID: 21300000, guid: ef6f834e2225c5b4382023ca8532b16b, type: 3}
+    baseDamage: 0
+    damagePerLevel: 0
+    baseHeal: 0
+    healPerLevel: 0
+    cooldown: 0
+    castTime: 0
+    manaCost: 0
+    manaCostPerLevel: 0
+    skillLevel: 0
+    skillMaxLevel: 10
+    totalHeal: 0
+    totalDamage: 0
+    addCrit: 9
+    addDodge: 0
+    isPassive: 1
+    infoText: 'Deals damage 0 * MATK (<color=red>0</color>)
+
+      Increase damage
+      0% per level
+
+      Increase manacost <color=#1C81CF>0</color> per level'
+    element: 6
+    spellType: 0
+    skillType: 3
+    isLearned: 0
+    canInterrup: 0
+  - skillName: Tiger Reflexes
+    skillIcon: {fileID: 21300000, guid: 2a635a453f2a720498f5fe290c979140, type: 3}
+    baseDamage: 0
+    damagePerLevel: 0
+    baseHeal: 0
+    healPerLevel: 0
+    cooldown: 0
+    castTime: 0
+    manaCost: 0
+    manaCostPerLevel: 0
+    skillLevel: 0
+    skillMaxLevel: 10
+    totalHeal: 0
+    totalDamage: 0
+    addCrit: 0
+    addDodge: 10
+    isPassive: 1
+    infoText: 
+    element: 7
+    spellType: 0
+    skillType: 3
+    isLearned: 0
+    canInterrup: 0
+  - skillName: Heal
+    skillIcon: {fileID: 21300000, guid: 82e106d18cfcea642a5fdbdcc72f015b, type: 3}
+    baseDamage: 0
+    damagePerLevel: 0
+    baseHeal: 20
+    healPerLevel: 0.2
+    cooldown: 4
+    castTime: 2
+    manaCost: 20
+    manaCostPerLevel: 20
+    skillLevel: 0
+    skillMaxLevel: 5
+    totalHeal: 0
+    totalDamage: 0
+    addCrit: 0
+    addDodge: 0
+    isPassive: 0
+    infoText: "Restores 18,8 * MATK (<color=green>18,8</color> health)\nIncrease
+      healing 20% of MATK per skill level \nIncrease manacost <color=#1C81CF>20</color>
+      per level"
+    element: 5
+    spellType: 1
+    skillType: 2
+    isLearned: 0
+    canInterrup: 0
+  - skillName: Lighting Bolt
+    skillIcon: {fileID: 21300000, guid: 51f771c76ccdea54187db502a06b2f3f, type: 3}
+    baseDamage: 2
+    damagePerLevel: 0.5
+    baseHeal: 0
+    healPerLevel: 0
+    cooldown: 25
+    castTime: 5
+    manaCost: 40
+    manaCostPerLevel: 40
+    skillLevel: 0
+    skillMaxLevel: 5
+    totalHeal: 0
+    totalDamage: 0
+    addCrit: 0
+    addDodge: 0
+    isPassive: 0
+    infoText: 'Deals damage 1,5 * MATK (<color=red>9</color>)
+
+      Increase damage
+      50% per level
+
+      Increase manacost <color=#1C81CF>40</color> per level'
+    element: 3
+    spellType: 0
+    skillType: 2
+    isLearned: 0
+    canInterrup: 0
+  - skillName: Poison Touch
+    skillIcon: {fileID: 21300000, guid: 0e782a9c00e4cf44da101fae69787263, type: 3}
+    baseDamage: 0.4
+    damagePerLevel: 0.2
+    baseHeal: 0
+    healPerLevel: 0
+    cooldown: 1
+    castTime: 1
+    manaCost: 5
+    manaCostPerLevel: 5
+    skillLevel: 0
+    skillMaxLevel: 5
+    totalHeal: 0
+    totalDamage: 0
+    addCrit: 0
+    addDodge: 0
+    isPassive: 0
+    infoText: 'Deals damage 0,2 * MATK (<color=red>1,2</color>)
+
+      Increase damage
+      20% per level
+
+      Increase manacost <color=#1C81CF>5</color> per level'
+    element: 2
+    spellType: 0
+    skillType: 2
+    isLearned: 0
+    canInterrup: 0
+  - skillName: Burning Heart
+    skillIcon: {fileID: 21300000, guid: 531ba51ddfe562546abeb0828e6d1ee4, type: 3}
+    baseDamage: 0.5
+    damagePerLevel: 0.2
+    baseHeal: 0
+    healPerLevel: 0
+    cooldown: 5
+    castTime: 1
+    manaCost: 6
+    manaCostPerLevel: 6
+    skillLevel: 0
+    skillMaxLevel: 5
+    totalHeal: 0
+    totalDamage: 0
+    addCrit: 0
+    addDodge: 0
+    isPassive: 0
+    infoText: 'Deals damage 0,3 * MATK (<color=red>1,8</color>)
+
+      Increase damage
+      20% per level
+
+      Increase manacost <color=#1C81CF>6</color> per level'
+    element: 0
+    spellType: 0
+    skillType: 2
+    isLearned: 0
+    canInterrup: 0
+  - skillName: Eearth Spikes
+    skillIcon: {fileID: 21300000, guid: 21c0a5e8603a28941bd58cecff0b8be0, type: 3}
+    baseDamage: 1.6
+    damagePerLevel: 0.5
+    baseHeal: 0
+    healPerLevel: 0
+    cooldown: 5
+    castTime: 4
+    manaCost: 12
+    manaCostPerLevel: 12
+    skillLevel: 0
+    skillMaxLevel: 5
+    totalHeal: 0
+    totalDamage: 0
+    addCrit: 0
+    addDodge: 0
+    isPassive: 0
+    infoText: 'Deals damage 1,1 * MATK (<color=red>6,6</color>)
+
+      Increase damage
+      50% per level
+
+      Increase manacost <color=#1C81CF>12</color> per level'
+    element: 2
+    spellType: 0
+    skillType: 2
+    isLearned: 0
+    canInterrup: 0
+  - skillName: Mending Leafs
+    skillIcon: {fileID: 21300000, guid: 8a96c3b8bdce6b5439318137d02a1060, type: 3}
+    baseDamage: 0
+    damagePerLevel: 0
+    baseHeal: 50
+    healPerLevel: 25
+    cooldown: 25
+    castTime: 3
+    manaCost: 20
+    manaCostPerLevel: 20
+    skillLevel: 0
+    skillMaxLevel: 5
+    totalHeal: 0
+    totalDamage: 0
+    addCrit: 0
+    addDodge: 0
+    isPassive: 0
+    infoText: "Restores -100 * MATK (<color=green>-100</color> health)\nIncrease
+      healing 20% of MATK per skill level \nIncrease manacost <color=#1C81CF>20</color>
+      per level"
+    element: 2
+    spellType: 1
+    skillType: 2
+    isLearned: 0
+    canInterrup: 0
+  - skillName: Flame Shock
+    skillIcon: {fileID: 21300000, guid: b1e7ddba9686e764e87b228652221a61, type: 3}
+    baseDamage: 0.5
+    damagePerLevel: 0.1
+    baseHeal: 0
+    healPerLevel: 0
+    cooldown: 2
+    castTime: 1
+    manaCost: 15
+    manaCostPerLevel: 15
+    skillLevel: 0
+    skillMaxLevel: 5
+    totalHeal: 0
+    totalDamage: 0
+    addCrit: 0
+    addDodge: 0
+    isPassive: 0
+    infoText: 'Deals damage 0,4 * MATK (<color=red>2,4</color>)
+
+      Increase damage
+      10% per level
+
+      Increase manacost <color=#1C81CF>15</color> per level'
+    element: 0
+    spellType: 0
+    skillType: 0
+    isLearned: 1
+    canInterrup: 0
+  - skillName: Double Strike
+    skillIcon: {fileID: 21300000, guid: b2dfe90da0359874bbcb4a11f26103bb, type: 3}
+    baseDamage: 0.6
+    damagePerLevel: 0.1
+    baseHeal: 0
+    healPerLevel: 0
+    cooldown: 10
+    castTime: 1
+    manaCost: 5
+    manaCostPerLevel: 5
+    skillLevel: 0
+    skillMaxLevel: 5
+    totalHeal: 0
+    totalDamage: 0
+    addCrit: 0
+    addDodge: 0
+    isPassive: 0
+    infoText: 'Deals damage 0,5 * MATK (<color=red>3</color>)
+
+      Increase damage
+      10% per level
+
+      Increase manacost <color=#1C81CF>5</color> per level'
+    element: 6
+    spellType: 0
+    skillType: 0
+    isLearned: 1
+    canInterrup: 0
+  - skillName: Basic Attack
+    skillIcon: {fileID: 21300000, guid: 0cd68d283806ee9409c19bdf7f799d26, type: 3}
+    baseDamage: 1
+    damagePerLevel: 0
+    baseHeal: 0
+    healPerLevel: 0
+    cooldown: 0
+    castTime: 0
+    manaCost: 0
+    manaCostPerLevel: 0
+    skillLevel: 0
+    skillMaxLevel: 1
+    totalHeal: 0
+    totalDamage: 0
+    addCrit: 0
+    addDodge: 0
+    isPassive: 0
+    infoText: 'Deals damage 1 * MATK (<color=red>6</color>)
+
+      Increase damage
+      0% per level
+
+      Increase manacost <color=#1C81CF>0</color> per level'
+    element: 6
+    spellType: 0
+    skillType: 0
+    isLearned: 1
+    canInterrup: 0
+  - skillName: Fire Shock
+    skillIcon: {fileID: 21300000, guid: bf42194757fbab949b845a3838f1d8ec, type: 3}
+    baseDamage: 5
+    damagePerLevel: 1
+    baseHeal: 0
+    healPerLevel: 0
+    cooldown: 25
+    castTime: 0
+    manaCost: 20
+    manaCostPerLevel: 20
+    skillLevel: 1
+    skillMaxLevel: 5
+    totalHeal: 0
+    totalDamage: 0
+    addCrit: 0
+    addDodge: 0
+    isPassive: 0
+    infoText: 'Deals damage 5 * MATK (<color=red>30</color>)
+
+      Increase damage
+      100% per level
+
+      Increase manacost <color=#1C81CF>20</color> per level'
+    element: 0
+    spellType: 0
+    skillType: 2
+    isLearned: 1
+    canInterrup: 0

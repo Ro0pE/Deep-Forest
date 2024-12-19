@@ -1,0 +1,17 @@
+# Unity-väliaikaiset tiedostot
+[Ll]ibrary/
+[Tt]emp/
+[Bb]uild/
+
+UserSettings/
+
+# Unity-kansioiden piilotiedostot
+*/.DS_Store
+*/.vs/
+
+# Pakatut tiedostot
+*.zip
+*.rar
+*.7z
+*.tar.gz
+

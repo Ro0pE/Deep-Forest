@@ -1,0 +1,32 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2013/05/nuspec.xsd">
+  <metadata>
+    <id>Google.Apis.Auth.Mvc</id>
+    <version>1.62.0</version>
+    <title>Google APIs Auth MVC Extensions</title>
+    <authors>Google LLC</authors>
+    <license type="expression">Apache-2.0</license>
+    <licenseUrl>https://licenses.nuget.org/Apache-2.0</licenseUrl>
+    <icon>NuGetIcon.png</icon>
+    <projectUrl>https://github.com/googleapis/google-api-dotnet-client</projectUrl>
+    <iconUrl>https://www.gstatic.com/images/branding/product/1x/google_developers_64dp.png</iconUrl>
+    <description>The Google APIs Client Library is a runtime client for working with Google Services.
+
+The ASP.NET MVC extension library contains an auth controller and an authorization code MVC App to make the OAuth2 "dance" easier.
+
+Supported Platforms:
+- .NET Framework 4.5+</description>
+    <copyright>Copyright 2021 Google LLC</copyright>
+    <tags>Google</tags>
+    <repository type="git" url="https://github.com/googleapis/google-api-dotnet-client" />
+    <dependencies>
+      <group targetFramework=".NETFramework4.5">
+        <dependency id="Google.Apis.Auth" version="1.62.0" exclude="Build,Analyzers" />
+        <dependency id="Microsoft.AspNet.Mvc" version="5.2.9" exclude="Build,Analyzers" />
+      </group>
+    </dependencies>
+    <frameworkAssemblies>
+      <frameworkAssembly assemblyName="System.Web" targetFramework=".NETFramework4.5" />
+    </frameworkAssemblies>
+  </metadata>
+</package>

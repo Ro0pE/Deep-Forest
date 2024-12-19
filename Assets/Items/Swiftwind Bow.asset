@@ -1,0 +1,45 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0926f471f7d86ed4d801d3e8e04b39ea, type: 3}
+  m_Name: Swiftwind Bow
+  m_EditorClassIdentifier: 
+  itemName: Swiftwind Bow
+  icon: {fileID: 21300000, guid: 1899a8fedf752f84896db339a96d716c, type: 3}
+  dropChance: 0
+  isStackable: 0
+  quantity: -12
+  sellPrice: 0
+  infoText: A bow so light and nimble, it feels like an extension of your own agility.
+    Perfect for swift strikes and evasive maneuvers
+  usageText: 
+  slot: 11
+  type: 2
+  model: 1
+  element: 8
+  modelPrefab: {fileID: 1108481198713282363, guid: ddb7fbc6b1e20a647a427928da1c47c7, type: 3}
+  damageValue: 0
+  magickDamageValue: 0
+  weaponAttackSpeed: 0
+  strValue: 0
+  vitValue: 0
+  intValue: 0
+  spiritValue: 0
+  agiValue: 300
+  hpRegValue: 0
+  spRegValue: 0
+  critValue: 0
+  dodgeValue: 0
+  castSpeedValue: 0
+  defValue: 0
+  requiredLevel: 0
+  stackSize: 1
+  rarity: 4

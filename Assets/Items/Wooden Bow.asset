@@ -1,0 +1,44 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0926f471f7d86ed4d801d3e8e04b39ea, type: 3}
+  m_Name: Wooden Bow
+  m_EditorClassIdentifier: 
+  itemName: Wooden Bow
+  icon: {fileID: 21300000, guid: 238c12f37604e4d47b503a5e603dc967, type: 3}
+  dropChance: 55
+  isStackable: 0
+  quantity: -86
+  sellPrice: 15
+  infoText: A simple wooden bow, reliable for long-range attacks.
+  usageText: 
+  slot: 11
+  type: 2
+  model: 1
+  element: 6
+  modelPrefab: {fileID: 3035005517513700007, guid: 97e4c3610a23b4e439ca4744bcdd4fc2, type: 3}
+  damageValue: 4
+  magickDamageValue: 0
+  weaponAttackSpeed: 2
+  strValue: 0
+  vitValue: 0
+  intValue: 0
+  spiritValue: 0
+  agiValue: 0
+  hpRegValue: 0
+  spRegValue: 0
+  critValue: 0
+  dodgeValue: 0
+  castSpeedValue: 0
+  defValue: 0
+  requiredLevel: 0
+  stackSize: 1
+  rarity: 0
