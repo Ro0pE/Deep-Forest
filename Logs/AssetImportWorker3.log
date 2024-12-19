@@ -388,3 +388,198 @@ Start importing Assets/Matthew Guz/Spell Area of Effect FREE/Prefab/AoE Stars.pr
  -> (artifact id: '939071d7f6be6f6e8b74b5a8c3e004a7') in 0.049808 seconds
 Number of updated asset objects reloaded before import = 0
 Number of asset objects unloaded after import = 49
+========================================================================
+Received Import Request.
+  Time since last request: 2429.349214 seconds.
+  path: Assets/6000FantasyIcons/ArmorIcons/ArmorSet_Icons/Tabards/Tabard_12.png
+  artifactKey: Guid(e6c2d61c85443d84b8fd237d2d7f218c) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/6000FantasyIcons/ArmorIcons/ArmorSet_Icons/Tabards/Tabard_12.png using Guid(e6c2d61c85443d84b8fd237d2d7f218c) Importer(815301076,1909f56bfc062723c751e8b465ee728b) [PhysX] Initialized MultithreadedTaskDispatcher with 24 workers.
+[PhysX] Initialized MultithreadedTaskDispatcher with 24 workers.
+ -> (artifact id: '4cbabcfca3fec309391f88bd019aa5bc') in 0.015173 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 3
+========================================================================
+Received Import Request.
+  Time since last request: 0.000020 seconds.
+  path: Assets/6000FantasyIcons/ArmorIcons/ArmorSet_Icons/Tabards/Tabard_15.png
+  artifactKey: Guid(94eb749f157e20a4a83487a8fd81bc43) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/6000FantasyIcons/ArmorIcons/ArmorSet_Icons/Tabards/Tabard_15.png using Guid(94eb749f157e20a4a83487a8fd81bc43) Importer(815301076,1909f56bfc062723c751e8b465ee728b) [PhysX] Initialized MultithreadedTaskDispatcher with 24 workers.
+[PhysX] Initialized MultithreadedTaskDispatcher with 24 workers.
+ -> (artifact id: 'fa5886e45db6db6b4f544ed0015c0697') in 0.014838 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 3
+========================================================================
+Received Import Request.
+  Time since last request: 0.000022 seconds.
+  path: Assets/6000FantasyIcons/ArmorIcons/ArmorSet_Icons/Tabards/Tabard_16.png
+  artifactKey: Guid(ad4de6de382bb5542b890692da34f9df) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/6000FantasyIcons/ArmorIcons/ArmorSet_Icons/Tabards/Tabard_16.png using Guid(ad4de6de382bb5542b890692da34f9df) Importer(815301076,1909f56bfc062723c751e8b465ee728b) [PhysX] Initialized MultithreadedTaskDispatcher with 24 workers.
+[PhysX] Initialized MultithreadedTaskDispatcher with 24 workers.
+ -> (artifact id: '2e0c19ec5a34b3139d14801c2845bd9c') in 0.016305 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 3
+========================================================================
+Received Import Request.
+  Time since last request: 0.000024 seconds.
+  path: Assets/6000FantasyIcons/ArmorIcons/ArmorSet_Icons/Tabards/Tabard_21.png
+  artifactKey: Guid(f45d8419c035d5c449869fa07671bc20) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/6000FantasyIcons/ArmorIcons/ArmorSet_Icons/Tabards/Tabard_21.png using Guid(f45d8419c035d5c449869fa07671bc20) Importer(815301076,1909f56bfc062723c751e8b465ee728b) [PhysX] Initialized MultithreadedTaskDispatcher with 24 workers.
+[PhysX] Initialized MultithreadedTaskDispatcher with 24 workers.
+ -> (artifact id: 'c528705cb62f15cd62e5b0f41eb6ba30') in 0.016563 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 3
+========================================================================
+Received Import Request.
+  Time since last request: 0.000026 seconds.
+  path: Assets/6000FantasyIcons/ArmorIcons/ArmorSet_Icons/Tabards/Tabard_20.png
+  artifactKey: Guid(ee1c4d5d1e9204f409a3eed338f87486) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/6000FantasyIcons/ArmorIcons/ArmorSet_Icons/Tabards/Tabard_20.png using Guid(ee1c4d5d1e9204f409a3eed338f87486) Importer(815301076,1909f56bfc062723c751e8b465ee728b) [PhysX] Initialized MultithreadedTaskDispatcher with 24 workers.
+[PhysX] Initialized MultithreadedTaskDispatcher with 24 workers.
+ -> (artifact id: '630c2ccbd6b59c7b40d8442cc72a9ab5') in 0.014693 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 3
+========================================================================
+Received Import Request.
+  Time since last request: 0.000019 seconds.
+  path: Assets/6000FantasyIcons/ArmorIcons/ArmorSet_Icons/Tabards/Tabard_25.png
+  artifactKey: Guid(f940f340f2b8d1442aa47ccb4f4619fe) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/6000FantasyIcons/ArmorIcons/ArmorSet_Icons/Tabards/Tabard_25.png using Guid(f940f340f2b8d1442aa47ccb4f4619fe) Importer(815301076,1909f56bfc062723c751e8b465ee728b) [PhysX] Initialized MultithreadedTaskDispatcher with 24 workers.
+[PhysX] Initialized MultithreadedTaskDispatcher with 24 workers.
+ -> (artifact id: '577de9235b9196a6482ad514e8188468') in 0.014210 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 3
+========================================================================
+Received Import Request.
+  Time since last request: 0.000020 seconds.
+  path: Assets/6000FantasyIcons/ArmorIcons/ArmorSet_Icons/Tabards/Tabard_30.png
+  artifactKey: Guid(9ed4506acd5e00944be82462cf600bb5) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/6000FantasyIcons/ArmorIcons/ArmorSet_Icons/Tabards/Tabard_30.png using Guid(9ed4506acd5e00944be82462cf600bb5) Importer(815301076,1909f56bfc062723c751e8b465ee728b) [PhysX] Initialized MultithreadedTaskDispatcher with 24 workers.
+[PhysX] Initialized MultithreadedTaskDispatcher with 24 workers.
+ -> (artifact id: '0b130e95335f367e1cbddfa3477d78ff') in 0.014856 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 3
+========================================================================
+Received Import Request.
+  Time since last request: 0.000022 seconds.
+  path: Assets/6000FantasyIcons/ArmorIcons/ArmorSet_Icons/Tabards/Tabard_32.png
+  artifactKey: Guid(05d95277fceb4204193fb906bb04d344) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/6000FantasyIcons/ArmorIcons/ArmorSet_Icons/Tabards/Tabard_32.png using Guid(05d95277fceb4204193fb906bb04d344) Importer(815301076,1909f56bfc062723c751e8b465ee728b) [PhysX] Initialized MultithreadedTaskDispatcher with 24 workers.
+[PhysX] Initialized MultithreadedTaskDispatcher with 24 workers.
+ -> (artifact id: '8c5257e552a5ff64afc9b68b738a3c27') in 0.015359 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 3
+========================================================================
+Received Import Request.
+  Time since last request: 0.000020 seconds.
+  path: Assets/6000FantasyIcons/ArmorIcons/ArmorSet_Icons/Tabards/Tabard_34.png
+  artifactKey: Guid(9f8c0c5b5d76edb42aacdf5c6d4ae136) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/6000FantasyIcons/ArmorIcons/ArmorSet_Icons/Tabards/Tabard_34.png using Guid(9f8c0c5b5d76edb42aacdf5c6d4ae136) Importer(815301076,1909f56bfc062723c751e8b465ee728b) [PhysX] Initialized MultithreadedTaskDispatcher with 24 workers.
+[PhysX] Initialized MultithreadedTaskDispatcher with 24 workers.
+ -> (artifact id: 'b189a6a56d21048613c4a438b6d13677') in 0.015697 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 3
+========================================================================
+Received Import Request.
+  Time since last request: 0.000018 seconds.
+  path: Assets/6000FantasyIcons/ArmorIcons/ArmorSet_Icons/Tabards/Tabard_37.png
+  artifactKey: Guid(a87a46678c95aed499f524e8ecc0e422) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/6000FantasyIcons/ArmorIcons/ArmorSet_Icons/Tabards/Tabard_37.png using Guid(a87a46678c95aed499f524e8ecc0e422) Importer(815301076,1909f56bfc062723c751e8b465ee728b) [PhysX] Initialized MultithreadedTaskDispatcher with 24 workers.
+[PhysX] Initialized MultithreadedTaskDispatcher with 24 workers.
+ -> (artifact id: 'de03d0575297ceb22f2c3d917b65d44d') in 0.014243 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 3
+========================================================================
+Received Import Request.
+  Time since last request: 0.000024 seconds.
+  path: Assets/6000FantasyIcons/ArmorIcons/ArmorSet_Icons/Tabards/Tabard_41.png
+  artifactKey: Guid(965ad8e075bcb764caa5e7a62b92873f) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/6000FantasyIcons/ArmorIcons/ArmorSet_Icons/Tabards/Tabard_41.png using Guid(965ad8e075bcb764caa5e7a62b92873f) Importer(815301076,1909f56bfc062723c751e8b465ee728b) [PhysX] Initialized MultithreadedTaskDispatcher with 24 workers.
+[PhysX] Initialized MultithreadedTaskDispatcher with 24 workers.
+ -> (artifact id: 'e5b4c77057ea3ca574557eda03c4d745') in 0.014111 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 3
+========================================================================
+Received Import Request.
+  Time since last request: 0.000043 seconds.
+  path: Assets/6000FantasyIcons/ArmorIcons/ArmorSet_Icons/Tabards/Tabard_42.png
+  artifactKey: Guid(c8745108115fc524abf754c2e0b285f9) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/6000FantasyIcons/ArmorIcons/ArmorSet_Icons/Tabards/Tabard_42.png using Guid(c8745108115fc524abf754c2e0b285f9) Importer(815301076,1909f56bfc062723c751e8b465ee728b) [PhysX] Initialized MultithreadedTaskDispatcher with 24 workers.
+[PhysX] Initialized MultithreadedTaskDispatcher with 24 workers.
+ -> (artifact id: '73af0e21bf8c542f87e2e1517015eff3') in 0.016387 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 3
+========================================================================
+Received Import Request.
+  Time since last request: 0.000023 seconds.
+  path: Assets/6000FantasyIcons/ArmorIcons/ArmorSet_Icons/Tabards/Tabard_48.png
+  artifactKey: Guid(d27025315831e2345a18e6160d1aff30) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/6000FantasyIcons/ArmorIcons/ArmorSet_Icons/Tabards/Tabard_48.png using Guid(d27025315831e2345a18e6160d1aff30) Importer(815301076,1909f56bfc062723c751e8b465ee728b) [PhysX] Initialized MultithreadedTaskDispatcher with 24 workers.
+[PhysX] Initialized MultithreadedTaskDispatcher with 24 workers.
+ -> (artifact id: '8d958f77df81b0fc75d62dffd48ed6c2') in 0.034766 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 3
+========================================================================
+Received Import Request.
+  Time since last request: 0.000022 seconds.
+  path: Assets/6000FantasyIcons/ArmorIcons/ArmorSet_Icons/Tabards/Tabard_43.png
+  artifactKey: Guid(e6e53a2ddd0aca14eacf440f4c7592f2) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/6000FantasyIcons/ArmorIcons/ArmorSet_Icons/Tabards/Tabard_43.png using Guid(e6e53a2ddd0aca14eacf440f4c7592f2) Importer(815301076,1909f56bfc062723c751e8b465ee728b) [PhysX] Initialized MultithreadedTaskDispatcher with 24 workers.
+[PhysX] Initialized MultithreadedTaskDispatcher with 24 workers.
+ -> (artifact id: 'df6746bd53afb5088210a3ff19f70b37') in 0.022958 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 3
+========================================================================
+Received Import Request.
+  Time since last request: 0.000026 seconds.
+  path: Assets/6000FantasyIcons/ArmorIcons/ArmorSet_Icons/Tabards/Tabard_24.png
+  artifactKey: Guid(aab92db4d61ffc94b88323bb932d316d) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/6000FantasyIcons/ArmorIcons/ArmorSet_Icons/Tabards/Tabard_24.png using Guid(aab92db4d61ffc94b88323bb932d316d) Importer(815301076,1909f56bfc062723c751e8b465ee728b) [PhysX] Initialized MultithreadedTaskDispatcher with 24 workers.
+[PhysX] Initialized MultithreadedTaskDispatcher with 24 workers.
+ -> (artifact id: '672e939c2bbc63f1387a33278ef89e10') in 0.029210 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 3
+========================================================================
+Received Import Request.
+  Time since last request: 0.000020 seconds.
+  path: Assets/6000FantasyIcons/ArmorIcons/ArmorSet_Icons/Tabards/Tabard_28.png
+  artifactKey: Guid(dca70b23fa7a6c042bf93520e1c0621f) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/6000FantasyIcons/ArmorIcons/ArmorSet_Icons/Tabards/Tabard_28.png using Guid(dca70b23fa7a6c042bf93520e1c0621f) Importer(815301076,1909f56bfc062723c751e8b465ee728b) [PhysX] Initialized MultithreadedTaskDispatcher with 24 workers.
+[PhysX] Initialized MultithreadedTaskDispatcher with 24 workers.
+ -> (artifact id: 'c52f314878a431a48617f2be1bc5b161') in 0.030063 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 3
+========================================================================
+Received Import Request.
+  Time since last request: 0.000023 seconds.
+  path: Assets/6000FantasyIcons/ArmorIcons/ArmorSet_Icons/Tabards/Tabard_36.png
+  artifactKey: Guid(c8b52fb1debf07b499cd0cf2a6f1c6a8) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/6000FantasyIcons/ArmorIcons/ArmorSet_Icons/Tabards/Tabard_36.png using Guid(c8b52fb1debf07b499cd0cf2a6f1c6a8) Importer(815301076,1909f56bfc062723c751e8b465ee728b) [PhysX] Initialized MultithreadedTaskDispatcher with 24 workers.
+[PhysX] Initialized MultithreadedTaskDispatcher with 24 workers.
+ -> (artifact id: 'bf67bf4522ae6a3300f446f80feeca41') in 0.067775 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 3
+========================================================================
+Received Import Request.
+  Time since last request: 0.000027 seconds.
+  path: Assets/6000FantasyIcons/ArmorIcons/ArmorSet_Icons/Tabards/Tabard_33_clean.png
+  artifactKey: Guid(26dc081bf0bbe9c4a9de5fd7a1d6ce97) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/6000FantasyIcons/ArmorIcons/ArmorSet_Icons/Tabards/Tabard_33_clean.png using Guid(26dc081bf0bbe9c4a9de5fd7a1d6ce97) Importer(815301076,1909f56bfc062723c751e8b465ee728b) [PhysX] Initialized MultithreadedTaskDispatcher with 24 workers.
+[PhysX] Initialized MultithreadedTaskDispatcher with 24 workers.
+ -> (artifact id: '708cfe3d04ecfead24d78f1eabfd672a') in 0.029563 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 3
+========================================================================
+Received Import Request.
+  Time since last request: 27.220871 seconds.
+  path: Assets/Resources/Sprites/Equipment/Mail1_gloves.png
+  artifactKey: Guid(803711918ac97c74784dfde7054085e9) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Resources/Sprites/Equipment/Mail1_gloves.png using Guid(803711918ac97c74784dfde7054085e9) Importer(815301076,1909f56bfc062723c751e8b465ee728b) [PhysX] Initialized MultithreadedTaskDispatcher with 24 workers.
+[PhysX] Initialized MultithreadedTaskDispatcher with 24 workers.
+ -> (artifact id: 'ec37f9a8027de52b31818800fd6a8c89') in 0.015389 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 3
+Editor requested this worker to shutdown with reason: Scaling down because of idle timeout
+TcpMessagingSession - receive error: operation aborted. errorcode: 995, details: I/O-toiminto keskeytettiin joko säikeen poistumisen tai sovelluksen pyynnön vuoksi.
+AssetImportWorker is now disconnected from the server
+Process exiting
+Exiting without the bug reporter. Application will terminate with return code 0

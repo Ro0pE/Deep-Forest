@@ -59,6 +59,7 @@ public class ItemDatabase : MonoBehaviour
     {
         // Haetaan data Google Sheetsistä
         SpreadsheetsResource.ValuesResource.GetRequest request = sheetsService.Spreadsheets.Values.Get(spreadsheetId, range);
+    
         ValueRange response = request.Execute();
 
         // Käydään rivit läpi ja luodaan Item-objektit
@@ -243,7 +244,7 @@ public class ItemDatabase : MonoBehaviour
             }
             else
             {
-                Debug.Log($"Sprite '{path}' loaded successfully.");
+                
             }
 
             return loadedSprite;
@@ -271,7 +272,7 @@ public Item GetItemByName(string name)
     {
         foreach (Item item in items)
         {
-            Debug.Log($"Database contains: {item.itemName}");
+            
         }
     }
 }

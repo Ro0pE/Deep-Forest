@@ -16,6 +16,7 @@ public class InventoryUI : MonoBehaviour
     {
         playerInventory = FindObjectOfType<Inventory>();
         UpdateUI();
+        slotParent.gameObject.SetActive(false);
     }
 
 

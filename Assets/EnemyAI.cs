@@ -80,10 +80,8 @@ public class EnemyAI : MonoBehaviour
 
 public virtual IEnumerator DelayedAttack()
 {
-    animator.SetBool("isAttackRange", true);
-    animator.SetBool("ChasePlayer", false);
     isAttacking = true; // Aseta hyökkäystila true
-    animator.SetTrigger("BasicAttack");
+    animator.SetBool("isAttacking", true);
     AttackPlayer();
     yield return new WaitForSeconds(attackCooldown); // Voit vähentää tai poistaa tämän testataksesi
     animator.SetBool("isAttacking", false);
@@ -140,16 +138,13 @@ public virtual IEnumerator DelayedAttack()
 
     if (player != null)
     {
-        //animator.SetBool("isAttacking", true);
+        animator.SetBool("isRunning", true);
 
         if (distanceToPlayer <= attackRange)
         {
+            animator.SetBool("isRunning", false);
             // Pysäytä agentti heti, kun ollaan hyökkäysetäisyydellä
             agent.isStopped = true;
-            animator.SetBool("isAttacking", true);
-            animator.SetBool("ChasePlayer", false);
-            animator.SetBool("WalkForward", false);
-            
             // Aloita hyökkäys heti ilman viivettä
             if (!isAttacking)
             {
@@ -161,9 +156,7 @@ public virtual IEnumerator DelayedAttack()
             
             agent.isStopped = false;
             agent.SetDestination(player.position);
-            animator.SetBool("WalkForward", false);
-            animator.SetBool("ChasePlayer", true);
-            animator.SetBool("isAttackRange", false);
+
         }
     }
 }
@@ -172,23 +165,19 @@ public virtual IEnumerator DelayedAttack()
 
     public virtual void Wander()
     {
-  
         if (enemyHealth.isDead)
         {
             //Debug.Log("Cant wander while dead");
             return;
         }
-        animator.SetBool("ChasePlayer", false);
-        animator.SetBool("WalkForward", agent.velocity.magnitude > 0.1f);
-        animator.SetBool("isAttacking", false);
+        animator.SetBool("isRunning", false);
+        animator.SetBool("isWalking", true);
         agent.speed = 5;
         wanderTimer += Time.deltaTime;
 
         // Jos vihollinen on saavuttanut määränpäänsä tai vaeltaminen on kestänyt tarpeeksi pitkään, valitse uusi kohde
         if (wanderTimer >= wanderInterval || agent.remainingDistance < 0.5f)
         {
-            animator.SetBool("WalkForward", false);
-            animator.SetTrigger("wanderIdle");
             // Luo satunnainen pysähtymisaika 1-12 sekuntia
             float stopTime = Random.Range(1f, 5f);
             StartCoroutine(PauseBeforeNextMove(stopTime));
@@ -198,10 +187,10 @@ public virtual IEnumerator DelayedAttack()
             agent.SetDestination(newPos);
             wanderTimer = 0;
         }
-        animator.SetBool("Combat Idle", false);
+      
 
         // Animaation hallinta: kävelyanimaatio on päällä, kun agentti liikkuu
-        animator.SetBool("WalkForward", agent.velocity.magnitude > 0.1f);
+        
     }
 
     // Tauko liikkeen välissä

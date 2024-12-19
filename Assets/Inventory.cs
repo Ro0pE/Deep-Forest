@@ -42,7 +42,7 @@ public class Inventory : MonoBehaviour
         AddItemToInventoryByName("Minor Mana Potion", 5);
         AddItemToInventoryByName("Training Sword", 1);
         AddItemToInventoryByName("Wooden Bow", 1);
-        AddItemToInventoryByName("Arrow", 500);
+        AddItemToInventoryByName("Arrow", 570);
     }
 
     // Async method to load the database

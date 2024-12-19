@@ -41,6 +41,7 @@ public class EnemyHealth : MonoBehaviour
     private Vector3 spawnPosition; // Tallentaa karhun alkuperäisen sijainnin
     private Vector3 deathPosition;
     float finalDamage;
+    public NavMeshAgent agent;
 
     public List<Item> lootItems; // Lista loot-esineistä
     public List<Item> droppedItems = new List<Item>(); // Lista esineistä, jotka oikeasti tippuvat
@@ -65,6 +66,7 @@ public class EnemyHealth : MonoBehaviour
 
     public virtual void Start()
     {
+        agent = GetComponent<NavMeshAgent>();
         playerStats = FindObjectOfType<PlayerStats>();
         avatarManager = FindObjectOfType<AvatarManager>();
         //enemySprite = Resources.Load<Sprite>("DefaultEnemyAvatar");
@@ -378,6 +380,7 @@ public class EnemyHealth : MonoBehaviour
         {
             Debug.Log("Immune, cant interrup");
         }
+        animator.SetTrigger("takeDamage");
         currentHealth -= finalDamage;
         EnemyHealthBar enemyHealthBar = playerAttack.targetedEnemy.GetComponentInChildren<EnemyHealthBar>();
         enemyHealthBar.ShowTextForDuration(enemyHealthBar.enemyTakeDamageText, finalDamage, isCrit, isMiss);
@@ -460,6 +463,7 @@ public class EnemyHealth : MonoBehaviour
         else
         {
             isMiss = false;
+            animator.SetTrigger("takeDamage");
 
             currentHealth -= finalDamage;
             EnemyHealthBar enemyHealthBar = playerAttack.targetedEnemy.GetComponentInChildren<EnemyHealthBar>();
@@ -503,9 +507,9 @@ public class EnemyHealth : MonoBehaviour
     private IEnumerator DeathDelay()
     {
 
-        animator.SetTrigger("Die");
-        animator.SetBool("isDead", true);
-        yield return new WaitForSeconds(0f);
+        animator.SetTrigger("isDead");
+        agent.isStopped = true;
+        yield return new WaitForSeconds(2f);
         DropLoot();
         yield return new WaitForSeconds(30f);
         Die();

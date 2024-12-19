@@ -2,24 +2,24 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BrownBear : EnemyHealth
+public class EmberWyrm : EnemyHealth
 {
-    protected override string PrefabPath => "BrownBear"; // Vaihtaa prefab-polun
+    protected override string PrefabPath => "EmberWyrm"; // Vaihtaa prefab-polun
     
 
-    public BrownBear()
+    public EmberWyrm()
     {
         
     }
     public override void Start()
     {
         // Aseta yksilöllinen sprite ennen EnemyHealth-luokan Start-logiikan kutsumista
-        monsterName = "Brown Bear";
+        monsterName = "Ember Wyrm";
         monsterLevel = Random.Range(1, 12);
-        enemySprite = Resources.Load<Sprite>("BrownBearAvatar");
-        enemyElement = Element.Earth;
-        damageModifiers[Element.Fire] = 1.5f; // Heikko tulta vastaan
-        damageModifiers[Element.Earth] = 0.0f; // Vastustaa vettä
+        enemySprite = Resources.Load<Sprite>("EmberWyrmAvatar");
+        enemyElement = Element.Fire;
+        damageModifiers[Element.Earth] = 1.5f; 
+        damageModifiers[Element.Fire] = 0.0f; 
         maxHealth = monsterLevel * 15f;
 
         base.Start(); // Kutsutaan ylemmän tason logiikkaa
@@ -35,7 +35,7 @@ public class BrownBear : EnemyHealth
         base.Revive(); // Kutsutaan EnemyHealthin toteutusta, jos se on tarpeen
 
         // Tässä voit lisätä PinkBearin erityisiä ominaisuuksia tai toimintalogiikkaa
-        Debug.Log("BrownBear revived with special behavior!");
+        Debug.Log("Ember Wyrm revived with special behavior!");
     }
 
 }

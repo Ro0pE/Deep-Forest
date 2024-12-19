@@ -51,8 +51,6 @@ public class PlayerAttack : MonoBehaviour
         
         autoaAttackElement = Element.Neutral;
         playerInventory = FindObjectOfType<Inventory>();
-        playerInventory.AddItem(arrowTest);
-        playerInventory.AddItem(arrowTest);
         equipmentManager = FindObjectOfType<EquipmentManager>();
         playerHealth = FindObjectOfType<PlayerHealth>();
         playerStats = FindObjectOfType<PlayerStats>();
