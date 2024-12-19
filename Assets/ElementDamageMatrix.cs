@@ -4,15 +4,15 @@ using UnityEngine;
 
 public static class ElementDamageMatrix
 {
-    private static readonly float[,] damageModifiers =
+private static readonly float[,] damageModifiers =
     {
         //   Fire   Water  Earth  Wind   Shadow Holy
-        { 0.0f,  0.5f,  1.5f,  1.0f,  1.0f,  1.0f }, // Fire
-        { 1.5f,  0.0f,  0.5f,  1.0f,  1.0f,  1.0f }, // Water
-        { 0.5f,  1.5f,  0.0f,  1.0f,  1.0f,  1.0f }, // Earth
-        { 1.0f,  1.0f,  1.0f,  0.0f,  1.0f,  1.0f }, // Wind
-        { 1.0f,  1.0f,  1.0f,  1.0f,  0.0f,  1.0f }, // Shadow
-        { 1.0f,  1.0f,  1.0f,  1.0f,  1.0f,  0.0f }  // Holy
+        { 0.0f,  1.5f,  1.0f,  1.0f,  1.0f,  1.0f }, // Fire
+        { 1.5f,  0.0f,  1.0f,  1.0f,  1.0f,  1.0f }, // Water
+        { 1.0f,  1.0f,  0.0f,  1.5f,  1.0f,  1.0f }, // Earth
+        { 1.0f,  1.5f,  1.0f,  0.0f,  1.0f,  1.0f }, // Wind
+        { 1.0f,  1.0f,  1.0f,  1.0f,  0.0f,  1.5f }, // Shadow
+        { 1.0f,  1.0f,  1.0f,  1.0f,  1.5f,  0.0f }  // Holy
     };
 
     private static readonly float defaultModifier = 1.0f;

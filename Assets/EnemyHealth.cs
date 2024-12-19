@@ -481,6 +481,8 @@ public class EnemyHealth : MonoBehaviour
 
         if (currentHealth <= 0)
         {
+            animator.SetTrigger("isDead");
+            agent.isStopped = true;
             currentHealth = 0;
             deathPosition = transform.position;
             //enemyHealthBar.ShowTextForDuration(enemyHealthBar.enemyTakeDamageText, finalDamage, isCrit);
@@ -507,8 +509,8 @@ public class EnemyHealth : MonoBehaviour
     private IEnumerator DeathDelay()
     {
 
-        animator.SetTrigger("isDead");
-        agent.isStopped = true;
+        
+        
         yield return new WaitForSeconds(2f);
         DropLoot();
         yield return new WaitForSeconds(30f);

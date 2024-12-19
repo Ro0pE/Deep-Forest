@@ -2,24 +2,24 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EmberWyrm : EnemyHealth
+public class StormWyrm : EnemyHealth
 {
-    protected override string PrefabPath => "EmberWyrm"; // Vaihtaa prefab-polun
+    protected override string PrefabPath => "StormWyrm"; // Vaihtaa prefab-polun
     
 
-    public EmberWyrm()
+    public StormWyrm()
     {
         
     }
     public override void Start()
     {
         // Aseta yksilöllinen sprite ennen EnemyHealth-luokan Start-logiikan kutsumista
-        monsterName = "Ember Wyrm";
+        monsterName = "Storm Wyrm";
         monsterLevel = Random.Range(1, 12);
-        enemySprite = Resources.Load<Sprite>("EmberWyrmAvatar");
-        enemyElement = Element.Fire;
-        damageModifiers[Element.Water] = 1.5f; 
-        damageModifiers[Element.Fire] = 0.0f; 
+        enemySprite = Resources.Load<Sprite>("StormWyrmAvatar");
+        enemyElement = Element.Wind;
+        damageModifiers[Element.Earth] = 1.5f; 
+        damageModifiers[Element.Wind] = 0.0f; 
         maxHealth = monsterLevel * 15f;
 
         base.Start(); // Kutsutaan ylemmän tason logiikkaa
@@ -35,7 +35,7 @@ public class EmberWyrm : EnemyHealth
         base.Revive(); // Kutsutaan EnemyHealthin toteutusta, jos se on tarpeen
 
         // Tässä voit lisätä PinkBearin erityisiä ominaisuuksia tai toimintalogiikkaa
-        Debug.Log("Ember Wyrm revived with special behavior!");
+        Debug.Log("Storm Wyrm revived with special behavior!");
     }
 
 }

@@ -138,6 +138,8 @@ public virtual IEnumerator DelayedAttack()
 
     if (player != null)
     {
+        agent.speed = 9;
+        animator.SetFloat("Speed", agent.velocity.magnitude);
         animator.SetBool("isRunning", true);
 
         if (distanceToPlayer <= attackRange)
@@ -170,9 +172,10 @@ public virtual IEnumerator DelayedAttack()
             //Debug.Log("Cant wander while dead");
             return;
         }
+        agent.speed = 5;
+        animator.SetFloat("Speed", agent.velocity.magnitude);
         animator.SetBool("isRunning", false);
         animator.SetBool("isWalking", true);
-        agent.speed = 5;
         wanderTimer += Time.deltaTime;
 
         // Jos vihollinen on saavuttanut määränpäänsä tai vaeltaminen on kestänyt tarpeeksi pitkään, valitse uusi kohde
