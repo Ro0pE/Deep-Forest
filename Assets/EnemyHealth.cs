@@ -481,6 +481,8 @@ public class EnemyHealth : MonoBehaviour
 
         if (currentHealth <= 0)
         {
+            animator.SetBool("isWalking", false);
+            animator.SetBool("isRunning", false);
             animator.SetTrigger("isDead");
             agent.isStopped = true;
             currentHealth = 0;

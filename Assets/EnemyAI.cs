@@ -139,7 +139,7 @@ public virtual IEnumerator DelayedAttack()
     if (player != null)
     {
         agent.speed = 9;
-        animator.SetFloat("Speed", agent.velocity.magnitude);
+        //animator.SetFloat("Speed", agent.velocity.magnitude);
         animator.SetBool("isRunning", true);
 
         if (distanceToPlayer <= attackRange)
@@ -173,7 +173,7 @@ public virtual IEnumerator DelayedAttack()
             return;
         }
         agent.speed = 5;
-        animator.SetFloat("Speed", agent.velocity.magnitude);
+        //animator.SetFloat("Speed", agent.velocity.magnitude);
         animator.SetBool("isRunning", false);
         animator.SetBool("isWalking", true);
         wanderTimer += Time.deltaTime;
