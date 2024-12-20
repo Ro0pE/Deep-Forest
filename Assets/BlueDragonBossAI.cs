@@ -62,6 +62,7 @@ public class BlueDragonBossAI : MonoBehaviour
         enemyHealth = GetComponent<EnemyHealth>();
         animator = GetComponent<Animator>();
         wanderTimer = wanderInterval;
+        playerSlowed = false;
 
         castBar.gameObject.SetActive(false);
 
@@ -128,12 +129,15 @@ public class BlueDragonBossAI : MonoBehaviour
     public IEnumerator MeleeAttack()
     {
         if (isMeleeAttackOnCooldown)
+        Debug.Log("BREAK?!");
         yield break; // Jos hyökkäys on jäähdytyksessä, ei tehdä mitään
         isMeleeAttackOnCooldown = true;
         Debug.Log("MELEE INC");
+        animator.SetBool("isAttacking", true);
         playerHealth.TakeDamage(attackDamage);
         yield return new WaitForSeconds(basicAttackCooldown);
         isMeleeAttackOnCooldown = false;
+        animator.SetBool("isAttacking", false);
 
     }
     public void IceCharge()
@@ -148,19 +152,23 @@ public class BlueDragonBossAI : MonoBehaviour
         agent.speed = 140f;        // Nopeus
         agent.acceleration = 120f; // Kiihtyvyys
         agent.SetDestination(targetPosition);  // Aseta tavoite
+        animator.SetTrigger("chargeAttack");
 
         StartCoroutine(ChargeTowardsPlayer(targetPosition));
+        
     }
 
     private IEnumerator ChargeTowardsPlayer(Vector3 targetPosition)
     {
+        
         // Liikuta agentti kohti pelaajaa
         while (isChargingToPlayer && Vector3.Distance(transform.position, targetPosition) > 1f)
         {
+
             agent.SetDestination(targetPosition); // Jatka liikettä kohti pelaajaa
             yield return null;  // Odota seuraavaa framea
         }
-
+        isChargingToPlayer = false;
         // Kun agentti on lähellä pelaajaa, tarkista osuuko se pelaajaan
         if (Vector3.Distance(transform.position, player.position) < 25f) // Pelaaja on lähellä
         {
@@ -174,7 +182,8 @@ public class BlueDragonBossAI : MonoBehaviour
         }
 
         // Loppu, isChargingToPlayer asetetaan false
-        isChargingToPlayer = false;
+        Debug.Log("charge loppu");
+
 
         // Kun Ice Dragon on valmis ja lopettaa liikkumisen
         agent.speed = 30f;  // Palauta alkuperäinen nopeus
@@ -188,7 +197,7 @@ public class BlueDragonBossAI : MonoBehaviour
         enemyHealth.isInterrupted = false;
         iceChargerTimer = 0f;
         isCastingIceCharge = true;
-        agent.isStopped = true;  // Pysäytä agentti castausajaksi
+        //agent.isStopped = true;  // Pysäytä agentti castausajaksi
         agent.velocity = Vector3.zero; // Aseta nopeus nollaksi
         agent.acceleration = 0f;      // Estä hidastuva liike
 
@@ -196,6 +205,7 @@ public class BlueDragonBossAI : MonoBehaviour
         castBar.fillAmount = 1f;
         castBar.gameObject.SetActive(true);
         float elapsed = 0f;
+        animator.SetTrigger("isCastingCharge");
 
         // Kun castaus keskeytetään, estä debuffin asettaminen
         while (elapsed < iceChargeChannelTime && !enemyHealth.isInterrupted)
@@ -280,10 +290,12 @@ public class BlueDragonBossAI : MonoBehaviour
 
     public IEnumerator FlameBreathCasting()
     {
+        isChargingToPlayer = false;
+        animator.SetTrigger("isCastingFlame");
         enemyHealth.isInterrupted = false;
         flameBreathTimer = 0f;
         isCastingFlameBreath = true;
-        agent.isStopped = true;
+        //agent.isStopped = true;
         agent.velocity = Vector3.zero; // Aseta nopeus nollaan
         agent.acceleration = 0f;      // Estä hidastuva liike
         castBarSkillText.text = "FLAME BREATH";
@@ -337,6 +349,7 @@ public class BlueDragonBossAI : MonoBehaviour
 
     public void FlameBreathAttack()
     {
+            isChargingToPlayer = false;
             Buff burningHeartBuffData  = buffDatabase.GetBuffByName("BurningHeart");
             Buff burningHeartBuff = new Buff(
                 burningHeartBuffData.name,
@@ -408,19 +421,22 @@ public class BlueDragonBossAI : MonoBehaviour
          if (isCastingFlameBreath) return; // Estä liike castauksen aikana
          if (isChargingToPlayer) return;
          if (isCastingIceCharge) return;
-        
-
+        agent.speed = 55f;
+        animator.SetBool("isRunning", true);
+        animator.SetBool("isWalking", false);
+        animator.SetBool("isAttacking", false);
         if (player != null)
         {
 
             if (distanceToPlayer <= attackRange)
             {
-                agent.isStopped = true;
+                animator.SetBool("isRunning", false);
+                //agent.isStopped = true;
                 agent.velocity = Vector3.zero; // Aseta nopeus nollaan
                 agent.acceleration = 0f;      // Estä hidastuva liike
                 FacePlayer();
                 // Pysäytä agentti heti, kun ollaan hyökkäysetäisyydellä
-            // agent.isStopped = true;
+              // agent.isStopped = true;
 
                 if (!isAttacking)
                 {
@@ -451,12 +467,16 @@ public class BlueDragonBossAI : MonoBehaviour
     {
         
         isAttacking = true; // Aseta hyökkäystila true
+        animator.SetBool("isAttacking", true);
+        animator.SetBool("isRunning", false);
+        animator.SetBool("isWalking", false);
         yield return new WaitForSeconds(basicAttackCooldown); // Voit vähentää tai poistaa tämän testataksesi
         AttackPlayer();
         isAttacking = false; // Palauta hyökkäystila false
     }
     public void AttackPlayer()
     {
+
 
         float distanceToPlayer = Vector3.Distance(player.position, transform.position);
         
@@ -481,8 +501,11 @@ public class BlueDragonBossAI : MonoBehaviour
     {
          if (isCastingFlameBreath) return; // Estä liike castauksen aikana
         
-        agent.speed = 7;
+        agent.speed = 25f;
         wanderTimer += Time.deltaTime;
+        animator.SetBool("isWalking", true);
+        animator.SetBool("isRunning", false);
+        animator.SetBool("isAttacking", false);
 
         // Jos vihollinen on saavuttanut määränpäänsä tai vaeltaminen on kestänyt tarpeeksi pitkään, valitse uusi kohde
         if (wanderTimer >= wanderInterval || agent.remainingDistance < 0.5f)

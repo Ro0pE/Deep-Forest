@@ -483,7 +483,7 @@ public class EnemyHealth : MonoBehaviour
         {
             animator.SetBool("isWalking", false);
             animator.SetBool("isRunning", false);
-            animator.SetTrigger("isDead");
+            
             agent.isStopped = true;
             currentHealth = 0;
             deathPosition = transform.position;
@@ -510,12 +510,11 @@ public class EnemyHealth : MonoBehaviour
 
     private IEnumerator DeathDelay()
     {
-
-        
-        
+        Debug.Log("DIE ANIMATION SET");
+        animator.SetTrigger("isDead");
         yield return new WaitForSeconds(2f);
         DropLoot();
-        yield return new WaitForSeconds(30f);
+        yield return new WaitForSeconds(5f);
         Die();
 
         // Pudota loot kuoleman viiveen jälkeen

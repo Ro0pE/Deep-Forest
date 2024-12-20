@@ -153,12 +153,13 @@ private void HandleTwoHandedEquipment(Equipment newEquipment)
     equipmentSlots[(int)SlotType.RightHand]?.SetItem(newEquipment);
     equipmentSlots[(int)SlotType.LeftHand]?.UpdateSlot();
     equipmentSlots[(int)SlotType.RightHand]?.UpdateSlot();
+    playerAttack.autoaAttackElement = newEquipment.element;
 
     if (newEquipment.type == EquipmentType.RangedWeapon)
     {
         playerAttack.attackRange = 40f;
     }
-
+    playerAttack.autoaAttackElement = newEquipment.element;
     playerStats.EquipItem(newEquipment);
     ActivateModel(newEquipment);
 }
@@ -178,7 +179,8 @@ private void HandleRightHandEquipment(Equipment newEquipment)
     {
         playerAttack.attackRange = 15f;
     }
-
+        
+        playerAttack.autoaAttackElement = newEquipment.element;
     playerStats.EquipItem(newEquipment);
     ActivateModel(newEquipment);
 }

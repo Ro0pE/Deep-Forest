@@ -80,13 +80,17 @@ public class EnemyAI : MonoBehaviour
 
 public virtual IEnumerator DelayedAttack()
 {
-    isAttacking = true; // Aseta hyökkäystila true
     animator.SetBool("isAttacking", true);
+    animator.SetBool("isWalking", false);
+    animator.SetBool("isRunning", false);
+    isAttacking = true; // Aseta hyökkäystila true
+    
     AttackPlayer();
     yield return new WaitForSeconds(attackCooldown); // Voit vähentää tai poistaa tämän testataksesi
-    animator.SetBool("isAttacking", false);
+   
 
     isAttacking = false; // Palauta hyökkäystila false
+    animator.SetBool("isAttacking", false);
 }
 
     public void AttackPlayer()
@@ -131,6 +135,7 @@ public virtual IEnumerator DelayedAttack()
                 }
             }
         }
+         
     }
 
     public virtual void ChasePlayer(float distanceToPlayer)
