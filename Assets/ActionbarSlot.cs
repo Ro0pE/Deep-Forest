@@ -99,7 +99,7 @@ public class ActionbarSlot : MonoBehaviour, IDropHandler
             // Käytä taitoa
             if (assignedSkill.spellType == SpellType.Damage)
             {
-                playerAttack.Attack(assignedSkill);
+                StartCoroutine(playerAttack.Attack(assignedSkill));
             }
             else if (assignedSkill.spellType == SpellType.Heal)
             {

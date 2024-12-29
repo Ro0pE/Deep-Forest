@@ -259,8 +259,6 @@ public class PlayerAttack : MonoBehaviour
         isMeleeOnCooldown = true; // Aloita cooldown-tila
         if (isRangedAttack)
         {       
-         
-          
                 Item arrow = equipmentManager.IsArrowEquipped();
                 playerInventory.RemoveItem(arrow, 1); 
                 Equipment arrow2 = arrow as Equipment; // Muunna Item Equipment-tyypik
@@ -273,11 +271,6 @@ public class PlayerAttack : MonoBehaviour
                 //StopMeleeAttack();
                 yield break;
                 }
-                
-             
-                
-                
-
         }
 
         //yield return new WaitForSeconds(castTime); //  viive lähitaisteluiskujen välillä
@@ -296,22 +289,7 @@ public class PlayerAttack : MonoBehaviour
         }
         if (isRangedAttack)
         {
-            
-            animator.SetTrigger("isRangedAttacking");
-                    
-                    Vector3 spawnPosition = castPoint.position + castPoint.forward * 0.5f + castPoint.up * 3.5f;
-
-                    Vector3 directionToTarget = (targetedEnemy.transform.position - spawnPosition).normalized;
-
-                    // Instanssioidaan nuoli
-                    GameObject projectile = Instantiate(arrowPrefab, spawnPosition, Quaternion.identity);
-
-                    // Asetetaan nuolen kierto niin, että se osoittaa vihollista kohti
-                    projectile.transform.forward = directionToTarget;
-
-                    // Alusta nuoli omilla arvoilla, kuten nopeus ja suunta
-                    projectile.GetComponent<Projectile>().Initialize(targetedEnemy.transform);
-                    yield return null;
+            StartCoroutine(ShootArrows());  // shoot arrow animation stuff
         }
         else
         {
@@ -326,6 +304,33 @@ public class PlayerAttack : MonoBehaviour
         StartCoroutine(DealDamageAfterDelayMelee());
         isMeleeOnCooldown = false; // Cooldown-tila päättyy
         isRangedAttack = false;
+    }
+
+    public IEnumerator ShootArrows()
+    {
+
+        animator.SetTrigger("isRangedAttacking");
+        if (targetedEnemy == null)
+        {
+            Debug.LogWarning("Targeted enemy is null. Cancelling arrow shot.");
+            yield break; // Lopetetaan coroutine
+        }
+            
+        Vector3 spawnPosition = castPoint.position + castPoint.forward * 0.5f + castPoint.up * 3.5f;
+
+        Vector3 directionToTarget = (targetedEnemy.transform.position - spawnPosition).normalized;
+
+        // Instanssioidaan nuoli
+        GameObject projectile = Instantiate(arrowPrefab, spawnPosition, Quaternion.identity);
+
+        // Asetetaan nuolen kierto niin, että se osoittaa vihollista kohti
+        projectile.transform.forward = directionToTarget;
+
+        // Alusta nuoli omilla arvoilla, kuten nopeus ja suunta
+        projectile.GetComponent<Projectile>().Initialize(targetedEnemy.transform);
+        yield return null;
+        
+       
     }
 
     public void UseSkill(int skillIndex)  // viittaa actionbarin slottiin 1-5
@@ -433,11 +438,24 @@ void UpdateEnemiesInRange()
 
 
 
-    public void Attack(Skill skill)
+    public IEnumerator Attack(Skill skill)
     {
         animator.SetTrigger("isAttacking");
         isAttacking = true;
-        StartCoroutine(DealDamageAfterDelayMagic(skill,IsCriticalHit()));
+        if (skill.skillName == "Double Strike")
+        {
+            StartCoroutine(ShootArrows());
+            StartCoroutine(DealDamageAfterDelayMagic(skill,IsCriticalHit()));
+            yield return new WaitForSeconds(0.2f);
+            StartCoroutine(ShootArrows());
+            StartCoroutine(DealDamageAfterDelayMagic(skill,IsCriticalHit()));
+
+        }
+        else
+        {
+            StartCoroutine(DealDamageAfterDelayMagic(skill,IsCriticalHit()));
+        }
+        
     }
 
     public IEnumerator DealDamageAfterDelayMelee()
@@ -469,7 +487,7 @@ void UpdateEnemiesInRange()
         // skill type === melee, ranged or spell
         // if melee: targetEnemy.TakeDamageMelee()
         // if ranged: targetEnemy.TakeDamageRanged()
-        // if sell: targetEnemy.TakeDamageSpell()
+        // if sell: targetEnemy.TakeDamageSpell()fdd
         // if passive: <-- return change to Self and do something to playerStats.
 
             //float finalDamage = CalculateDamageMagic(skill.damage);

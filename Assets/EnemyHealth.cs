@@ -23,6 +23,7 @@ public enum Element
 
 public class EnemyHealth : MonoBehaviour
 {
+    public GameObject targetIndicator; // Viittaus kohteen merkkiin (punainen rinkula)
     public string monsterName = "";
     public int monsterLevel = 0;
     public Element enemyElement;
@@ -49,7 +50,7 @@ public class EnemyHealth : MonoBehaviour
 
         [Header("Loot UI")]
     public GameObject lootWindow; // Loot window -objekti
-    private EnemyHealth trackedBearHealth;
+    public EnemyHealth trackedBearHealth;
     public Transform lootBackground; // Loot Background
     public List<Button> lootButtons; // Painikkeet lootille
     public ItemDatabase itemDatabase;  // Viittaus ItemDatabasee
@@ -77,10 +78,11 @@ public class EnemyHealth : MonoBehaviour
         itemDatabase = FindObjectOfType<ItemDatabase>();
         
         spawnPosition = transform.position; // Tallentaa alkuperäisen sijainnin
-        StartCoroutine(WaitForItemDatabaseAndAddLoot());
+
         HideHealthBar(); // Piilota health bar alussa
         lootWindow.SetActive(false);
         Button closeButton = lootWindow.transform.Find("CloseButton").GetComponent<Button>();
+        targetIndicator.SetActive(false);
         
         if (closeButton != null)
         {
@@ -94,33 +96,23 @@ public class EnemyHealth : MonoBehaviour
 
     public void Update()
     {
-        if (healthBar != null && playerAttack != null)
-        {
-            Transform playerTransform = playerAttack.transform; // Pelaajan sijainti
-            Vector3 directionToPlayer = playerTransform.position - healthBar.transform.position;
-
-            // Estetään y-akselin muutokset (pidetään healthbar vaakatasossa)
-            directionToPlayer.y = 0;
-
-            // Päivitetään healthbarin rotaatio, jotta se osoittaa pelaajaa kohti
-            if (directionToPlayer != Vector3.zero) // Varmistetaan, ettei nolla-vektoria käytetä
-            {
-                Quaternion lookRotation = Quaternion.LookRotation(directionToPlayer);
-                healthBar.transform.rotation = lookRotation * Quaternion.Euler(0, 180, 0); // Lisätään 180° käännös y-akselilla
-            }
-        }
-    }
-    private IEnumerator WaitForItemDatabaseAndAddLoot()
+    if (Input.GetKeyDown(KeyCode.V))
     {
-        // Odotetaan, että ItemDatabase on ladannut esineet
-        while (itemDatabase == null || itemDatabase.items.Count == 0)
+        // Tarkistetaan, onko terveyspalkki aktiivinen, ja vaihdetaan sen tila
+        if (healthBar.activeSelf)
         {
-            yield return null; // Odotetaan seuraavaa framea
+            HideHealthBar();
         }
-
-        // Kun ItemDatabase on valmis, lisätään lootit viholliselle
-        AddLootItemsAtStart();
+        else
+        {
+            ShowHealthBar();
+        }
+    }   
     }
+
+
+    
+
 
     public void createLoot()
     {
@@ -132,42 +124,9 @@ public class EnemyHealth : MonoBehaviour
         }
 
     }
-    public void CalculateDroppedLoot()
-{
-    droppedItems.Clear(); // Tyhjennetään lista varmuuden vuoksi
 
-    foreach (Item item in lootItems)
-    {
-        int randomValue = Random.Range(0, 1000); // Arvotaan luku 0-99 väliltä
 
-        if (item.dropChance >= randomValue)
-        {
-            droppedItems.Add(item); // Lisää esine droppedItems-listaan, jos se tippuu
-        }
-    }
-    }
-    private void AddLootItemsAtStart()
-{
-    // Esimerkki: Lisäämme joitain esineitä loot-listaan, joita vihollinen voi tiputtaa
-    Item healingPotion = itemDatabase.GetItemByName("Minor Healing Potion");
-    Item manaPotion = itemDatabase.GetItemByName("Minor Mana Potion");
-    Equipment bearHelm = itemDatabase.GetItemByName("Helm of the bear") as Equipment;;
-    Equipment bearAxe = itemDatabase.GetItemByName("Axe of the bear") as Equipment;;
-    Equipment bearClaw = itemDatabase.GetItemByName("Bear Claw") as Equipment;;
-    healingPotion.dropChance = 300;
-    manaPotion.dropChance = 250;
-    bearHelm.dropChance = 100;
-    bearAxe.dropChance = 120;
-    bearClaw.dropChance = 300;
-    bearClaw.SetCardSlots(4);
-    bearAxe.SetCardSlots(2);
-    lootItems.Add(healingPotion);
-    lootItems.Add(manaPotion);
-    lootItems.Add(bearHelm);
-    lootItems.Add(bearAxe);
-    lootItems.Add(bearClaw);
-    Debug.Log("Lootit lisätty viholliselle pelin alussa.");
-}
+
     private void ShowLootWindow()
     {
       /*  if (lootWindow == null || lootBackground == null || lootButtons == null || lootButtons.Count == 0)
@@ -522,6 +481,23 @@ public class EnemyHealth : MonoBehaviour
         // Herätä karhu henkiin 30 sekunnin kuluttua
 
     }
+    public void CalculateDroppedLoot()
+    {
+        // Karhukohtainen droppi-logiikka
+        droppedItems.Clear(); // Tyhjennetään lista varmuuden vuoksi
+
+        foreach (Item item in lootItems)
+        {
+            int randomValue = Random.Range(0, 1000); // Arvotaan luku 0-999 väliltä
+
+            if (item.dropChance >= randomValue)
+            {
+                droppedItems.Add(item); // Lisää esine droppedItems-listaan, jos se tippuu
+            }
+        }
+
+        Debug.Log("BrownBear dropped loot calculated.");
+    }
 
 
     private void Die()
@@ -533,7 +509,7 @@ public class EnemyHealth : MonoBehaviour
     }
 
     // Metodi lootin pudottamiseen
-    private void DropLoot()
+    public virtual void DropLoot()
     {
        CalculateDroppedLoot();
 
@@ -622,6 +598,20 @@ public virtual void Revive()
 
                     // Update the tracked health reference to the new monster
                     trackedBearHealth = newMonsterHealth;
+                    Camera playerCamera = GameObject.Find("Warrior/PlayerCamera/Camera").GetComponent<Camera>();
+                    if (playerCamera != null)
+                    {
+                        // Oletetaan, että HealthBarissa on playerCamera-viittaus
+                        EnemyHealthBar newHealthBar = newMonsterHealth.GetComponentInChildren<EnemyHealthBar>();
+                        if (newHealthBar != null)
+                        {
+                            newHealthBar.playerCamera = playerCamera;
+                        }
+                    }
+                    else
+                    {
+                        Debug.LogError("Pelaajan kameraa ei löytynyt!");
+                    }
                 }
                 else
                 {
@@ -650,41 +640,56 @@ public virtual void Revive()
 
 
 
-    private void OnMouseDown()
+
+
+// Muuta OnMouseDown-metodia:
+private void OnMouseDown()
+{
+    // Jos vihollinen on kuollut ja sillä on loottia, näytä loot-ikkuna
+    if (isDead && droppedItems.Count > 0) 
     {
-        // Jos vihollinen on kuollut ja sillä on loottia, näytä loot-ikkuna
-        if (isDead && droppedItems.Count > 0) 
+        ShowLootWindow(); // Näytä loot-ikkuna
+    }
+    else if (!isDead) // Jos vihollinen ei ole kuollut
+    {
+        // Piilota edellisen vihollisen health bar, jos se on asetettu
+        if (playerAttack.targetedEnemy != null)
         {
-            ShowLootWindow(); // Näytä loot-ikkuna
+            //playerAttack.targetedEnemy.HideHealthBar();
+            // Piilota edellisen kohteen merkki
+            if (playerAttack.targetedEnemy.targetIndicator != null)
+            {
+                playerAttack.targetedEnemy.targetIndicator.SetActive(false);
+            }
         }
-        else if (!isDead) // Jos vihollinen ei ole kuollut
+
+        // Asetetaan tämä vihollinen kohteeksi
+        if (playerAttack != null)
         {
-            // Piilota edellisen vihollisen health bar, jos se on asetettu
-            if (playerAttack.targetedEnemy != null)
-            {
-                playerAttack.targetedEnemy.HideHealthBar();
-            }
+            playerAttack.targetedEnemy = this;
+        }
 
-            // Asetetaan tämä vihollinen kohteeksi
-            if (playerAttack != null)
+        // Päivitetään avatar-paneli
+        if (avatarManager != null)
+        {
+            avatarManager.AssignEnemy(this, enemySprite); // Päivitä avatarin tiedot
+            if (avatarManager.avatarPanel != null && !avatarManager.avatarPanel.activeSelf)
             {
-                playerAttack.targetedEnemy = this;
+                avatarManager.avatarPanel.SetActive(true); // Aktivoi avatar-paneli, jos se ei ole jo näkyvissä
             }
+        }
 
-            // Päivitetään avatar-paneli
-            if (avatarManager != null)
-            {
-                avatarManager.AssignEnemy(this, enemySprite); // Päivitä avatarin tiedot
-                if (avatarManager.avatarPanel != null && !avatarManager.avatarPanel.activeSelf)
-                {
-                    avatarManager.avatarPanel.SetActive(true); // Aktivoi avatar-paneli, jos se ei ole jo näkyvissä
-                }
-            }
+        // Näytetään tämän vihollisen health bar
+        //ShowHealthBar();
 
-            // Näytetään tämän vihollisen health bar
-            ShowHealthBar();
+        // Näytä kohteen merkki (punainen rinkula)
+        if (targetIndicator != null)
+        {
+            targetIndicator.SetActive(true);
         }
     }
+}
+
 
 
 }

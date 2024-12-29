@@ -40,8 +40,6 @@ public class EnemyAI : MonoBehaviour
     void Update()
     {
        
-
-
         float distanceToPlayer = Vector3.Distance(player.position, transform.position);
 
         if (distanceToPlayer <= attackRange && !isAttacking)
