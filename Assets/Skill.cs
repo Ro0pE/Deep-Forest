@@ -29,6 +29,7 @@ public class Skill
     public float castTime;
     public float manaCost;
     public float manaCostPerLevel;
+    public float damageRange;
     public int skillLevel = 0;
     public int skillMaxLevel;
     public float totalHeal;

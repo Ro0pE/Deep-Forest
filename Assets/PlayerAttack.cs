@@ -45,6 +45,7 @@ public class PlayerAttack : MonoBehaviour
     public EquipmentManager equipmentManager;
     public Inventory playerInventory;
     public PlayerStats playerStats;
+    public SkillManager SkillManager;
 
     private void Start()
     {
@@ -118,7 +119,7 @@ public class PlayerAttack : MonoBehaviour
         }
 
         // Hyökkää, jos pelaaja on jo targetoinut vihollisen ja on tarpeeksi lähellä
-        if (Input.GetMouseButton(1) && targetedEnemy != null && !isAttacking && !isCasting) // Aloita hyökkäys hiiren oikealla
+        if (Input.GetMouseButton(1) && targetedEnemy != null && !isAttacking && !isCasting && !targetedEnemy.isDead) // Aloita hyökkäys hiiren oikealla
         {
             float distanceToEnemy = Vector3.Distance(transform.position, targetedEnemy.transform.position);
     
@@ -201,6 +202,12 @@ public class PlayerAttack : MonoBehaviour
 
     private IEnumerator PerformAutoAttack()
     {
+        if (targetedEnemy.isDead)
+        {
+            Debug.Log("Target enemy is dead!");
+            isAttacking = false;
+            yield break;
+        }
         isAttacking = true;
 
         while (isAttacking)
@@ -289,7 +296,7 @@ public class PlayerAttack : MonoBehaviour
         }
         if (isRangedAttack)
         {
-            StartCoroutine(ShootArrows());  // shoot arrow animation stuff
+            StartCoroutine(ShootArrows(targetedEnemy, arrowPrefab));  // shoot arrow animation stuff
         }
         else
         {
@@ -306,32 +313,32 @@ public class PlayerAttack : MonoBehaviour
         isRangedAttack = false;
     }
 
-    public IEnumerator ShootArrows()
+    public IEnumerator<GameObject> ShootArrows(EnemyHealth otherEnemy, GameObject arrowPrefab)
     {
-
         animator.SetTrigger("isRangedAttacking");
-        if (targetedEnemy == null)
+
+        if (targetedEnemy == null || otherEnemy == null)
         {
             Debug.LogWarning("Targeted enemy is null. Cancelling arrow shot.");
-            yield break; // Lopetetaan coroutine
+            yield break;
         }
-            
+
         Vector3 spawnPosition = castPoint.position + castPoint.forward * 0.5f + castPoint.up * 3.5f;
+        Vector3 directionToTarget = (otherEnemy.transform.position - spawnPosition).normalized;
 
-        Vector3 directionToTarget = (targetedEnemy.transform.position - spawnPosition).normalized;
-
-        // Instanssioidaan nuoli
+        // Instanssioidaan nuoli annetusta prefabista
         GameObject projectile = Instantiate(arrowPrefab, spawnPosition, Quaternion.identity);
 
         // Asetetaan nuolen kierto niin, että se osoittaa vihollista kohti
         projectile.transform.forward = directionToTarget;
 
         // Alusta nuoli omilla arvoilla, kuten nopeus ja suunta
-        projectile.GetComponent<Projectile>().Initialize(targetedEnemy.transform);
-        yield return null;
-        
-       
+        projectile.GetComponent<Projectile>().Initialize(otherEnemy.transform);
+
+        yield return projectile; // Palautetaan projektiili
     }
+
+
 
     public void UseSkill(int skillIndex)  // viittaa actionbarin slottiin 1-5
     {
@@ -385,6 +392,7 @@ public class PlayerAttack : MonoBehaviour
             if (targetedEnemy != null)
             {
                 targetedEnemy.HideHealthBar(); // Piilota edellisen targetin healthbar
+                targetedEnemy.targetIndicator.SetActive(false);
             }
 
             // Siirrytään seuraavaan viholliseen
@@ -392,9 +400,11 @@ public class PlayerAttack : MonoBehaviour
 
             // Jos targetti ei ole kuollut, valitaan se
             targetedEnemy = enemiesInRange[currentTargetIndex];
+            
             if (targetedEnemy != null && !targetedEnemy.isDead)
             {
-                targetedEnemy.ShowHealthBar(); // Näytetään sen healthbar
+                targetedEnemy.targetIndicator.SetActive(true);
+                //targetedEnemy.ShowHealthBar(); // Näytetään sen healthbar
 
                 // Päivitetään avatar
                 AvatarManager avatarManager = FindObjectOfType<AvatarManager>();
@@ -438,25 +448,24 @@ void UpdateEnemiesInRange()
 
 
 
-    public IEnumerator Attack(Skill skill)
-    {
-        animator.SetTrigger("isAttacking");
-        isAttacking = true;
-        if (skill.skillName == "Double Strike")
-        {
-            StartCoroutine(ShootArrows());
-            StartCoroutine(DealDamageAfterDelayMagic(skill,IsCriticalHit()));
-            yield return new WaitForSeconds(0.2f);
-            StartCoroutine(ShootArrows());
-            StartCoroutine(DealDamageAfterDelayMagic(skill,IsCriticalHit()));
+public IEnumerator Attack(Skill skill)
+{
+    animator.SetTrigger("isAttacking");
+    isAttacking = true;
 
-        }
-        else
-        {
-            StartCoroutine(DealDamageAfterDelayMagic(skill,IsCriticalHit()));
-        }
-        
+    if (skill != null)
+    {
+        SkillManager.ExecuteSkill(skill);
     }
+    else
+    {
+        yield return StartCoroutine(DealDamageAfterDelayMagic(skill, IsCriticalHit()));
+    }
+
+    // Lopetetaan coroutine
+    yield break;
+}
+
 
     public IEnumerator DealDamageAfterDelayMelee()
     {
@@ -477,27 +486,31 @@ void UpdateEnemiesInRange()
         //StartCoroutine(ResetAttack());
     }
 
-    public IEnumerator DealDamageAfterDelayMagic(Skill skill, bool isCrit)
+    public IEnumerator DealDamageAfterDelayMagic(Skill skill, bool isCrit, EnemyHealth targetEnemy = null)
     {
-       
-        yield return new WaitForSeconds(0.5f);
-
-        if (targetedEnemy != null)
+        // Jos targetEnemy on null, käytä targetedEnemy
+        if (targetEnemy == null)
         {
-        // skill type === melee, ranged or spell
-        // if melee: targetEnemy.TakeDamageMelee()
-        // if ranged: targetEnemy.TakeDamageRanged()
-        // if sell: targetEnemy.TakeDamageSpell()fdd
-        // if passive: <-- return change to Self and do something to playerStats.
-
-            //float finalDamage = CalculateDamageMagic(skill.damage);
-         
-            targetedEnemy.TakeDamage(skill, isCrit);
-            isCasting = false;
+            targetEnemy = targetedEnemy;
         }
 
-        StartCoroutine(ResetAttack());
+        yield return new WaitForSeconds(0.2f);
+
+        if (targetEnemy != null)
+        {
+            // Toteuta vahinko määritetylle viholliselle
+            targetEnemy.TakeDamage(skill, isCrit);
+        }
+
+        isCasting = false;
+
+        // Käynnistä ResetAttack vain kerran pääkohteelle
+        if (targetEnemy == targetedEnemy)
+        {
+            StartCoroutine(ResetAttack());
+        }
     }
+
 
     public IEnumerator ResetAttack()
     {
@@ -513,7 +526,7 @@ void UpdateEnemiesInRange()
     {
         if (targetedEnemy != null)
         {
-            targetedEnemy.HideHealthBar();
+            //targetedEnemy.HideHealthBar();
         }
     }
 

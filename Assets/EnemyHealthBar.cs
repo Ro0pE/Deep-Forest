@@ -19,6 +19,7 @@ public class EnemyHealthBar : MonoBehaviour
 
 
 
+
     void Start()
     {
         // Hae EnemyHealth-komponentti viholliselta

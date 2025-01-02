@@ -23,6 +23,7 @@ MonoBehaviour:
     castTime: 2
     manaCost: 15
     manaCostPerLevel: 15
+    damageRange: 0
     skillLevel: 0
     skillMaxLevel: 5
     totalHeal: 0
@@ -51,6 +52,7 @@ MonoBehaviour:
     castTime: 2
     manaCost: 25
     manaCostPerLevel: 25
+    damageRange: 0
     skillLevel: 0
     skillMaxLevel: 5
     totalHeal: 0
@@ -79,6 +81,7 @@ MonoBehaviour:
     castTime: 3
     manaCost: 25
     manaCostPerLevel: 25
+    damageRange: 0
     skillLevel: 0
     skillMaxLevel: 5
     totalHeal: 0
@@ -107,6 +110,7 @@ MonoBehaviour:
     castTime: 0
     manaCost: 0
     manaCostPerLevel: 0
+    damageRange: 0
     skillLevel: 0
     skillMaxLevel: 10
     totalHeal: 0
@@ -135,6 +139,7 @@ MonoBehaviour:
     castTime: 0
     manaCost: 0
     manaCostPerLevel: 0
+    damageRange: 0
     skillLevel: 0
     skillMaxLevel: 10
     totalHeal: 0
@@ -158,6 +163,7 @@ MonoBehaviour:
     castTime: 2
     manaCost: 20
     manaCostPerLevel: 20
+    damageRange: 0
     skillLevel: 0
     skillMaxLevel: 5
     totalHeal: 0
@@ -183,6 +189,7 @@ MonoBehaviour:
     castTime: 5
     manaCost: 40
     manaCostPerLevel: 40
+    damageRange: 0
     skillLevel: 0
     skillMaxLevel: 5
     totalHeal: 0
@@ -211,6 +218,7 @@ MonoBehaviour:
     castTime: 1
     manaCost: 5
     manaCostPerLevel: 5
+    damageRange: 0
     skillLevel: 0
     skillMaxLevel: 5
     totalHeal: 0
@@ -239,6 +247,7 @@ MonoBehaviour:
     castTime: 1
     manaCost: 6
     manaCostPerLevel: 6
+    damageRange: 0
     skillLevel: 0
     skillMaxLevel: 5
     totalHeal: 0
@@ -267,6 +276,7 @@ MonoBehaviour:
     castTime: 4
     manaCost: 12
     manaCostPerLevel: 12
+    damageRange: 0
     skillLevel: 0
     skillMaxLevel: 5
     totalHeal: 0
@@ -295,6 +305,7 @@ MonoBehaviour:
     castTime: 3
     manaCost: 20
     manaCostPerLevel: 20
+    damageRange: 0
     skillLevel: 0
     skillMaxLevel: 5
     totalHeal: 0
@@ -320,6 +331,7 @@ MonoBehaviour:
     castTime: 1
     manaCost: 15
     manaCostPerLevel: 15
+    damageRange: 0
     skillLevel: 0
     skillMaxLevel: 5
     totalHeal: 0
@@ -344,23 +356,24 @@ MonoBehaviour:
     damagePerLevel: 0.1
     baseHeal: 0
     healPerLevel: 0
-    cooldown: 6
-    castTime: 1
-    manaCost: 5
-    manaCostPerLevel: 5
-    skillLevel: 1
+    cooldown: 3
+    castTime: 0.3
+    manaCost: 15
+    manaCostPerLevel: 15
+    damageRange: 0
+    skillLevel: 0
     skillMaxLevel: 5
     totalHeal: 0
     totalDamage: 0
     addCrit: 0
     addDodge: 0
     isPassive: 0
-    infoText: 'Deals damage 0,8 * MATK (<color=red>1,6</color>)
+    infoText: 'Deals damage 0,7 * MATK (<color=red>1,4</color>)
 
       Increase damage
       10% per level
 
-      Increase manacost <color=#1C81CF>5</color> per level'
+      Increase manacost <color=#1C81CF>15</color> per level'
     element: 6
     spellType: 0
     skillType: 1
@@ -376,6 +389,7 @@ MonoBehaviour:
     castTime: 0
     manaCost: 0
     manaCostPerLevel: 0
+    damageRange: 0
     skillLevel: 0
     skillMaxLevel: 1
     totalHeal: 0
@@ -404,6 +418,7 @@ MonoBehaviour:
     castTime: 0
     manaCost: 20
     manaCostPerLevel: 20
+    damageRange: 0
     skillLevel: 0
     skillMaxLevel: 5
     totalHeal: 0
@@ -420,5 +435,92 @@ MonoBehaviour:
     element: 0
     spellType: 0
     skillType: 2
+    isLearned: 1
+    canInterrup: 0
+  - skillName: Multi Arrow
+    skillIcon: {fileID: 21300000, guid: cacfeb3917e76294db3be4ebca0b8aab, type: 3}
+    baseDamage: 0.3
+    damagePerLevel: 0.1
+    baseHeal: 0
+    healPerLevel: 0
+    cooldown: 1
+    castTime: 0.2
+    manaCost: 9
+    manaCostPerLevel: 9
+    damageRange: 25
+    skillLevel: 0
+    skillMaxLevel: 5
+    totalHeal: 0
+    totalDamage: 0
+    addCrit: 0
+    addDodge: 0
+    isPassive: 0
+    infoText: 'Deals damage 0,2 * MATK (<color=red>0,4</color>)
+
+      Increase damage
+      10% per level
+
+      Increase manacost <color=#1C81CF>9</color> per level'
+    element: 6
+    spellType: 0
+    skillType: 1
+    isLearned: 1
+    canInterrup: 0
+  - skillName: Stunning Arrow
+    skillIcon: {fileID: 21300000, guid: 9efee09b321b23a49bcd8287db98625d, type: 3}
+    baseDamage: 0.3
+    damagePerLevel: 0.2
+    baseHeal: 0
+    healPerLevel: 0
+    cooldown: 15
+    castTime: 0.5
+    manaCost: 20
+    manaCostPerLevel: 20
+    damageRange: 0
+    skillLevel: 0
+    skillMaxLevel: 5
+    totalHeal: 0
+    totalDamage: 0
+    addCrit: 0
+    addDodge: 0
+    isPassive: 0
+    infoText: 'Deals damage 0,1 * MATK (<color=red>0,2</color>)
+
+      Increase damage
+      20% per level
+
+      Increase manacost <color=#1C81CF>20</color> per level'
+    element: 6
+    spellType: 0
+    skillType: 1
+    isLearned: 1
+    canInterrup: 1
+  - skillName: Bulls Eye
+    skillIcon: {fileID: 21300000, guid: 74d743cf912dc474cb9c15bc4b442898, type: 3}
+    baseDamage: 3
+    damagePerLevel: 0.5
+    baseHeal: 0
+    healPerLevel: 0
+    cooldown: 4
+    castTime: 2
+    manaCost: 25
+    manaCostPerLevel: 25
+    damageRange: 0
+    skillLevel: 0
+    skillMaxLevel: 5
+    totalHeal: 0
+    totalDamage: 0
+    addCrit: 0
+    addDodge: 0
+    isPassive: 0
+    infoText: 'Deals damage 2,5 * MATK (<color=red>5</color>)
+
+      Increase damage
+      50% per level
+
+      Increase manacost <color=#1C81CF>25</color> per level'
+    element: 6
+    spellType: 0
+    skillType: 1
     isLearned: 1
     canInterrup: 0

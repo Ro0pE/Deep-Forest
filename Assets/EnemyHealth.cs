@@ -62,6 +62,7 @@ public class EnemyHealth : MonoBehaviour
     private const int MaxHitChance = 95;
     private const int MinHitChance = 5;
     public bool isMiss = false;
+    public bool isHealthBarActive;
 
 
 
@@ -79,7 +80,7 @@ public class EnemyHealth : MonoBehaviour
         
         spawnPosition = transform.position; // Tallentaa alkuperäisen sijainnin
 
-        HideHealthBar(); // Piilota health bar alussa
+        //HideHealthBar(); // Piilota health bar alussa
         lootWindow.SetActive(false);
         Button closeButton = lootWindow.transform.Find("CloseButton").GetComponent<Button>();
         targetIndicator.SetActive(false);
@@ -101,13 +102,23 @@ public class EnemyHealth : MonoBehaviour
         // Tarkistetaan, onko terveyspalkki aktiivinen, ja vaihdetaan sen tila
         if (healthBar.activeSelf)
         {
-            HideHealthBar();
+            isHealthBarActive = false;
+            
         }
         else
         {
-            ShowHealthBar();
+            isHealthBarActive = true;
+           
         }
     }   
+    if (isHealthBarActive)
+    {
+        ShowHealthBar();
+    }
+    else
+    {
+        HideHealthBar();
+    }
     }
 
 
@@ -341,8 +352,16 @@ public class EnemyHealth : MonoBehaviour
         }
         animator.SetTrigger("takeDamage");
         currentHealth -= finalDamage;
-        EnemyHealthBar enemyHealthBar = playerAttack.targetedEnemy.GetComponentInChildren<EnemyHealthBar>();
-        enemyHealthBar.ShowTextForDuration(enemyHealthBar.enemyTakeDamageText, finalDamage, isCrit, isMiss);
+        EnemyHealthBar enemyHealthBar = GetComponentInChildren<EnemyHealthBar>();
+        if (enemyHealthBar != null)
+        {
+            enemyHealthBar.ShowTextForDuration(enemyHealthBar.enemyTakeDamageText, finalDamage, isCrit, isMiss);
+        }
+        else
+        {
+            Debug.LogWarning("EnemyHealthBar not found on enemy: " + gameObject.name);
+        }
+
         
         if (avatarManager != null)
         {
@@ -356,6 +375,14 @@ public class EnemyHealth : MonoBehaviour
 
         if (currentHealth <= 0)
         {
+            isDead = true;
+            Debug.Log("Setting enemy isdead true");
+            Debug.Log(isDead);
+
+            animator.SetBool("isWalking", false);
+            animator.SetBool("isRunning", false);
+            
+            agent.isStopped = true;
             playerAttack.StopMeleeAttack();
             currentHealth = 0;
             deathPosition = transform.position;
@@ -440,6 +467,10 @@ public class EnemyHealth : MonoBehaviour
 
         if (currentHealth <= 0)
         {
+            isDead = true;
+            Debug.Log("Setting enemy isdead true");
+            Debug.Log(isDead);
+
             animator.SetBool("isWalking", false);
             animator.SetBool("isRunning", false);
             
@@ -458,7 +489,7 @@ public class EnemyHealth : MonoBehaviour
             {
                 bearScript.KillBear();
             }
-            isDead = true;
+            
             
             
             //playerAttack.targetedEnemy.HideHealthBar();
@@ -471,6 +502,7 @@ public class EnemyHealth : MonoBehaviour
     {
         Debug.Log("DIE ANIMATION SET");
         animator.SetTrigger("isDead");
+        agent.isStopped = true;
         yield return new WaitForSeconds(2f);
         DropLoot();
         yield return new WaitForSeconds(5f);
@@ -544,8 +576,12 @@ public virtual void Revive()
         GameObject newMonster = Instantiate(monsterPrefab, spawnPosition, Quaternion.identity);
         EnemyHealth newMonsterHealth = newMonster.GetComponent<EnemyHealth>();
 
+
         if (newMonsterHealth != null)
         {
+            newMonsterHealth.gameObject.SetActive(true);
+            ShowHealthBar();
+            
             // Close old loot window if exists
             if (trackedBearHealth != null && trackedBearHealth.lootWindow != null)
             {
@@ -603,10 +639,13 @@ public virtual void Revive()
                     {
                         // Oletetaan, että HealthBarissa on playerCamera-viittaus
                         EnemyHealthBar newHealthBar = newMonsterHealth.GetComponentInChildren<EnemyHealthBar>();
+                        newHealthBar.gameObject.SetActive(true);
+                        newMonsterHealth.ShowHealthBar();
                         if (newHealthBar != null)
                         {
                             newHealthBar.playerCamera = playerCamera;
                         }
+                        
                     }
                     else
                     {
