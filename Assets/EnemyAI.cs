@@ -25,6 +25,7 @@ public class EnemyAI : MonoBehaviour
     public float wanderTimer;
     public bool isAttacking; // Tieto siitä, onko vihollinen parhaillaan hyökkäämässä
     float randomAttack;
+    
 
     public void Start()
     {
@@ -39,6 +40,10 @@ public class EnemyAI : MonoBehaviour
 
     void Update()
     {
+        if (enemyHealth.isStunned)
+        {
+            return;
+        }
        
         float distanceToPlayer = Vector3.Distance(player.position, transform.position);
 

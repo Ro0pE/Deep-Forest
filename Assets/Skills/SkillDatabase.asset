@@ -472,7 +472,7 @@ MonoBehaviour:
     damagePerLevel: 0.2
     baseHeal: 0
     healPerLevel: 0
-    cooldown: 15
+    cooldown: 3
     castTime: 0.5
     manaCost: 20
     manaCostPerLevel: 20

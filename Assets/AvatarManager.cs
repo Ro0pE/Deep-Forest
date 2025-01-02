@@ -16,6 +16,7 @@ public class AvatarManager : MonoBehaviour
     public EnemyHealth enemyHealth; // Viittaus vihollisen terveyteen
     public GameObject avatarPanel; // Paneli, jossa kaikki näkyvät (kuva, palkki, teksti)
     public PlayerStats playerStats;
+    public GameObject enemyCastBarPanel;
 
     // Varmistetaan, että paneli on piilotettu alussa
     void Start()
@@ -26,6 +27,7 @@ public class AvatarManager : MonoBehaviour
             avatarPanel.SetActive(false); // Piilotetaan avatar alussa, jos ei ole valittua vihollista
         }
         monsterIconPanel.SetActive(false);
+        enemyCastBarPanel.SetActive(false);
     }
 
     public void Update()

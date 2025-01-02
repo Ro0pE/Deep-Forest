@@ -50,11 +50,15 @@ public class Buff
     {
         if (damage > 0)
         {
-            return $"Inflicts ({damage} * {stacks}) damage per second.";
+            return $"Inflicts {damage * stacks} damage per second.";
         }
 
         if (buffType == BuffType.Debuff)
         {
+            if (name.ToLower().Contains("stun"))
+            {
+                return $"Stunned for {duration} second{(duration > 1 ? "s" : "")}.";
+            }
             if (effectValue < 0)
             {
                 return $"Reduces {name} by {Mathf.Abs(effectValue) * 100}%";
@@ -72,4 +76,5 @@ public class Buff
 
         return "No effect.";
     }
+
 }

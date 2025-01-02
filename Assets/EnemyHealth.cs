@@ -34,7 +34,7 @@ public class EnemyHealth : MonoBehaviour
     public int experiencePoints = 50; // Kokemuspisteet, jotka vihollinen antaa
     public bool isDead = false;
     public bool isInterrupted = false;
-    private Animator animator;
+    public Animator animator;
     public PlayerAttack playerAttack;
     public GameObject healthBar; // Lisää tämä
     public float critMultiplier = 2f;
@@ -63,6 +63,8 @@ public class EnemyHealth : MonoBehaviour
     private const int MinHitChance = 5;
     public bool isMiss = false;
     public bool isHealthBarActive;
+    public bool isStunned = false;
+    
 
 
 

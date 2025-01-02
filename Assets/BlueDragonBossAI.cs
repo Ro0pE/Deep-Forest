@@ -10,6 +10,7 @@ public class BlueDragonBossAI : MonoBehaviour
     public Image castBar; // Viittaus CastBar-kuvakkeeseen
     public TextMeshProUGUI castTimeText; // Viittaus CastBarin ajan näyttöön
     public TextMeshProUGUI castBarSkillText;
+    public GameObject enemyCastBarPanel;
     public float detectionRange = 80f; // Etäisyys, jolla vihollinen havaitsee pelaajan
     public float attackRange = 25f; // Etäisyys, jolla vihollinen voi hyökätä pelaajaan
     public float wanderRadius = 100f; // Vaeltamisen säde
@@ -194,6 +195,7 @@ public class BlueDragonBossAI : MonoBehaviour
     // Castausmetodi
     public IEnumerator IceChargeCasting()
     {
+        enemyCastBarPanel.SetActive(true);
         enemyHealth.isInterrupted = false;
         iceChargerTimer = 0f;
         isCastingIceCharge = true;
@@ -233,6 +235,7 @@ public class BlueDragonBossAI : MonoBehaviour
             castBar.gameObject.SetActive(false);
             yield break;  // Lopeta korutiini, jotta ei aseteta debuffia
         }
+        
 
 
         // Kun castaus on valmis
@@ -245,6 +248,7 @@ public class BlueDragonBossAI : MonoBehaviour
 
         // Aloita IceCharge-metodi
         Debug.Log("Ice charge lähtee!");
+        enemyCastBarPanel.SetActive(false);
         IceCharge();
     }
 
@@ -290,6 +294,7 @@ public class BlueDragonBossAI : MonoBehaviour
 
     public IEnumerator FlameBreathCasting()
     {
+        enemyCastBarPanel.SetActive(true);
         isChargingToPlayer = false;
         animator.SetTrigger("isCastingFlame");
         enemyHealth.isInterrupted = false;
@@ -340,6 +345,7 @@ public class BlueDragonBossAI : MonoBehaviour
         agent.isStopped = false;
         agent.acceleration = 95f; // Palauta alkuperäinen kiihtyvyys
         isCastingFlameBreath = false;
+        enemyCastBarPanel.SetActive(false);
 
         // Aloita polttovahinko hyökkäys
        

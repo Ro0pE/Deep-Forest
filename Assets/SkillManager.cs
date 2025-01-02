@@ -5,6 +5,7 @@ using UnityEngine;
 public class SkillManager : MonoBehaviour
 {
     PlayerAttack playerAttack;
+    public BuffDatabase buffDatabase;
     // Start is called before the first frame update
     void Start()
     {
@@ -16,6 +17,20 @@ public class SkillManager : MonoBehaviour
     void Update()
     {
         
+    }
+    private void ApplyStunEffect(EnemyHealth targetEnemy)
+    {
+        targetEnemy.isStunned = true;
+        playerAttack.targetedEnemy.agent.isStopped = true;
+        targetEnemy.animator.SetBool("isStunned", true);
+        
+    }
+
+    private void RemoveStunEffect(EnemyHealth targetEnemy)
+    {
+        targetEnemy.isStunned = false;
+        targetEnemy.animator.SetBool("isStunned", false);
+        playerAttack.targetedEnemy.agent.isStopped = false;
     }
 
     public void ExecuteSkill(Skill skill)
@@ -85,13 +100,40 @@ public class SkillManager : MonoBehaviour
         yield return playerAttack.StartCoroutine(playerAttack.DealDamageAfterDelayMagic(skill, playerAttack.IsCriticalHit()));
     }
 
-    public IEnumerator StunningArrow(Skill skill)
-    {
+public IEnumerator StunningArrow(Skill skill)
+{
+    Buff stunData = buffDatabase.GetBuffByName("Stun");
+    Debug.Log($"stunData: Name={stunData.name}, EffectText={stunData.effectText}, Duration={stunData.duration}");
+    Buff stunBuf = new Buff(
+        stunData.name,
+        stunData.duration,
+        stunData.isStackable,
+        stunData.stacks,
+        stunData.buffIcon,
+        BuffType.Debuff, // Tämä on debuff
+        stunData.damage,
+        stunData.effectText,
+        stunData.effectValue,
+        () => ApplyStunEffect(playerAttack.targetedEnemy), // Käytetään lambda-funktiota
+        () => RemoveStunEffect(playerAttack.targetedEnemy) // Sama täällä
+        );
+
+        if (stunBuf == null)
+        {
+            Debug.LogError("Stun-buff creation failed!");
+        }
+        else
+        {
+            Debug.Log("WTF " + stunBuf.effectText);
+            
+            playerAttack.enemyBuffManager.AddBuff(stunBuf);
+        }
+
         yield return playerAttack.StartCoroutine(playerAttack.ShootArrows(playerAttack.targetedEnemy,playerAttack.arrowPrefab));
         yield return playerAttack.StartCoroutine(playerAttack.DealDamageAfterDelayMagic(skill, playerAttack.IsCriticalHit()));
-        playerAttack.targetedEnemy.agent.isStopped = true;
-        yield return new WaitForSeconds(3f);
-        playerAttack.targetedEnemy.agent.isStopped = false;
+        
+      
+        
         
     }
 

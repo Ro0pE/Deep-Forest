@@ -46,6 +46,7 @@ public class PlayerAttack : MonoBehaviour
     public Inventory playerInventory;
     public PlayerStats playerStats;
     public SkillManager SkillManager;
+    public EnemyBuffManager enemyBuffManager;
 
     private void Start()
     {
@@ -55,6 +56,7 @@ public class PlayerAttack : MonoBehaviour
         equipmentManager = FindObjectOfType<EquipmentManager>();
         playerHealth = FindObjectOfType<PlayerHealth>();
         playerStats = FindObjectOfType<PlayerStats>();
+        enemyBuffManager = FindObjectOfType<EnemyBuffManager>();
         isAttacking = false;
         outOfRange.SetActive(false);
         if (animator == null)
