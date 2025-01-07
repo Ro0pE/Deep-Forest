@@ -1,7 +1,6 @@
 using UnityEngine;
-using UnityEngine.UI;
-using System.Collections;
 using UnityEngine.AI;
+using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 
@@ -13,7 +12,6 @@ public class BrownBear : EnemyHealth
 
     public override void Start()
     {
-        // Aseta yksilöllinen sprite ennen EnemyHealth-luokan Start-logiikan kutsumista
         monsterName = "Brown Bear";
         monsterLevel = Random.Range(1, 5);
         enemySprite = Resources.Load<Sprite>("BrownBearAvatar");
@@ -26,21 +24,19 @@ public class BrownBear : EnemyHealth
         StartCoroutine(WaitForItemDatabaseAndAddLoot());
         base.Start();
     }
+
     private IEnumerator WaitForItemDatabaseAndAddLoot()
     {
-        // Odotetaan, että ItemDatabase on ladannut esineet
         while (itemDatabase == null || itemDatabase.items.Count == 0)
         {
             yield return null; // Odotetaan seuraavaa framea
         }
 
-        // Kun ItemDatabase on valmis, lisätään lootit viholliselle
         AddLootItemsAtStart();
     }
 
     public void AddLootItemsAtStart()
     {
-        // Karhukohtainen loot-logiikka
         lootItems.Clear(); // Tyhjennetään varmuuden vuoksi
 
         Item healingPotion = itemDatabase.GetItemByName("Minor Healing Potion");
@@ -78,10 +74,24 @@ public class BrownBear : EnemyHealth
         lootItems.Add(bearGloves);
         lootItems.Add(bearBelt);
         lootItems.Add(swordBear);
-        
 
         Debug.Log("BrownBear loot added.");
     }
 
+    // Override to handle death logic
+    public override void Die()
+    {
+        base.Die(); // Kutsu perittyä Die-metodia
 
+        // Päivitä questin progress, kun BrownBear kuolee
+        QuestManager questManager = FindObjectOfType<QuestManager>();
+        if (questManager != null)
+        {
+            // Tämän karhun tappaminen lisää progression Quest "DamnBearsQuestID" tavoitteelle
+            questManager.UpdateQuestProgress("DamnBears", GoalType.Kill, 1);
+            questManager.OnEnemyKill("Bear");
+        }
+
+        Debug.Log("BrownBear died and quest progress updated.");
+    }
 }

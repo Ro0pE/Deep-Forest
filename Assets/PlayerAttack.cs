@@ -47,6 +47,7 @@ public class PlayerAttack : MonoBehaviour
     public PlayerStats playerStats;
     public SkillManager SkillManager;
     public EnemyBuffManager enemyBuffManager;
+    public bool showEnemyHealthBar = false;
 
     private void Start()
     {
@@ -448,7 +449,14 @@ void UpdateEnemiesInRange()
 
 
 
-
+public IEnumerator Buff(Skill skill)
+{
+    if (skill != null)
+    {
+        SkillManager.ExecuteSkill(skill);
+    }
+     yield break;
+}
 
 public IEnumerator Attack(Skill skill)
 {

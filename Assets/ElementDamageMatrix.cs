@@ -20,7 +20,7 @@ private static readonly float[,] damageModifiers =
     public static float GetDamageModifier(Element attacker, Element defender)
     {
         // Käsittele Combat ja Defense erikseen, koska ne eivät ole vahingonlaskennassa mukana
-        if (attacker == Element.Combat || attacker == Element.Defense || defender == Element.Combat || defender == Element.Defense || attacker == Element.Neutral || defender == Element.Neutral)
+        if (attacker == Element.Melee || attacker == Element.Defense || defender == Element.Melee || defender == Element.Defense || attacker == Element.Neutral || defender == Element.Neutral || attacker == Element.Ranged || defender == Element.Ranged)
         {
             return defaultModifier;  // Neutraali vahinko
         }

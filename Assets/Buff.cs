@@ -29,7 +29,7 @@ public class Buff
 
     
     public Buff(string name, float duration, bool isStackable, int stacks, Sprite icon, BuffType buffType,
-                float damage, string effectText, float effectValue, System.Action applyEffect, System.Action removeEffect)
+                float damage, string effect, float effectValue, System.Action applyEffect, System.Action removeEffect)
     {
         this.name = name;
         this.duration = duration;
@@ -38,7 +38,7 @@ public class Buff
         this.buffIcon = icon;
         this.buffType = buffType;
         this.damage = damage;
-        this.effectText = GenerateEffectText();
+        this.effectText = GenerateEffectText(effect);
         this.effectValue = effectValue;
         this.applyEffect = applyEffect;
         this.removeEffect = removeEffect;
@@ -46,7 +46,7 @@ public class Buff
         
     }
 
-    private string GenerateEffectText()
+    private string GenerateEffectText(String effect)
     {
         if (damage > 0)
         {
@@ -71,7 +71,7 @@ public class Buff
 
         if (buffType == BuffType.Buff)
         {
-            return $"Increases {name} by {effectValue * 100}%";
+            return effect;
         }
 
         return "No effect.";

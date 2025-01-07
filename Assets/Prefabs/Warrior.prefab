@@ -258,6 +258,8 @@ MonoBehaviour:
   attackDamage: 1
   magickAttackDamage: 1
   critChance: 0
+  hitRating: 0
+  baseHitRating: 50
   attackSpeed: 2
   attackSpeedReduction: 0
   weaponAttackSpeed: 0
@@ -285,6 +287,10 @@ MonoBehaviour:
   playerHealth: {fileID: 0}
   equipmentManager: {fileID: 0}
   playerInventory: {fileID: 0}
+  playerStats: {fileID: 0}
+  SkillManager: {fileID: 0}
+  enemyBuffManager: {fileID: 0}
+  showEnemyHealthBar: 0
 --- !u!114 &3364863312871154683
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1077,9 +1083,10 @@ MonoBehaviour:
   - {fileID: 21300000, guid: da1f58789f4b8e94ebde8ec37875d655, type: 3}
   - {fileID: 21300000, guid: d1fff64bbc4964b4d83fbe46a2c8afde, type: 3}
   - {fileID: 21300000, guid: 28e805edd08f9a14bb2df60766987b1a, type: 3}
-  - {fileID: 21300000, guid: e3d32ebc63a4d9c46b6c00e18cf3f567, type: 3}
+  - {fileID: 21300000, guid: c30403190aa32934691bcf099bd3a293, type: 3}
+  - {fileID: 21300000, guid: 35098b447f47bb64b9b845814eecb855, type: 3}
+  - {fileID: 21300000, guid: 5ec27d0fb5d47ad4aadb0bb9856f3bfe, type: 3}
   - {fileID: 21300000, guid: 78d50b874b652984b86ab95c47fb836e, type: 3}
-  - {fileID: 21300000, guid: a013d359534b252429badb31ed2c2eb6, type: 3}
 --- !u!1 &4624891736774053273
 GameObject:
   m_ObjectHideFlags: 0
@@ -1137,6 +1144,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: b75389df4d1b0714b9e2435d651e493f, type: 2}
   - {fileID: 11400000, guid: dce988b3408011d49ad15caad05c07eb, type: 2}
   - {fileID: 11400000, guid: 5cf5c3e525c4111498ae6ac3a151811b, type: 2}
+  itemDatabase: {fileID: 0}
   inventoryPanel: {fileID: 0}
   maxItems: 25
   playerMoney: 0

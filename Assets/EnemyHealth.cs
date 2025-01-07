@@ -15,7 +15,8 @@ public enum Element
     Wind,
     Shadow,
     Holy,
-    Combat,
+    Melee,
+    Ranged,
     Defense,
     Neutral
     
@@ -102,18 +103,19 @@ public class EnemyHealth : MonoBehaviour
     if (Input.GetKeyDown(KeyCode.V))
     {
         // Tarkistetaan, onko terveyspalkki aktiivinen, ja vaihdetaan sen tila
-        if (healthBar.activeSelf)
+        if (!playerAttack.showEnemyHealthBar)
         {
-            isHealthBarActive = false;
+            playerAttack.showEnemyHealthBar = true;
+            
             
         }
         else
         {
-            isHealthBarActive = true;
+            playerAttack.showEnemyHealthBar = false;
            
         }
     }   
-    if (isHealthBarActive)
+    if (playerAttack.showEnemyHealthBar)
     {
         ShowHealthBar();
     }
@@ -486,11 +488,7 @@ public class EnemyHealth : MonoBehaviour
             {
                 playerStats.AddExperience(experiencePoints);
             }
-            Bear bearScript = GetComponent<Bear>();
-            if (bearScript != null)
-            {
-                bearScript.KillBear();
-            }
+
             
             
             
@@ -534,10 +532,10 @@ public class EnemyHealth : MonoBehaviour
     }
 
 
-    private void Die()
+// EnemyHealth-luokassa
+    public virtual void Die()
     {
-        
-       
+        // Peruslogiikka
         Destroy(gameObject); // Poista vihollinen pelistä
         Revive();
     }

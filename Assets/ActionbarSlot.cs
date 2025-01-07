@@ -105,6 +105,10 @@ public class ActionbarSlot : MonoBehaviour, IDropHandler
             {
                 playerHealth.Heal(assignedSkill.heal);
             }
+            else if (assignedSkill.spellType == SpellType.Buff)
+            {
+                StartCoroutine(playerAttack.Buff(assignedSkill));
+            }
         }
         else
         {

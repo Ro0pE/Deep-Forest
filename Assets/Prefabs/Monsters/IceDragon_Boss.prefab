@@ -1522,13 +1522,16 @@ MonoBehaviour:
   - {fileID: 21300000, guid: da1f58789f4b8e94ebde8ec37875d655, type: 3}
   - {fileID: 21300000, guid: d1fff64bbc4964b4d83fbe46a2c8afde, type: 3}
   - {fileID: 21300000, guid: 28e805edd08f9a14bb2df60766987b1a, type: 3}
-  - {fileID: 21300000, guid: e3d32ebc63a4d9c46b6c00e18cf3f567, type: 3}
+  - {fileID: 21300000, guid: c30403190aa32934691bcf099bd3a293, type: 3}
+  - {fileID: 21300000, guid: 35098b447f47bb64b9b845814eecb855, type: 3}
+  - {fileID: 21300000, guid: 5ec27d0fb5d47ad4aadb0bb9856f3bfe, type: 3}
   - {fileID: 21300000, guid: 78d50b874b652984b86ab95c47fb836e, type: 3}
   maxHealth: 2500
   currentHealth: 2500
   experiencePoints: 1200
   isDead: 0
   isInterrupted: 0
+  animator: {fileID: 0}
   playerAttack: {fileID: 0}
   healthBar: {fileID: 2468554027147137042}
   critMultiplier: 2
@@ -1547,6 +1550,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: c1355c103cdcc504294b5d5580cc7bc4, type: 2}
   droppedItems: []
   lootWindow: {fileID: 0}
+  trackedBearHealth: {fileID: 0}
   lootBackground: {fileID: 0}
   lootButtons:
   - {fileID: 0}
@@ -1562,6 +1566,8 @@ MonoBehaviour:
   playerInventory: {fileID: 0}
   enemySprite: {fileID: 21300000, guid: ec474873842776247b330571660b008a, type: 3}
   isMiss: 0
+  isHealthBarActive: 0
+  isStunned: 0
 --- !u!114 &6402966706051617070
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1641,6 +1647,7 @@ MonoBehaviour:
   castBar: {fileID: 0}
   castTimeText: {fileID: 0}
   castBarSkillText: {fileID: 0}
+  enemyCastBarPanel: {fileID: 0}
   detectionRange: 80
   attackRange: 25
   wanderRadius: 100

@@ -5,7 +5,8 @@ using System.Collections.Generic;
 public enum SpellType
 {
     Damage,
-    Heal
+    Heal,
+    Buff
     
 }
 public enum SkillType
@@ -60,6 +61,10 @@ public class Skill
     {
         if (!isPassive)
         {
+            if (skillType == SkillType.Spell)
+            {
+
+          
             if (spellType == SpellType.Damage)
             {
             float skillTotalDamage = (baseDamage + (damagePerLevel * (skillLevel - 1))) * playerStats.magickAttack;
@@ -79,6 +84,9 @@ public class Skill
             + " * MATK (<color=green>" + skillTotalHeal + "</color> health)\n"
             + "Increase healing 20% of MATK per skill level \n"
             + "Increase manacost <color=#1C81CF>" + manaCostPerLevel + "</color> per level";               
+            }
+            } else {
+                
             }
         }
     }

@@ -29,6 +29,8 @@ public class PlayerStats : MonoBehaviour
     public float def;
     public float castSpeed;
 
+    public int buffAgi = 0;
+    public int buffDex = 0;
     public int itemStr = 0;
     public int itemAgi = 0;
     public int itemInt = 0;
@@ -480,6 +482,21 @@ public class PlayerStats : MonoBehaviour
             UpdateStatTexts();
 
         }
+    }
+    public void AddBuffStat()
+    {
+        Debug.Log("Buff stats ADded");
+        agility = agility + buffAgi;
+        dexterity = dexterity + buffDex;
+        UpdateStatTexts();
+        UpdateStats();
+    }
+    public void RemoveBuffStat()
+    {
+        agility = agility - buffAgi;
+        dexterity = dexterity - buffDex;
+        UpdateStatTexts();
+        UpdateStats();
     }
     public void RemoveSkillPoint()
     {

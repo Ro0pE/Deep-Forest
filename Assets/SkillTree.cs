@@ -6,7 +6,8 @@ public class SkillTree : MonoBehaviour
     public SkillDatabase skillDatabase;  // SkillDatabase ScriptableObject
     public GameObject skillButtonPrefab; // Prefabi, joka sisältää UI-elementit
 
-    public Transform combatParent;  // Vanhempi, johon painikkeet lisätään
+    public Transform meleeParent;  // Vanhempi, johon painikkeet lisätään
+    public Transform rangedParent;  // Vanhempi, johon painikkeet lisätään
     public Transform defenceParent;  // Vanhempi, johon painikkeet lisätään
     public Transform fireParent;  // Vanhempi, johon painikkeet lisätään
     public Transform waterParent;  // Vanhempi, johon painikkeet lisätään
@@ -16,7 +17,8 @@ public class SkillTree : MonoBehaviour
     public Transform shadowParent;  // Vanhempi, johon painikkeet lisätään
 
     public GameObject skillTreeUI; // UI-elementti skill tree:lle
-    public Button activateCombat;
+    public Button activateMelee;
+    public Button activateRanged;
     public Button activateDefence;
     public Button activateFire;
     public Button activateWater;
@@ -26,7 +28,8 @@ public class SkillTree : MonoBehaviour
     public Button activateShadow;
 
 
-    public GameObject combatPanel;
+    public GameObject meleePanel;
+    public GameObject rangedPanel;
     public GameObject defencePanel;
     public GameObject firePanel;
     public GameObject waterPanel;
@@ -44,7 +47,8 @@ public class SkillTree : MonoBehaviour
 
     void Start()
     {
-        combatPanel.SetActive(false);
+        meleePanel.SetActive(true);
+        rangedPanel.SetActive(false);
         defencePanel.SetActive(false);
         firePanel.SetActive(false);
         waterPanel.SetActive(false);
@@ -74,10 +78,12 @@ public class SkillTree : MonoBehaviour
         // Määritä parent skillin tyypin mukaan
         switch (skill.element)
         {
-            case Element.Combat:
-                parent = combatParent;
+            case Element.Melee:
+                parent = meleeParent;
                 break;
-
+            case Element.Ranged:
+                parent = rangedParent;
+                break;
             case Element.Defense:
                 parent = defenceParent;
                 break;
@@ -173,16 +179,24 @@ public class SkillTree : MonoBehaviour
     }
 
     // Funktiot paneelien avaamiseen
-    public void OpenCombat()
+    public void OpenMelee()
     {
         // Suljetaan kaikki muut paneelit
         CloseAllPanels();
 
-        // Avaa vain combatPanel ja päivittää napit
-        combatPanel.SetActive(true);
-        ResetOtherButtons(activateCombat);
+        // Avaa vain meleePanel ja päivittää napit
+        meleePanel.SetActive(true);
+        ResetOtherButtons(activateMelee);
     }
+    public void OpenRanged()
+    {
+        // Suljetaan kaikki muut paneelit
+        CloseAllPanels();
 
+        // Avaa vain meleePanel ja päivittää napit
+        rangedPanel.SetActive(true);
+        ResetOtherButtons(activateRanged);
+    }
     public void OpenDefence()
     {
         // Suljetaan kaikki muut paneelit
@@ -253,7 +267,8 @@ public class SkillTree : MonoBehaviour
     // Sulkee kaikki paneelit
     void CloseAllPanels()
     {
-        combatPanel.SetActive(false);
+        meleePanel.SetActive(false);
+        rangedPanel.SetActive(false);
         defencePanel.SetActive(false);
         firePanel.SetActive(false);
         waterPanel.SetActive(false);
@@ -266,7 +281,7 @@ public class SkillTree : MonoBehaviour
     // Resetoi muiden napit takaisin normaaliksi
     void ResetOtherButtons(Button activeButton)
     {
-        Button[] buttons = { activateCombat, activateDefence, activateFire, activateWater, activateEarth, activateWind, activateHoly, activateShadow };
+        Button[] buttons = { activateMelee, activateRanged, activateDefence, activateFire, activateWater, activateEarth, activateWind, activateHoly, activateShadow };
         foreach (Button button in buttons)
         {
             if (button != activeButton)

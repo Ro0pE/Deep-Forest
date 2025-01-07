@@ -57,7 +57,7 @@ public class PlayerHealthBar : MonoBehaviour
         SetElementImage();
     }
         private void SetElementImage()
-    {
+        {
         
         if (playerAttack.autoaAttackElement != null && elementImage != null)
         {
@@ -82,14 +82,17 @@ public class PlayerHealthBar : MonoBehaviour
                 case Element.Holy:
                     elementImage.sprite = playerElementSprites[5]; // Holy sprite
                     break;
-                case Element.Combat:
+                case Element.Melee:
                     elementImage.sprite = playerElementSprites[6]; // Combat sprite
                     break;
+                case Element.Ranged:
+                    elementImage.sprite = playerElementSprites[7]; // Combat sprite
+                    break;                    
                 case Element.Defense:
-                    elementImage.sprite = playerElementSprites[7]; // Defense sprite
+                    elementImage.sprite = playerElementSprites[8]; // Defense sprite
                     break;
                 case Element.Neutral:
-                    elementImage.sprite = playerElementSprites[8]; // Defense sprite
+                    elementImage.sprite = playerElementSprites[9]; // Defense sprite
                     break;      
                 default:
                     elementImage.sprite = null; // Jos elementtiä ei ole, jätä kuva tyhjäksi

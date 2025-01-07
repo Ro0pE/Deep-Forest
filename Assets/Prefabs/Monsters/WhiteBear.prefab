@@ -188,12 +188,23 @@ MonoBehaviour:
   monsterName: 
   monsterLevel: 0
   enemyElement: 0
-  elementSprites: []
+  elementSprites:
+  - {fileID: 21300000, guid: b1e7ddba9686e764e87b228652221a61, type: 3}
+  - {fileID: 21300000, guid: bcabed2f9147c084ebf399a9e200c887, type: 3}
+  - {fileID: 21300000, guid: bfa1d0809cd57044d83dc5826d82a1e5, type: 3}
+  - {fileID: 21300000, guid: da1f58789f4b8e94ebde8ec37875d655, type: 3}
+  - {fileID: 21300000, guid: d1fff64bbc4964b4d83fbe46a2c8afde, type: 3}
+  - {fileID: 21300000, guid: 28e805edd08f9a14bb2df60766987b1a, type: 3}
+  - {fileID: 21300000, guid: c30403190aa32934691bcf099bd3a293, type: 3}
+  - {fileID: 21300000, guid: 35098b447f47bb64b9b845814eecb855, type: 3}
+  - {fileID: 21300000, guid: 5ec27d0fb5d47ad4aadb0bb9856f3bfe, type: 3}
+  - {fileID: 21300000, guid: 78d50b874b652984b86ab95c47fb836e, type: 3}
   maxHealth: 1000
   currentHealth: 0
   experiencePoints: 500
   isDead: 0
   isInterrupted: 0
+  animator: {fileID: 0}
   playerAttack: {fileID: 0}
   healthBar: {fileID: 7300362286094763323}
   critMultiplier: 2
@@ -213,6 +224,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: dfe5f865c23a7784d82b6f1d21c68005, type: 2}
   droppedItems: []
   lootWindow: {fileID: 0}
+  trackedBearHealth: {fileID: 0}
   lootBackground: {fileID: 0}
   lootButtons:
   - {fileID: 0}
@@ -228,6 +240,8 @@ MonoBehaviour:
   playerInventory: {fileID: 0}
   enemySprite: {fileID: 21300000, guid: d78c236b6d552d241b780fe0202de4ae, type: 2}
   isMiss: 0
+  isHealthBarActive: 0
+  isStunned: 0
 --- !u!1 &328941334559708880
 GameObject:
   m_ObjectHideFlags: 0

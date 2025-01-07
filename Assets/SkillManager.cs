@@ -5,12 +5,15 @@ using UnityEngine;
 public class SkillManager : MonoBehaviour
 {
     PlayerAttack playerAttack;
+    PlayerStats playerStats;
+    BuffManager buffManager;
     public BuffDatabase buffDatabase;
     // Start is called before the first frame update
     void Start()
     {
         playerAttack = FindObjectOfType<PlayerAttack>();
-        
+        playerStats = FindObjectOfType<PlayerStats>();
+        buffManager = FindObjectOfType<BuffManager>();
     }
 
     // Update is called once per frame
@@ -32,6 +35,22 @@ public class SkillManager : MonoBehaviour
         targetEnemy.animator.SetBool("isStunned", false);
         playerAttack.targetedEnemy.agent.isStopped = false;
     }
+    private void ApplyHawkEye(Skill skill)
+    {
+        Debug.Log("Apply haek eye metod");
+        playerStats.buffAgi = Mathf.RoundToInt(playerStats.agility * 1.04f + (0.02f * skill.skillLevel));
+        playerStats.buffDex = Mathf.RoundToInt(playerStats.dexterity * 1.04f + (0.02f * skill.skillLevel));
+        playerStats.AddBuffStat();
+        
+    }
+
+    private void RemoveHawkEye(Skill skill)
+    {
+        playerStats.RemoveBuffStat();
+        playerStats.buffAgi = 0;
+        playerStats.buffDex = 0;
+    }
+
 
     public void ExecuteSkill(Skill skill)
     {
@@ -51,6 +70,11 @@ public class SkillManager : MonoBehaviour
         else if (skill.skillName == "Bulls Eye")
         {
             StartCoroutine(BullsEye(skill));
+        }
+        else if (skill.skillName == "Hawk Eye")
+        {
+            Debug.Log("Lähtee");
+            StartCoroutine(HawkEye(skill));
         }
         else
         {
@@ -137,38 +161,58 @@ public IEnumerator StunningArrow(Skill skill)
         
     }
 
-public IEnumerator BullsEye(Skill skill)
-{
-    // Lataa tai aseta BullsEyeArrow-prefab
-    GameObject bullsEyeArrowPrefab = Resources.Load<GameObject>("Projectiles/BullsEyeArrow");
-
-    if (bullsEyeArrowPrefab == null)
+    public IEnumerator BullsEye(Skill skill)
     {
-        Debug.LogError("BullsEyeArrow prefab not found!");
-        yield break;
-    }
+        // Lataa tai aseta BullsEyeArrow-prefab
+        GameObject bullsEyeArrowPrefab = Resources.Load<GameObject>("Projectiles/BullsEyeArrow");
 
-    // Käynnistetään ShootArrows coroutine ja odotetaan sen palauttamista
-    GameObject projectile = null;
-
-    // Odotetaan ShootArrows coroutinea ja palautetaan projektiili
-    yield return StartCoroutine(playerAttack.ShootArrows(playerAttack.targetedEnemy, bullsEyeArrowPrefab));
-
-    // Tässä vaiheessa 'projectile' on käytettävissä, jos se palautettiin ShootArrows metodista
-    if (projectile != null)
-    {
-        Renderer renderer = projectile.GetComponent<Renderer>();
-        if (renderer != null)
+        if (bullsEyeArrowPrefab == null)
         {
-            renderer.material.color = Color.red; // Muuta esimerkiksi nuolen väri punaiseksi
+            Debug.LogError("BullsEyeArrow prefab not found!");
+            yield break;
         }
 
-        // Voit lisätä muita efektejä tai ominaisuuksia
-    }
+        // Käynnistetään ShootArrows coroutine ja odotetaan sen palauttamista
+        GameObject projectile = null;
 
-    // Vahingon käsittely
-    yield return playerAttack.StartCoroutine(playerAttack.DealDamageAfterDelayMagic(skill, playerAttack.IsCriticalHit()));
-}
+        // Odotetaan ShootArrows coroutinea ja palautetaan projektiili
+        yield return StartCoroutine(playerAttack.ShootArrows(playerAttack.targetedEnemy, bullsEyeArrowPrefab));
+
+        // Tässä vaiheessa 'projectile' on käytettävissä, jos se palautettiin ShootArrows metodista
+        if (projectile != null)
+        {
+            Renderer renderer = projectile.GetComponent<Renderer>();
+            if (renderer != null)
+            {
+                renderer.material.color = Color.red; // Muuta esimerkiksi nuolen väri punaiseksi
+            }
+
+            // Voit lisätä muita efektejä tai ominaisuuksia
+        }
+
+        // Vahingon käsittely
+        yield return playerAttack.StartCoroutine(playerAttack.DealDamageAfterDelayMagic(skill, playerAttack.IsCriticalHit()));
+    }
+    public IEnumerator HawkEye(Skill skill)
+    {
+            Buff hawkEyeData = buffDatabase.GetBuffByName("HawkEye");
+       
+            Buff hawkBuf = new Buff(
+                hawkEyeData.name,
+                hawkEyeData.duration,
+                hawkEyeData.isStackable,
+                hawkEyeData.stacks,
+                hawkEyeData.buffIcon,
+                BuffType.Buff, // Tämä on debuff
+                hawkEyeData.damage,
+                hawkEyeData.effectText,
+                hawkEyeData.effectValue,
+                () => ApplyHawkEye(skill), // Käytetään lambda-funktiota
+                () => RemoveHawkEye(skill) // Sama täällä
+                );
+                buffManager.AddBuff(hawkBuf);
+    yield return null; // Palauttaa null, koska coroutine odottaa palautusta.
+    }
 
 
 

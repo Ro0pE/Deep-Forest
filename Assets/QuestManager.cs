@@ -1,114 +1,84 @@
+using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
-using TMPro;
 
 public class QuestManager : MonoBehaviour
 {
-    public TextMeshProUGUI questDescriptionText;
-    public Button acceptButton;
-    public Button declineButton;
-    public Button rewardButton;
-    public TextMeshProUGUI rewardText;
-    public GameObject questPanel;
-    public GameObject questProgresPanel;
-    public GameObject questRewardPanel;
-    public TextMeshProUGUI questProgressText; // Viittaus UI-tekstiin
-    public PlayerStats playerStats;
+    public List<Quest> activeQuests; // Pelaajan aktiiviset questit
+    public List<Quest> completedQuests; // Suoritetut questit
 
-    private int bearsKilled = 0;
-    private int bearKillCount = 0;
-    private int bearsToKill = 10;
-    private bool questAccepted = false;
-    private int rewardAmount = 10; // Palkkio kultakolikoina
-    public bool questCompleted = false;
-
-    private void Start()
+    public void AddQuest(Quest newQuest)
     {
-        questPanel.SetActive(false); // Piilota quest-paneeli aluksi
-        questRewardPanel.SetActive(false);
-        questProgresPanel.SetActive(false);
-
-        acceptButton.onClick.AddListener(AcceptQuest);
-        declineButton.onClick.AddListener(DeclineQuest);
-        rewardButton.onClick.AddListener(AcceptReward);
-        
-        rewardText.text = $"Reward: {rewardAmount} gold";
-    }
-    public void resetQuest()
-    {
-        bearsKilled = 0;
-        bearKillCount = 0;
-        questAccepted = false;
-        questRewardPanel.SetActive(true);
-        questProgresPanel.SetActive(false);
-        questPanel.SetActive(false);
-        questProgressText.text = "Bears killed: " + bearsKilled + "/" + bearsToKill;
-    }
-
-    public void ShowQuest()
-    {
-        questPanel.SetActive(true);
-        //questDescriptionText.text = $"Kill {bearsToKill} bears to get {rewardAmount} gold.";
-    }
-
-    private void AcceptQuest()
-    {
-        questProgresPanel.SetActive(true);
-        questAccepted = true;
-        questPanel.SetActive(false);
-        Debug.Log("Quest hyväksytty!");
-    }
-    private void AcceptReward()
-{
-    questProgresPanel.SetActive(false);
-    questRewardPanel.SetActive(false);
-    Debug.Log("Quest completed! GOOD JOB");
-    playerStats.AddExperience(300);
-}
-
-    private void DeclineQuest()
-    {
-        questAccepted = false;
-        questPanel.SetActive(false);
-        Debug.Log("Quest hylätty.");
-    }
-
-    public void OnBearKilled()
-    {
-        if (bearsKilled < bearsToKill)
+        if (!activeQuests.Contains(newQuest))
         {
-        bearsKilled++;
-        UpdateQuestProgress();
-
-        }
-
-        if (bearsKilled >= bearsToKill)
-        {
-            questProgressText.text = "Bears killed: " + bearsKilled + "/" + bearsToKill + " Complete!";
-           CompleteQuest();
-            // Tässä voit päivittää palkinnon tai näyttää ilmoituksen pelaajalle
+            activeQuests.Add(newQuest);
         }
     }
 
-    private void UpdateQuestProgress()
+    public void CompleteQuest(Quest quest)
     {
-        if (questProgressText != null)
+        if (activeQuests.Contains(quest))
         {
-            questProgressText.text = "Bears killed: " + bearsKilled + "/" + bearsToKill;
-        }
-        else
-        {
-            Debug.LogWarning("Quest progress text not assigned in QuestManager.");
+            activeQuests.Remove(quest);
+            completedQuests.Add(quest);
+            Debug.Log($"Quest {quest.title} completed!");
         }
     }
 
-    private void CompleteQuest()
+    public void UpdateQuestProgress(string questID, GoalType goalType, int amount)
     {
-        Debug.Log("Quest suoritettu! Saat " + rewardAmount + " kultakolikkoa ja hitusen expaa.");
-        // Palkitse pelaaja (voit yhdistää tämän pelaajan inventaariosysteemiin)
-        questAccepted = false;
-        bearKillCount = 0;
-        questCompleted = true;
-        
+        // Muutetaan foreach -> for-silmukaksi
+        for (int i = 0; i < activeQuests.Count; i++)
+        {
+            Quest quest = activeQuests[i];
+            if (quest.questID == questID)
+            {
+                for (int j = 0; j < quest.goals.Count; j++)
+                {
+                    QuestGoal goal = quest.goals[j];
+                    if (goal.goalType == goalType)
+                    {
+                        goal.currentAmount += amount;
+                        if (goal.IsGoalCompleted())
+                        {
+                            Debug.Log($"Goal completed for quest: {quest.title}");
+                        }
+                    }
+                }
+
+                // Tarkista, onko kaikki tavoitteet suoritettu
+                if (quest.goals.TrueForAll(goal => goal.IsGoalCompleted()))
+                {
+                    CompleteQuest(quest);
+                }
+            }
+        }
     }
+    public void OnEnemyKill(string enemyName)
+    {
+        // Käydään läpi kaikki aktiiviset questit
+        foreach (var quest in activeQuests)
+        {
+            // Käydään läpi kaikki questin tavoitteet
+            foreach (var goal in quest.goals)
+            {
+                // Tarkistetaan, että tavoite on "Kill" ja että vihollinen on karhu
+                if (goal.goalType == GoalType.Kill && enemyName == "Bear") // Voit vaihtaa tähän tarkemman nimen
+                {
+                    goal.currentAmount += 1; // Lisätään tappoja
+                    Debug.Log($"Karhut tapettu: {goal.currentAmount}/{goal.requiredAmount}");
+
+                    // Tarkista, onko tavoite saavutettu
+                    if (goal.IsGoalCompleted())
+                    {
+                        Debug.Log($"Tavoite saavutettu questille: {quest.title}");
+                    }
+
+                    // Päivitetään questin edistyminen
+                    UpdateQuestProgress(quest.questID, GoalType.Kill, 1); // Päivitetään progress
+                }
+            }
+        }
+    }
+
+
 }

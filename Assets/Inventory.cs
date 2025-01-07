@@ -53,7 +53,7 @@ public class Inventory : MonoBehaviour
     }
 
     // Add item to inventory by name
-    void AddItemToInventoryByName(string itemName, int quantity)
+    public void AddItemToInventoryByName(string itemName, int quantity)
     {
         Item item = itemDatabase.GetItemByName(itemName);
        
@@ -249,5 +249,9 @@ public class Inventory : MonoBehaviour
         }
 
         return items.Where(item => item.itemName == equipment.itemName).Sum(item => item.quantity);
+    }
+    public void AddGold(int amount)
+    {
+        playerMoney = playerMoney + amount;
     }
 }

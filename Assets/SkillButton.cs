@@ -28,7 +28,7 @@ public class SkillButton : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndD
         // Alustetaan tarvittavat komponentit
         playerStats = FindObjectOfType<PlayerStats>();
 
-        skill.UpdateInfoText(); // Päivitä info tekstin aluksi
+        //skill.UpdateInfoText(); // Päivitä info tekstin aluksi
     
         iconRectTransform = skillIcon.GetComponent<RectTransform>();
         skillTooltipManager = FindObjectOfType<SkillTooltipManager>();
@@ -56,7 +56,7 @@ public class SkillButton : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndD
         levelUpButton.interactable = skill.skillLevel < skill.skillMaxLevel;
         levelUpButton.gameObject.SetActive(skill.isLearned);
         learnButton.gameObject.SetActive(!skill.isLearned);
-        skill.UpdateInfoText(); // Päivitä info tekstin aluksi
+        //skill.UpdateInfoText(); // Päivitä info tekstin aluksi
         UpdateSkillIconVisibility();
     }
     private void UpdateSkillIconVisibility()

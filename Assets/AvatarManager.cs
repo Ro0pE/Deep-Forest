@@ -129,11 +129,14 @@ public class AvatarManager : MonoBehaviour
                 case Element.Holy:
                     elementImage.sprite = enemyHealth.elementSprites[5]; // Holy sprite
                     break;
-                case Element.Combat:
+                case Element.Melee:
                     elementImage.sprite = enemyHealth.elementSprites[6]; // Combat sprite
                     break;
+                case Element.Ranged:
+                    elementImage.sprite = enemyHealth.elementSprites[7]; // Combat sprite
+                    break;
                 case Element.Defense:
-                    elementImage.sprite = enemyHealth.elementSprites[7]; // Defense sprite
+                    elementImage.sprite = enemyHealth.elementSprites[8]; // Defense sprite
                     break;
                 default:
                     elementImage.sprite = null; // Jos elementtiä ei ole, jätä kuva tyhjäksi

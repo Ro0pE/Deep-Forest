@@ -115,7 +115,7 @@ MonoBehaviour:
     skillMaxLevel: 10
     totalHeal: 0
     totalDamage: 0
-    addCrit: 9
+    addCrit: 4
     addDodge: 0
     isPassive: 1
     infoText: 'Deals damage 0 * MATK (<color=red>0</color>)
@@ -124,10 +124,10 @@ MonoBehaviour:
       0% per level
 
       Increase manacost <color=#1C81CF>0</color> per level'
-    element: 6
+    element: 7
     spellType: 0
     skillType: 3
-    isLearned: 0
+    isLearned: 1
     canInterrup: 0
   - skillName: Tiger Reflexes
     skillIcon: {fileID: 21300000, guid: 2a635a453f2a720498f5fe290c979140, type: 3}
@@ -145,13 +145,13 @@ MonoBehaviour:
     totalHeal: 0
     totalDamage: 0
     addCrit: 0
-    addDodge: 10
+    addDodge: 13
     isPassive: 1
     infoText: 
     element: 7
     spellType: 0
     skillType: 3
-    isLearned: 0
+    isLearned: 1
     canInterrup: 0
   - skillName: Heal
     skillIcon: {fileID: 21300000, guid: 82e106d18cfcea642a5fdbdcc72f015b, type: 3}
@@ -374,7 +374,7 @@ MonoBehaviour:
       10% per level
 
       Increase manacost <color=#1C81CF>15</color> per level'
-    element: 6
+    element: 7
     spellType: 0
     skillType: 1
     isLearned: 1
@@ -461,7 +461,7 @@ MonoBehaviour:
       10% per level
 
       Increase manacost <color=#1C81CF>9</color> per level'
-    element: 6
+    element: 7
     spellType: 0
     skillType: 1
     isLearned: 1
@@ -490,7 +490,7 @@ MonoBehaviour:
       20% per level
 
       Increase manacost <color=#1C81CF>20</color> per level'
-    element: 6
+    element: 7
     spellType: 0
     skillType: 1
     isLearned: 1
@@ -519,8 +519,32 @@ MonoBehaviour:
       50% per level
 
       Increase manacost <color=#1C81CF>25</color> per level'
-    element: 6
+    element: 7
     spellType: 0
+    skillType: 1
+    isLearned: 1
+    canInterrup: 0
+  - skillName: Hawk Eye
+    skillIcon: {fileID: 21300000, guid: 36679ff6c9c67a64f819b28e72d1f86e, type: 3}
+    baseDamage: 0
+    damagePerLevel: 0
+    baseHeal: 0
+    healPerLevel: 0
+    cooldown: 60
+    castTime: 0
+    manaCost: 15
+    manaCostPerLevel: 15
+    damageRange: 0
+    skillLevel: 0
+    skillMaxLevel: 5
+    totalHeal: 0
+    totalDamage: 0
+    addCrit: 0
+    addDodge: 0
+    isPassive: 0
+    infoText: Increases AGi and DEX 4 % + (2% * skill lvl) for 30sec
+    element: 7
+    spellType: 2
     skillType: 1
     isLearned: 1
     canInterrup: 0
