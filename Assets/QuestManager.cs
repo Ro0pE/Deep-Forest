@@ -14,19 +14,33 @@ public class QuestManager : MonoBehaviour
         }
     }
 
-    public void CompleteQuest(Quest quest)
+    public void MarkQuestAsReadyForCompletion(Quest quest)
     {
-        if (activeQuests.Contains(quest))
+        if (activeQuests.Contains(quest) && !quest.isCompleted)
         {
-            activeQuests.Remove(quest);
-            completedQuests.Add(quest);
-            Debug.Log($"Quest {quest.title} completed!");
+            quest.isReadyForCompletion = true;
+            Debug.Log($"Quest {quest.title} is ready for completion!");
         }
     }
 
+    public void CompleteQuest(Quest quest)
+    {
+        if (activeQuests.Contains(quest) && quest.isReadyForCompletion)
+        {
+            activeQuests.Remove(quest);
+            completedQuests.Add(quest);
+            quest.isCompleted = true;
+            Debug.Log($"Quest {quest.title} completed and moved to completed quests!");
+        }
+        else
+        {
+            Debug.Log($"Quest {quest.title} is not ready for completion yet.");
+        }
+    }
+
+
     public void UpdateQuestProgress(string questID, GoalType goalType, int amount)
     {
-        // Muutetaan foreach -> for-silmukaksi
         for (int i = 0; i < activeQuests.Count; i++)
         {
             Quest quest = activeQuests[i];
@@ -48,37 +62,33 @@ public class QuestManager : MonoBehaviour
                 // Tarkista, onko kaikki tavoitteet suoritettu
                 if (quest.goals.TrueForAll(goal => goal.IsGoalCompleted()))
                 {
-                    CompleteQuest(quest);
+                    quest.isReadyForCompletion = true; // Merkitään valmiiksi kerättäväksi
+                    Debug.Log($"Quest {quest.title} is ready for completion!");
                 }
             }
         }
     }
+
+
     public void OnEnemyKill(string enemyName)
     {
-        // Käydään läpi kaikki aktiiviset questit
         foreach (var quest in activeQuests)
         {
-            // Käydään läpi kaikki questin tavoitteet
             foreach (var goal in quest.goals)
             {
-                // Tarkistetaan, että tavoite on "Kill" ja että vihollinen on karhu
-                if (goal.goalType == GoalType.Kill && enemyName == "Bear") // Voit vaihtaa tähän tarkemman nimen
+                if (goal.goalType == GoalType.Kill && enemyName == "Bear")
                 {
-                    goal.currentAmount += 1; // Lisätään tappoja
+                    goal.currentAmount += 1;
                     Debug.Log($"Karhut tapettu: {goal.currentAmount}/{goal.requiredAmount}");
 
-                    // Tarkista, onko tavoite saavutettu
                     if (goal.IsGoalCompleted())
                     {
                         Debug.Log($"Tavoite saavutettu questille: {quest.title}");
                     }
 
-                    // Päivitetään questin edistyminen
-                    UpdateQuestProgress(quest.questID, GoalType.Kill, 1); // Päivitetään progress
+                    UpdateQuestProgress(quest.questID, GoalType.Kill, 1);
                 }
             }
         }
     }
-
-
 }

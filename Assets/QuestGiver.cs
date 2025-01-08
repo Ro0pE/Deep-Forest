@@ -23,10 +23,16 @@ public class QuestGiver : MonoBehaviour
     public TextMeshProUGUI questDescriptionText; // Questin kuvaus
     public Image questRewardItem1; // Palkintoesine 1
     public Image questRewardItem2; // Palkintoesine 2
+    public Image completeReward1; // Palkintoesine 1
+    public Image completeReward2; // Palkintoesine 2
     public TextMeshProUGUI questRewardExp; // Palkintokokemus
     public TextMeshProUGUI questRewardGold; // Palkintoraha
     public Button acceptButton; // Hyväksy-nappi
     public Button rejectButton; // Hylkää-nappi
+
+    public GameObject questCompletedWindow;
+    public TextMeshProUGUI questCompletedText;
+    public Button collectReward;
 
     void Start()
     {
@@ -39,12 +45,13 @@ public class QuestGiver : MonoBehaviour
 
         // Piilotetaan quest-ikkuna aluksi
         questWindow.SetActive(false);
+        questCompletedWindow.SetActive(false);
     }
 
     void Update()
     {
         // Päivitetään quest-merkintöjen sijainti ja suunta pelaajaa kohti
-        if (questHereMark != null && playerCamera != null)
+        if (playerCamera != null)
         {
             Vector3 worldPosition = transform.position + nameOffset;
             markPanel.position = worldPosition;
@@ -55,22 +62,64 @@ public class QuestGiver : MonoBehaviour
         // Päivitä merkit questin tilan mukaan
         if (questAccepted && IsQuestCompleted())
         {
-            questInProgress.SetActive(false);
+            
             questCompleted.SetActive(true);
         }
+        if (questToGive.isReadyForCompletion)
+        {
+            
+            questInProgress.SetActive(false);
+
+        }
+    }
+    private void ShowQuestCompletedPanel()
+    {
+        Item item1 = FindObjectOfType<ItemDatabase>().GetItemByName(questToGive.itemRewardNames.Count > 0 ? questToGive.itemRewardNames[0] : null);
+        Item item2 = FindObjectOfType<ItemDatabase>().GetItemByName(questToGive.itemRewardNames.Count > 1 ? questToGive.itemRewardNames[1] : null);
+
+        // Näytetään esineiden kuvat (sprite) UI:ssa
+        completeReward1.sprite = item1 != null ? item1.icon : null;
+        completeReward2.sprite = item2 != null ? item2.icon : null;
+
+        questCompletedWindow.SetActive(true); // Näytä paneeli
+        questCompletedText.text = questToGive.completeText;
+        Debug.Log($"Quest '{questToGive.title}' is already completed.");
     }
 
     void OnMouseDown()
     {
-        if (!questAccepted && questToGive != null)
+        if (IsQuestCompleted()) // Tarkista, onko quest jo suoritettu
         {
-            ShowQuestWindow(); // Avaa quest-ikkuna
+            collectReward.onClick.AddListener(CollectRewards);
+            ShowQuestCompletedPanel(); // Näytä suoritetun questin paneeli
         }
-        else if (questAccepted && IsQuestCompleted())
+        else if (!questAccepted && questToGive != null)
         {
-            CompleteQuest(); // Suorita quest, jos se on tehty
+            ShowQuestWindow(); // Näytä quest-ikkuna, jos quest ei ole hyväksytty
         }
     }
+    public void CollectRewards()
+    {
+        Debug.Log("Complete quest!");
+        if (questManager != null && questToGive != null)
+        {
+            Quest questInstance = questManager.activeQuests.Find(q => q.questID == questToGive.questID);
+            if (questInstance != null && questInstance.isReadyForCompletion)
+            {
+                questManager.CompleteQuest(questInstance); // Siirretään quest completed-listalle
+                GiveRewardsToPlayer(questInstance); // Annetaan palkinnot
+            }
+            else
+            {
+                Debug.Log("Quest is not ready for completion yet.");
+            }
+        }
+
+        questCompletedWindow.SetActive(false);
+        questInProgress.SetActive(false);
+        questCompleted.SetActive(false);
+    }
+
 
     private void ShowQuestWindow()
     {
@@ -87,8 +136,8 @@ public class QuestGiver : MonoBehaviour
         questRewardItem1.sprite = item1 != null ? item1.icon : null;
         questRewardItem2.sprite = item2 != null ? item2.icon : null;
 
-        questRewardExp.text = questToGive.experienceReward > 0 ? questToGive.experienceReward.ToString() : "None";
-        questRewardGold.text = questToGive.goldReward > 0 ? questToGive.goldReward.ToString() : "None";
+        questRewardExp.text = questToGive.experienceReward > 0 ? questToGive.experienceReward.ToString() : "-";
+        questRewardGold.text = questToGive.goldReward > 0 ? questToGive.goldReward.ToString() : "-";
 
         // Asetetaan napit toimimaan
         acceptButton.onClick.AddListener(AcceptQuest);
@@ -105,6 +154,7 @@ public class QuestGiver : MonoBehaviour
             questAccepted = true;
             questWindow.SetActive(false); // Piilotetaan quest-ikkuna
             questInProgress.SetActive(true);
+            questHereMark.SetActive(false);
             Debug.Log($"Quest '{questToGive.title}' accepted!");
         }
     }
@@ -117,8 +167,10 @@ public class QuestGiver : MonoBehaviour
 
     private void CompleteQuest()
     {
+        Debug.Log("Lisätäään comp listaan");
         if (questManager != null)
         {
+            Debug.Log("manager ei null");
             // Muunna QuestData Quest-objektiksi
             Quest questInstance = new Quest(questToGive); // Käytämme aiemmin lisättyä konstruktoria
             
@@ -133,13 +185,14 @@ public class QuestGiver : MonoBehaviour
 
     private bool IsQuestCompleted()
     {
-        if (questManager != null)
+        if (questManager != null && questToGive != null)
         {
-            bool isQuestInCompleted = questManager.completedQuests.Exists(q => q.questID == questToGive.questID && q.goals.TrueForAll(goal => goal.IsGoalCompleted()));
-            return isQuestInCompleted; // Quest löytyy suoritetuista questista ja kaikki tavoitteet on suoritettu
+            Quest quest = questManager.activeQuests.Find(q => q.questID == questToGive.questID);
+            return quest != null && quest.isReadyForCompletion; // Palautetaan true, jos quest löytyy ja on suoritettu
         }
         return false;
     }
+
 
     // Metodi, joka antaa pelaajalle kaikki palkinnot
     private void GiveRewardsToPlayer(Quest quest)

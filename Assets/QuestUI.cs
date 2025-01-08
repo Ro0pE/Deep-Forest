@@ -37,8 +37,16 @@ public class QuestUI : MonoBehaviour
         
         foreach (var quest in questManager.activeQuests)
         {
+            if (quest.isReadyForCompletion)
+            {
+                questInfo += $"{quest.title}:  COMPLETED!";
+            }
+            else
+            {
             questInfo += $"{quest.title}:  ";
             questInfo += $"Progress: {GetQuestProgress(quest)}";
+            }
+
         }
         
         questText.text = questInfo;

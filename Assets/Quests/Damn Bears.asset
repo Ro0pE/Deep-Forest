@@ -16,6 +16,8 @@ MonoBehaviour:
   title: Damn bears!
   description: These bears are getting out of hand! They are eating my wifes blueberries.
     Could you help me and get rid of those damn bears!
+  completeText: Thank you so much! My wife is now super happy and you know what they
+    say; Happy wife, happy life! Here, take these rewards to help you on your adventure!
   experienceReward: 400
   goldReward: 0
   itemRewardNames:
@@ -23,6 +25,7 @@ MonoBehaviour:
   - Bow of the bear
   goals:
   - goalDescription: Kill brown bears
-    requiredAmount: 3
-    currentAmount: 3
+    requiredAmount: 4
+    currentAmount: 12
     goalType: 0
+  isReadyForCompletion: 0
