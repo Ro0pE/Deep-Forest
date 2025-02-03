@@ -8,6 +8,9 @@ public class SkillManager : MonoBehaviour
     PlayerStats playerStats;
     BuffManager buffManager;
     public BuffDatabase buffDatabase;
+    private Coroutine bleedCoroutine;
+    private Dictionary<EnemyHealth, Coroutine> activeBleedCoroutines = new Dictionary<EnemyHealth, Coroutine>();
+
     // Start is called before the first frame update
     void Start()
     {
@@ -21,19 +24,81 @@ public class SkillManager : MonoBehaviour
     {
         
     }
+            
+    
+
+
+private IEnumerator ApplyBleedDamage(EnemyHealth targetEnemy, Skill skill)
+{
+    Debug.Log("BLEED DAMAGE LÄHTEE: " + targetEnemy);
+    float tickInterval = 1f; // Vahinkoa kerran sekunnissa
+
+    while (true)
+    {
+        // Tarkista BuffManager ja Bleed-buff
+        EnemyBuffManager buffManager = targetEnemy.GetComponent<EnemyBuffManager>();
+        if (buffManager == null)
+        {
+            Debug.LogError("EnemyBuffManager not found on target!");
+            yield break;
+        }
+
+        Buff bleedBuff = buffManager.activeBuffs.Find(b => b.name == "Bleed");
+        if (bleedBuff == null || bleedBuff.duration <= 0f)
+        {
+            Debug.Log($"Bleed effect ended for: {targetEnemy}");
+            yield break; // Lopeta korutiini, kun buffi ei ole enää aktiivinen
+        }
+
+        // Vahingon käsittely
+        Debug.Log($"Dealing bleed damage from {skill.skillName}, BaseDamage: {skill.baseDamage} to target: {targetEnemy}");
+        targetEnemy.TakeDamage(skill, false);
+
+        yield return new WaitForSeconds(tickInterval);
+    }
+}
+
+private void ApplyBleedEffect(EnemyHealth targetEnemy, Skill skill)
+{
+    Debug.Log($"Applying bleed effect to: {targetEnemy}");
+
+    // Tarkista, onko kohteella jo aktiivinen korutiini
+    if (activeBleedCoroutines.TryGetValue(targetEnemy, out Coroutine existingCoroutine))
+    {
+        StopCoroutine(existingCoroutine); // Pysäytä aiempi korutiini
+    }
+
+    // Käynnistä uusi korutiini ja lisää se sanakirjaan
+    Coroutine newCoroutine = StartCoroutine(ApplyBleedDamage(targetEnemy, skill));
+    activeBleedCoroutines[targetEnemy] = newCoroutine;
+}
+
+private void RemoveBleedEffect(EnemyHealth targetEnemy, Skill skill)
+{
+    Debug.Log($"Removing bleed effect from: {targetEnemy}");
+
+    // Lopeta ja poista aktiivinen korutiini, jos sellainen löytyy
+    if (activeBleedCoroutines.TryGetValue(targetEnemy, out Coroutine existingCoroutine))
+    {
+        StopCoroutine(existingCoroutine);
+        activeBleedCoroutines.Remove(targetEnemy);
+    }
+}
+
     private void ApplyStunEffect(EnemyHealth targetEnemy)
     {
         targetEnemy.isStunned = true;
-        playerAttack.targetedEnemy.agent.isStopped = true;
+        targetEnemy.agent.isStopped = true;
         targetEnemy.animator.SetBool("isStunned", true);
         
     }
 
     private void RemoveStunEffect(EnemyHealth targetEnemy)
     {
+        Debug.Log("Removing stun");
         targetEnemy.isStunned = false;
         targetEnemy.animator.SetBool("isStunned", false);
-        playerAttack.targetedEnemy.agent.isStopped = false;
+        targetEnemy.agent.isStopped = false;
     }
     private void ApplyHawkEye(Skill skill)
     {
@@ -73,8 +138,13 @@ public class SkillManager : MonoBehaviour
         }
         else if (skill.skillName == "Hawk Eye")
         {
-            Debug.Log("Lähtee");
+           
             StartCoroutine(HawkEye(skill));
+        }
+        else if (skill.skillName == "Bleeding Strike")
+        {
+           
+            StartCoroutine(BleedingStrike(skill));
         }
         else
         {
@@ -85,7 +155,7 @@ public class SkillManager : MonoBehaviour
 
     public void MultiArrow(Skill skill)
     {       
-        Debug.Log("Multi arrow inc!");
+        
     // Laukaistaan nuoli kohteeseen
     playerAttack.StartCoroutine(playerAttack.ShootArrows(playerAttack.targetedEnemy,playerAttack.arrowPrefab));
     playerAttack.StartCoroutine(playerAttack.DealDamageAfterDelayMagic(skill, playerAttack.IsCriticalHit()));
@@ -100,7 +170,7 @@ public class SkillManager : MonoBehaviour
         {
             // Tarkista, onko kyseessä toinen vihollinen
             EnemyHealth otherEnemy = hitCollider.GetComponent<EnemyHealth>();
-            if (otherEnemy != null && otherEnemy != playerAttack.targetedEnemy) // Ei tehdä vahinkoa alkuperäiselle kohteelle
+            if (otherEnemy != null && otherEnemy != playerAttack.targetedEnemy && !otherEnemy.isDead) // Ei tehdä vahinkoa alkuperäiselle kohteelle
             {
                 // Tee vahinkoa muille vihollisille rinnakkain
                 playerAttack.StartCoroutine(playerAttack.DealDamageAfterDelayMagic(skill, playerAttack.IsCriticalHit(), otherEnemy));
@@ -127,7 +197,9 @@ public class SkillManager : MonoBehaviour
 public IEnumerator StunningArrow(Skill skill)
 {
     Buff stunData = buffDatabase.GetBuffByName("Stun");
-    Debug.Log($"stunData: Name={stunData.name}, EffectText={stunData.effectText}, Duration={stunData.duration}");
+    
+    EnemyHealth stunnedEnemy = playerAttack.targetedEnemy;
+    EnemyBuffManager targetBuffManager = stunnedEnemy.GetComponent<EnemyBuffManager>();
     Buff stunBuf = new Buff(
         stunData.name,
         stunData.duration,
@@ -138,8 +210,8 @@ public IEnumerator StunningArrow(Skill skill)
         stunData.damage,
         stunData.effectText,
         stunData.effectValue,
-        () => ApplyStunEffect(playerAttack.targetedEnemy), // Käytetään lambda-funktiota
-        () => RemoveStunEffect(playerAttack.targetedEnemy) // Sama täällä
+        () => ApplyStunEffect(stunnedEnemy), // Käytetään lambda-funktiota
+        () => RemoveStunEffect(stunnedEnemy) // Sama täällä
         );
 
         if (stunBuf == null)
@@ -148,9 +220,9 @@ public IEnumerator StunningArrow(Skill skill)
         }
         else
         {
-            Debug.Log("WTF " + stunBuf.effectText);
             
-            playerAttack.enemyBuffManager.AddBuff(stunBuf);
+            
+            targetBuffManager.AddBuff(stunBuf);
         }
 
         yield return playerAttack.StartCoroutine(playerAttack.ShootArrows(playerAttack.targetedEnemy,playerAttack.arrowPrefab));
@@ -213,6 +285,68 @@ public IEnumerator StunningArrow(Skill skill)
                 buffManager.AddBuff(hawkBuf);
     yield return null; // Palauttaa null, koska coroutine odottaa palautusta.
     }
+public IEnumerator BleedingStrike(Skill skill)
+{
+    Buff bleedData = buffDatabase.GetBuffByName("Bleed");
+    if (playerAttack.targetedEnemy == null)
+    {
+        Debug.LogError("playerAttack.targetedEnemy is null!");
+        yield break; // Lopeta korutiini
+    }
+
+    if (skill.damageRange > 0f)
+    {
+        Collider[] hitColliders = Physics.OverlapSphere(playerAttack.targetedEnemy.transform.position, skill.damageRange);
+        Debug.Log("Vihuja lähellä: " + hitColliders.Length);
+
+        foreach (Collider hitCollider in hitColliders)
+        {
+            EnemyHealth otherEnemy = hitCollider.GetComponent<EnemyHealth>();
+                if (otherEnemy == null)
+                {
+                    
+                    continue; // Ohita osuma, jos ei ole vihollinen
+                }
+                if (!hitCollider.CompareTag("Enemy"))
+                {
+                    continue; // Ohita collider, jos tagi ei ole "Enemy"
+                }
+
+                
+                if (otherEnemy == null)
+                {
+                    continue; // Ohita collider, jos siinä ei ole EnemyHealth-komponenttia
+                }
+
+                Debug.Log("Bleed Target: " + otherEnemy);
+            if (otherEnemy != null)
+            {
+                EnemyBuffManager otherBuffManager = otherEnemy.GetComponent<EnemyBuffManager>();
+                if (otherBuffManager != null)
+                {
+                    Buff newBleedBuff = new Buff(
+                        bleedData.name,
+                        bleedData.duration,
+                        bleedData.isStackable,
+                        bleedData.stacks,
+                        bleedData.buffIcon,
+                        BuffType.Debuff,
+                        bleedData.damage,
+                        bleedData.effectText,
+                        bleedData.effectValue,
+                        () => ApplyBleedEffect(otherEnemy, skill),
+                        () => RemoveBleedEffect(otherEnemy, skill)
+                    );
+                    Debug.Log("BUFF ADDING TO MANAGER " + otherEnemy);
+                    otherBuffManager.AddBuff(newBleedBuff);
+                }
+            }
+        }
+    }
+
+    yield return null;
+}
+
 
 
 

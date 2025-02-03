@@ -1,0 +1,37 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f0c24347ec8ef9f4b8c7e38d4e7785bf, type: 3}
+  m_Name: A Thorny Situation
+  m_EditorClassIdentifier: 
+  questID: Athornysituation
+  title: A Thorny Situation
+  description: "Near the forest\u2019s edge, strange cactus-like creatures have started
+    sprouting where they don\u2019t belong. They\u2019re not just weird\u2014they\u2019re
+    dropping sharp thorns everywhere! Collect their thorny cores to stop the spread
+    and clean up the area."
+  completeText: "Great job clearing out those strange cactus creatures! With their
+    thorny cores removed, the forest\u2019s edge is safe again, and the paths are
+    much easier to walk without those nasty thorns everywhere. Thanks for cleaning
+    up the mess!"
+  experienceReward: 150
+  goldReward: 12
+  itemRewardNames:
+  - Healing Potion
+  - Healing Potion
+  goals:
+  - goalDescription: Collect Thorns
+    requiredAmount: 15
+    currentAmount: 15
+    itemToCollect: Thorn
+    enemyToKill: Spikthorn
+    goalType: 1
+  isReadyForCompletion: 0

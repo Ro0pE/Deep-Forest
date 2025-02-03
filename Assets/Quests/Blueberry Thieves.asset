@@ -1,0 +1,40 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f0c24347ec8ef9f4b8c7e38d4e7785bf, type: 3}
+  m_Name: Blueberry Thieves
+  m_EditorClassIdentifier: 
+  questID: StrawberryThieves
+  title: Strawberry Thieves
+  description: "\"The bears have stolen all our strawberries, and now my wife, Joanna,
+    is heartbroken. Those greedy creatures have taken the best of the crop, and I
+    need your help to get them back. Track down the bears and gather the stolen strawberries
+    from their lairs.  Be careful, though\u2014these bears won\u2019t give up their
+    prize easily. But if you manage to take back the berries, we\u2019ll be forever
+    grateful.\""
+  completeText: "Thank the stars! You\u2019ve actually managed to retrieve our straweberries!
+    I can't believe you pulled it off, especially with those bears lurking around.
+    Joanna will be overjoyed when I tell her the news. You\u2019ve saved us, and
+    now we can finally enjoy our harvest. Take this reward\u2014consider it a small
+    gesture for all your trouble."
+  experienceReward: 300
+  goldReward: 20
+  itemRewardNames:
+  - Mana Potion
+  - Necklace of the owl
+  goals:
+  - goalDescription: Collect all the strawberries.
+    requiredAmount: 3
+    currentAmount: 4
+    itemToCollect: Strawberry
+    enemyToKill: 
+    goalType: 1
+  isReadyForCompletion: 0

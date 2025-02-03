@@ -49,3 +49,12 @@ MonoBehaviour:
     damage: 0
     effectText: Increase AGI and DEX
     effectValue: 0
+  - name: Bleed
+    duration: 10
+    isStackable: 0
+    stacks: 0
+    buffIcon: {fileID: 21300000, guid: 299e837b7de144a49bb0d66f7600bf95, type: 3}
+    buffType: 1
+    damage: 1
+    effectText: 1 damage per sec
+    effectValue: 0

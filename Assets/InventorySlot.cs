@@ -3,7 +3,7 @@ using TMPro;
 using UnityEngine.UI;  // Lisätty, jotta pääsemme käsiksi Button-komponenttiin
 using UnityEngine.EventSystems;
 
-public class InventorySlot : MonoBehaviour
+public class InventorySlot : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler
 {
     public Transform itemTransform;  // Tämä on objekti, joka näyttää itemin ikonin
     public Item currentItem;
@@ -18,6 +18,12 @@ public class InventorySlot : MonoBehaviour
 
     private float lastClickTime = 0f;  // Aikaleima edellisestä klikkauksesta
     public float doubleClickTimeLimit = 0.5f;  // Aikaraja tuplaklikkaukselle
+    private Canvas parentCanvas;
+    private RectTransform itemRectTransform;
+    private Vector3 initialItemPosition;
+    [SerializeField] private RectTransform playerInventoryPanel; // Viittaus pelaajan inventory-paneliin
+    public GameObject confirmationPanel;
+
 
     void Start()
     {
@@ -26,10 +32,13 @@ public class InventorySlot : MonoBehaviour
         playerHealth = FindObjectOfType<PlayerHealth>();
         inventoryUI = FindObjectOfType<InventoryUI>();
         itemTooltipManager = FindObjectOfType<ItemTooltipManager>();
+        
 
         if (itemTransform != null)
         {
             itemImage = itemTransform.GetComponent<Image>();
+            itemRectTransform = itemTransform.GetComponent<RectTransform>();
+
             if (itemImage == null)
             {
                 Debug.LogError("itemTransform doesn't have an Image component attached!");
@@ -41,11 +50,21 @@ public class InventorySlot : MonoBehaviour
         }
 
         button = GetComponent<Button>();
+        parentCanvas = GetComponentInParent<Canvas>();
 
-        // Kutsutaan UpdateUI-metodia varmistamaan, että UI päivittyy oikein
         if (inventoryUI != null)
         {
-            inventoryUI.UpdateUI(); // Päivitetään UI heti pelin alussa
+            confirmationPanel = inventoryUI.confirmationPanel;
+            //confirmationPanel.SetActive(false);
+
+            //Button yesButton = inventoryUI.GetYesButton();
+            //Button noButton = inventoryUI.GetNoButton();
+
+            inventoryUI.UpdateUI();
+        }
+        if (playerInventoryPanel == null && inventoryUI != null)
+        {
+            playerInventoryPanel = inventoryUI.GetComponent<RectTransform>();
         }
     }
 
@@ -76,18 +95,21 @@ public class InventorySlot : MonoBehaviour
         }
     }
 
-    public void ClearSlot()
+public void ClearSlot()
+{
+    if (currentItem != null)
     {
-        if (currentItem != null)
+        currentItem = null;
+        if (itemImage != null)
         {
-            currentItem = null;
-            if (itemImage != null)
-            {
-                itemImage.sprite = null;  // Tyhjennetään ikoni
-            }
-            quantityText.text = "";
+            itemImage.sprite = null;  // Tyhjennetään ikoni
         }
+        quantityText.text = "";
     }
+    // Piilotetaan slotti, jos item on tyhjä
+    gameObject.SetActive(false);
+}
+
 
     public bool IsEmpty()
     {
@@ -118,6 +140,7 @@ public class InventorySlot : MonoBehaviour
             {
                 // Vain päivitämme UI:n määrä
                 quantityText.text = currentItem.quantity.ToString();
+                inventoryUI.UpdateUI();
             }
         }
     }
@@ -176,6 +199,15 @@ public class InventorySlot : MonoBehaviour
                 playerHealth.RestoreMana(potion.manaAmount);
                 RemoveItem();
                 Debug.Log($"Used potion: {itemName} and healed for {potion.healAmount} HP.");
+                QuestManager questManager = FindObjectOfType<QuestManager>();
+                if (questManager != null)
+                {
+                    Debug.Log("Quest manager pitäs updatee");
+                    // Tämän karhun tappaminen lisää progression Quest "DamnBearsQuestID" tavoitteelle
+                    questManager.UpdateCollectQuestProgress(currentItem);
+                    
+                    
+                }
             }
         }
 
@@ -244,5 +276,98 @@ public class InventorySlot : MonoBehaviour
     public void HideItemTooltip()
     {
         itemTooltipManager.HideTooltip();
+    }
+        // Aloita vetäminen
+    public void OnBeginDrag(PointerEventData eventData)
+    {
+        if (currentItem == null) return;
+
+        initialItemPosition = itemRectTransform.position;
+        itemImage.raycastTarget = false;
+        Debug.Log("Drag started!");
+    }
+
+    public void OnDrag(PointerEventData eventData)
+    {
+        if (currentItem == null) return;
+
+        Vector3 mousePosition;
+        RectTransformUtility.ScreenPointToWorldPointInRectangle(
+            parentCanvas.transform as RectTransform,
+            eventData.position,
+            eventData.pressEventCamera,
+            out mousePosition
+        );
+        itemRectTransform.position = mousePosition;
+    }
+
+public void OnEndDrag(PointerEventData eventData)
+{
+    if (currentItem == null) return;
+
+    itemImage.raycastTarget = true;
+
+
+    // Piilotetaan vedettävä esine, jotta se ei ole näkyvissä, kun vahvistusikkuna avautuu
+    itemImage.gameObject.SetActive(false);
+
+    // Tarkista, onko vetäminen päättynyt inventoryn ulkopuolella
+    if (!RectTransformUtility.RectangleContainsScreenPoint(playerInventoryPanel, eventData.position, eventData.pressEventCamera))
+    {
+        if (inventoryUI.confirmationPanelParent != null)
+        {
+            inventoryUI.confirmationPanel.SetActive(true); // Avaa vahvistusikkuna
+
+            // Asetetaan vahvistus- ja peruutuspainikkeet
+            inventoryUI.yesButton.onClick.RemoveAllListeners();  // Poistetaan mahdolliset vanhat kuuntelijat
+            inventoryUI.noButton.onClick.RemoveAllListeners();
+
+            // Asetetaan itemToDelete kuvan avulla
+            inventoryUI.itemToDelete.sprite = currentItem.icon; // Asetetaan kuva itemistä
+            inventoryUI.itemToDelete.enabled = true;  // Varmistetaan, että kuva näkyy
+
+            // Kun "Yes" painetaan, poistetaan item
+            inventoryUI.yesButton.onClick.AddListener(() => {
+                RemoveItem(); // Poistetaan item pelaajan inventorysta
+                inventoryUI.confirmationPanel.SetActive(false); // Suljetaan varmistusikkuna
+                itemRectTransform.position = initialItemPosition; // Palautetaan alkuperäinen sijainti
+                itemImage.gameObject.SetActive(true);
+            });
+
+            // Kun "No" painetaan, palautetaan item alkuperäiseen sijaintiin
+            inventoryUI.noButton.onClick.AddListener(() => {
+                inventoryUI.confirmationPanel.SetActive(false); // Suljetaan varmistusikkuna
+                itemRectTransform.position = initialItemPosition; // Palautetaan alkuperäinen sijainti
+                itemImage.gameObject.SetActive(true);
+            });
+        }
+        else
+        {
+            Debug.Log("Confirmation panel is null");
+        }
+    }
+    else
+    {
+        Debug.Log("Dropped inside inventory");
+        itemRectTransform.position = initialItemPosition;
+    }
+    
+}
+
+    private void ConfirmItemRemoval()
+    {
+        Debug.Log("Item removed");
+        RemoveItem();
+        //confirmationPanel.SetActive(false);
+        //itemRectTransform.position = initialItemPosition;
+        
+    }
+
+    private void CancelItemRemoval()
+    {
+        Debug.Log("Item removal canceled");
+       // confirmationPanel.SetActive(false);
+        itemRectTransform.position = initialItemPosition;
+        
     }
 }

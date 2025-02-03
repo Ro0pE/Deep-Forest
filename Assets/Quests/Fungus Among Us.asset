@@ -1,0 +1,34 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f0c24347ec8ef9f4b8c7e38d4e7785bf, type: 3}
+  m_Name: Fungus Among Us
+  m_EditorClassIdentifier: 
+  questID: FungusAmongUs
+  title: Fungus Among Us!
+  description: "A bunch of clumsy, mushroom-like creatures has popped up in the forest.
+    They\u2019re not exactly terrifying, but they\u2019re annoying enough to be a
+    problem. Clear them out before they cause more trouble!"
+  completeText: "With the last of the goofy mushroom critters defeated, peace returns
+    to the forest. Let\u2019s hope they don\u2019t grow back anytime soon!"
+  experienceReward: 200
+  goldReward: 5
+  itemRewardNames:
+  - Minor Mana Potion
+  - Minor Healing Potion
+  goals:
+  - goalDescription: Kill Spores
+    requiredAmount: 15
+    currentAmount: 0
+    itemToCollect: 
+    enemyToKill: Spore
+    goalType: 0
+  isReadyForCompletion: 0

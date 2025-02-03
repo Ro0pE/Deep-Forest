@@ -14,10 +14,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   questID: DamnBears
   title: Damn bears!
-  description: These bears are getting out of hand! They are eating my wifes blueberries.
-    Could you help me and get rid of those damn bears!
-  completeText: Thank you so much! My wife is now super happy and you know what they
-    say; Happy wife, happy life! Here, take these rewards to help you on your adventure!
+  description: "\"The bears have been terrorizing my wife, Joanna, and ruining our
+    blueberry harvest. They come at night, clawing through the woods and devouring
+    every berry in sight. I\u2019ve tried to stop them, but they\u2019re too strong. 
+    Please, hunt down these cursed bears and bring me their fangs as proof. But beware,
+    there\u2019s a massive white bear in the area\u2014it's more dangerous than the
+    rest, and I\u2019ve heard it\u2019s been acting strange. Stay clear of it if
+    you value your life!\""
+  completeText: "Ah, you\u2019ve returned! I can see by the look on your face that
+    the bears are no more. And you\u2019ve brought their fangs as proof, just as
+    I asked. You\u2019ve done a great service to this village and to Joanna, who
+    can finally rest easy. We are forever in your debt. Please, take this as a token
+    of our gratitude."
   experienceReward: 400
   goldReward: 0
   itemRewardNames:
@@ -26,6 +34,8 @@ MonoBehaviour:
   goals:
   - goalDescription: Kill brown bears
     requiredAmount: 4
-    currentAmount: 12
+    currentAmount: 4
+    itemToCollect: 
+    enemyToKill: Bear
     goalType: 0
   isReadyForCompletion: 0

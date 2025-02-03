@@ -99,6 +99,7 @@ public class PlayerStats : MonoBehaviour
     public PlayerUI playerUI;
     public PlayerHealthBar playerHealthBar;
     public SkillDatabase skillDatabase;
+    public Button closeStatsButton;
 
     void Start()
     {   
@@ -505,5 +506,10 @@ public class PlayerStats : MonoBehaviour
     public void UpdateSkillPoints()
     {
         skillPointsLeftText.text = $"Skill points: {skillPoints}";
+    }
+    public void Close()
+    {
+        characterStats.SetActive(false);
+
     }
 }

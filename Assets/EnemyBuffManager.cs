@@ -9,17 +9,22 @@ public class EnemyBuffManager : MonoBehaviour
 
     public List<Buff> activeBuffs = new List<Buff>();
     public EnemyHealth enemyHealth;
+    public AvatarManager avatarManager;
 
 
     private void Start()
     {
         enemyHealth = GetComponent<EnemyHealth>();
+        avatarManager = FindObjectOfType<AvatarManager>();
 
     }
 
     public void AddBuff(Buff buff)
     {
+         Debug.Log("Add buff to enemy: " + enemyHealth);
+
         Buff existingBuff = activeBuffs.Find(b => b.name == buff.name);
+        EnemyHealthBar enemyHealthBar = enemyHealth.GetComponent<EnemyHealthBar>();
 
         if (existingBuff != null)
         {
@@ -29,11 +34,13 @@ public class EnemyBuffManager : MonoBehaviour
                 existingBuff.duration = buff.duration;
                 existingBuff.applyEffect();
                 UpdateEffectText(existingBuff);
+                enemyHealthBar.AddBuffIcon(buff);
             }
             else
             {
                 existingBuff.duration = buff.duration;
                 existingBuff.applyEffect();
+                enemyHealthBar.AddBuffIcon(buff);
             }
         }
         else
@@ -47,22 +54,21 @@ public class EnemyBuffManager : MonoBehaviour
                 buff.stacks = 1; // Start with one stack
             }
 
-            // Optional UI logic
+            // Päivitetään UI
             if (buffParent != null && buffPrefab != null)
             {
-                GameObject newBuffUI = Instantiate(buffPrefab, buffParent);
-                buffUI buffUIComponent = newBuffUI.GetComponent<buffUI>();
-                buffUIComponent.buffIcon.sprite = buff.buffIcon;
-                buffUIComponent.UpdateDuration(buff.duration, buff.stacks);
-                buffUIComponent.Initialize(buff);
-                buff.uiComponent = buffUIComponent;
+                if (avatarManager != null)
+                {
+                    avatarManager.CreateBuffUI(buff);
+                }
             }
         }
     }
 
+
     private void UpdateEffectText(Buff buff)
     {
-
+       
         if (buff.effectText.Contains("damage per second"))
         {
             float totalDamage = buff.damage * buff.stacks;
@@ -96,6 +102,7 @@ public class EnemyBuffManager : MonoBehaviour
 
     public void RemoveBuff(Buff buff)
     {
+        
         if (buff.isStackable && buff.stacks > 1)
         {
             buff.stacks--;
@@ -112,7 +119,7 @@ public class EnemyBuffManager : MonoBehaviour
         }
     }
 
-    private void Update()
+    public void Update()
     {
         for (int i = activeBuffs.Count - 1; i >= 0; i--)
         {
@@ -125,6 +132,10 @@ public class EnemyBuffManager : MonoBehaviour
             }
 
             if (buff.duration <= 0)
+            {
+                RemoveBuff(buff);
+            }
+            if (enemyHealth.isDead)
             {
                 RemoveBuff(buff);
             }

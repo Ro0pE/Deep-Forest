@@ -200,7 +200,12 @@ public class ItemDatabase : MonoBehaviour
         // Haetaan sprite
         string spriteName = row[26] != null && !string.IsNullOrEmpty(row[26].ToString()) ? row[26].ToString() : "default_sprite"; // Asetetaan oletusarvo "default_sprite", jos spriteName on tyhjä
         newEquipment.icon = LoadSprite(spriteName, newEquipment.itemType);   // Ladataan sprite "Equipment"-kansiosta
-        newEquipment.model = string.IsNullOrEmpty(row[27]?.ToString()) ? EquipmentModel.Sword : (EquipmentModel)Enum.Parse(typeof(EquipmentModel), row[27].ToString());
+
+        // Muodostetaan modelName stringiksi ennen kuin annetaan se LoadModel-metodille
+        string modelName = string.IsNullOrEmpty(row[27]?.ToString()) ? EquipmentModel.Sword.ToString() : row[27].ToString(); // Käytetään enumia stringinä
+        newEquipment.model = (EquipmentModel)Enum.Parse(typeof(EquipmentModel), modelName);
+        newEquipment.modelPrefab = LoadModel(modelName, newEquipment.itemType);
+
         newEquipment.isStackable = row[28] != null && !string.IsNullOrEmpty(row[28].ToString()) ? bool.Parse(row[28].ToString()) : false;
 
         return newEquipment;
@@ -228,6 +233,10 @@ public class ItemDatabase : MonoBehaviour
             {
                 path = "Sprites/Equipment/" + spriteName;  // Equipment kansio
             }
+            else if (itemType == "Misc")
+            {
+                path = "Sprites/Misc/" + spriteName;  // Equipment kansio
+            }
             else
             {
                 Debug.LogError("Unknown item type: " + itemType);
@@ -249,6 +258,37 @@ public class ItemDatabase : MonoBehaviour
 
             return loadedSprite;
         }
+        // Lataa malli Resources-kansiosta vain, jos itemType on Equipment
+        GameObject LoadModel(string modelName, string itemType)
+        {
+            // Jos itemType ei ole Equipment, palautetaan null, ei ladata mallia
+            if (itemType != "Equipment")
+            {
+                return null;
+            }
+
+            // Muodostetaan model-nimi ilman "_model" -päätettä
+            string modelNameFormatted = modelName.ToLower().Replace(" ", "_");
+
+            // Määritellään polku Equipment-malleille
+            string path = "Models/Equipment/" + modelNameFormatted;  // Equipment kansio
+
+            // Lataa malli määritellyn polun mukaan (oletetaan, että se on prefab)
+            GameObject loadedModel = Resources.Load<GameObject>(path);
+
+            // Debug-tuloste, jotta tiedämme, ladataanko malli oikein
+            if (loadedModel == null)
+            {
+                Debug.LogError($"Model '{path}' not found in Resources!");
+            }
+            else
+            {
+                Debug.Log($"Model '{path}' loaded successfully.");
+            }
+
+            return loadedModel;
+        }
+
 
 
 

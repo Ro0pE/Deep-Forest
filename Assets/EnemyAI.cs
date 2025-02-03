@@ -16,6 +16,8 @@ public class EnemyAI : MonoBehaviour
     public float attackDamage = 5f; // Hyökkäysvoima
     public float groundCheckDistance = 1.5f; // Maan tarkistuksen etäisyys
     public float attackCooldown = 1.5f; // Hyökkäysväli
+    public float walkSpeed = 5f; // Oletusnopeus vaeltamiseen
+    public float runSpeed = 10f; // Oletusnopeus pelaajaa jahdatessa
 
     public NavMeshAgent agent;
     public Transform player;
@@ -24,7 +26,8 @@ public class EnemyAI : MonoBehaviour
     public Animator animator;
     public float wanderTimer;
     public bool isAttacking; // Tieto siitä, onko vihollinen parhaillaan hyökkäämässä
-    float randomAttack;
+    public float randomAttack;
+    public float distanceToPlayer; 
     
 
     public void Start()
@@ -36,16 +39,17 @@ public class EnemyAI : MonoBehaviour
         animator = GetComponent<Animator>();
         wanderTimer = wanderInterval;
         isAttacking = false; // Vihollinen ei hyökkää alussa
+
     }
 
-    void Update()
+    public void Update()
     {
         if (enemyHealth.isStunned)
         {
             return;
         }
        
-        float distanceToPlayer = Vector3.Distance(player.position, transform.position);
+        distanceToPlayer = Vector3.Distance(player.position, transform.position);
 
         if (distanceToPlayer <= attackRange && !isAttacking)
         {
@@ -83,6 +87,9 @@ public class EnemyAI : MonoBehaviour
 
 public virtual IEnumerator DelayedAttack()
 {
+    Vector3 directionToPlayer = (player.position - transform.position).normalized;
+    Quaternion targetRotation = Quaternion.LookRotation(directionToPlayer);
+    transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * 25f); // Aseta kääntymisnopeus tarvittaessa
     animator.SetBool("isAttacking", true);
     animator.SetBool("isWalking", false);
     animator.SetBool("isRunning", false);
@@ -96,7 +103,7 @@ public virtual IEnumerator DelayedAttack()
     animator.SetBool("isAttacking", false);
 }
 
-    public void AttackPlayer()
+    public virtual void AttackPlayer()
     {
 
 
@@ -141,35 +148,52 @@ public virtual IEnumerator DelayedAttack()
          
     }
 
-    public virtual void ChasePlayer(float distanceToPlayer)
-    {
-
+public virtual void ChasePlayer(float distanceToPlayer)
+{
     if (player != null)
     {
-        agent.speed = 9;
-        //animator.SetFloat("Speed", agent.velocity.magnitude);
+        detectionRange = 70;
+        agent.speed = runSpeed;
         animator.SetBool("isRunning", true);
 
+        // Jos agentilla on voimassa oleva reitti, jatka sen seuraamista
+        if (agent.hasPath && !agent.pathPending && !agent.isPathStale)
+        {
+            // Jos reitti on voimassa, liikutaan sen mukaan
+            agent.SetDestination(player.position);
+            return;
+        }
+
+        // Jos ei ole reittiä, etsitään uusi reitti
         if (distanceToPlayer <= attackRange)
         {
             animator.SetBool("isRunning", false);
-            // Pysäytä agentti heti, kun ollaan hyökkäysetäisyydellä
             agent.isStopped = true;
-            // Aloita hyökkäys heti ilman viivettä
+
             if (!isAttacking)
             {
                 StartCoroutine(DelayedAttack());
             }
         }
+        else if (distanceToPlayer <= detectionRange)
+        {
+            agent.isStopped = false;
+
+            // Jos ei ole reittiä tai se on vanhentunut, asetetaan uusi reitti
+            if (!agent.hasPath || agent.isPathStale || agent.pathPending)
+            {
+                Debug.Log("Reitti ei ole voimassa tai agentti odottaa reittiä.");
+                agent.ResetPath();
+                agent.SetDestination(player.position);
+            }
+        }
         else
         {
-            
-            agent.isStopped = false;
-            agent.SetDestination(player.position);
-
+            Debug.Log("Pelaaja on liian kaukana.");
         }
     }
 }
+
 
 
 
@@ -180,11 +204,13 @@ public virtual IEnumerator DelayedAttack()
             //Debug.Log("Cant wander while dead");
             return;
         }
-        agent.speed = 5;
+        detectionRange = 40;
+        agent.speed = walkSpeed;
         //animator.SetFloat("Speed", agent.velocity.magnitude);
         animator.SetBool("isRunning", false);
         animator.SetBool("isWalking", true);
         wanderTimer += Time.deltaTime;
+
 
         // Jos vihollinen on saavuttanut määränpäänsä tai vaeltaminen on kestänyt tarpeeksi pitkään, valitse uusi kohde
         if (wanderTimer >= wanderInterval || agent.remainingDistance < 0.5f)

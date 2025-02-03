@@ -65,12 +65,15 @@ public class EnemyHealth : MonoBehaviour
     public bool isMiss = false;
     public bool isHealthBarActive;
     public bool isStunned = false;
+    public EnemyAI enemyAI;
+    public PlayerMovement playerMovement;
     
 
 
 
     public virtual void Start()
     {
+        playerMovement = FindObjectOfType<PlayerMovement>();
         agent = GetComponent<NavMeshAgent>();
         playerStats = FindObjectOfType<PlayerStats>();
         avatarManager = FindObjectOfType<AvatarManager>();
@@ -80,6 +83,7 @@ public class EnemyHealth : MonoBehaviour
         currentHealth = maxHealth;
         animator = GetComponent<Animator>();
         itemDatabase = FindObjectOfType<ItemDatabase>();
+       
         
         spawnPosition = transform.position; // Tallentaa alkuperäisen sijainnin
 
@@ -100,22 +104,7 @@ public class EnemyHealth : MonoBehaviour
 
     public void Update()
     {
-    if (Input.GetKeyDown(KeyCode.V))
-    {
-        // Tarkistetaan, onko terveyspalkki aktiivinen, ja vaihdetaan sen tila
-        if (!playerAttack.showEnemyHealthBar)
-        {
-            playerAttack.showEnemyHealthBar = true;
-            
-            
-        }
-        else
-        {
-            playerAttack.showEnemyHealthBar = false;
-           
-        }
-    }   
-    if (playerAttack.showEnemyHealthBar)
+    if (playerMovement.showEnemyHealthBar)
     {
         ShowHealthBar();
     }
@@ -124,11 +113,6 @@ public class EnemyHealth : MonoBehaviour
         HideHealthBar();
     }
     }
-
-
-    
-
-
     public void createLoot()
     {
         foreach (Item item in lootItems)
@@ -149,8 +133,12 @@ public class EnemyHealth : MonoBehaviour
             Debug.LogError("Loot UI -elementit eivät ole asetettu oikein!");
             return;
         }*/
+        if (lootWindow != null)
+        {
+                    lootWindow.SetActive(true);
+        }
 
-        lootWindow.SetActive(true);
+
 
         for (int i = 0; i < lootButtons.Count; i++)
         {
@@ -193,22 +181,42 @@ public class EnemyHealth : MonoBehaviour
         }
     }
 
-    private void CollectItem(int index)
+private void CollectItem(int index)
+{
+    if (index < droppedItems.Count)
     {
-        if (index < droppedItems.Count)
+        Item item = droppedItems[index];
+
+        // Tarkistetaan, onko esine jo inventaariossa
+        Item existingItem = playerInventory.items.Find(i => i.itemName == item.itemName && i.isStackable);
+
+        if (existingItem != null)
         {
-            Item item = droppedItems[index];
-           
+            // Jos esine on stackable ja löytyy jo inventaariosta, lisää määrää
+            existingItem.quantity += item.quantity;
 
-            // Tarkistetaan, onko esine jo inventaariossa
-            Item existingItem = playerInventory.items.Find(i => i.itemName == item.itemName && i.isStackable);
+            // Poistetaan esine loot-windowista, koska se lisätty inventaariossa
+            droppedItems.RemoveAt(index);
 
-            if (existingItem != null)
+            // Päivitetään loot window
+            ShowLootWindow();
+
+            // Tarkista, onko loot-lista tyhjä
+            if (droppedItems.Count == 0)
             {
-                // Jos esine on stackable ja löytyy jo inventaariosta, lisää määrää
-                existingItem.quantity += item.quantity;
+                DestroyLootWindow(); // Suljetaan loot-ikkuna, kun kaikki loot on kerätty
+            }
+        }
+        else
+        {
+            // Jos esine ei ole stackable tai sitä ei löydy inventaariosta
+            if (playerInventory.items.Count < playerInventory.maxItems)
+            {
+                playerInventory.AddItem(item);
 
-                // Poistetaan esine loot-windowista, koska se lisättiin pinoon
+                // Siirretään OnItemCollected tännekin, jotta quest päivittyy myös silloin
+
+                // Poistetaan esine loot-windowista vain, jos lisäys onnistui
                 droppedItems.RemoveAt(index);
 
                 // Päivitetään loot window
@@ -222,30 +230,30 @@ public class EnemyHealth : MonoBehaviour
             }
             else
             {
-                // Jos esine ei ole stackable tai sitä ei löydy inventaariosta
-                if (playerInventory.items.Count < playerInventory.maxItems)
-                {
-                    playerInventory.AddItem(item);
-
-                    // Poistetaan esine loot-windowista vain, jos lisäys onnistui
-                    droppedItems.RemoveAt(index);
-
-                    // Päivitetään loot window
-                    ShowLootWindow();
-
-                    // Tarkista, onko loot-lista tyhjä
-                    if (droppedItems.Count == 0)
-                    {
-                        DestroyLootWindow(); // Suljetaan loot-ikkuna, kun kaikki loot on kerätty
-                    }
-                }
-                else
-                {
-                    Debug.LogWarning("Inventaario täynnä! Ei voida lisätä: " + item.itemName);
-                }
+                Debug.LogWarning("Inventaario täynnä! Ei voida lisätä: " + item.itemName);
             }
         }
+        if (playerInventory.items.Count < playerInventory.maxItems)
+        {
+
+        }
+        else
+        {
+            Debug.Log("invetory full, Cant add quest item");
+        }
+        QuestManager questManager = FindObjectOfType<QuestManager>();
+        if (questManager != null)
+        {
+            Debug.Log("Quest manager pitäs updatee");
+            // Tämän karhun tappaminen lisää progression Quest "DamnBearsQuestID" tavoitteelle
+            questManager.UpdateCollectQuestProgress(item);
+            
+            
+        }
     }
+
+}
+
 
     public void HideLootWindow()
     {
@@ -318,6 +326,7 @@ public class EnemyHealth : MonoBehaviour
 
     public void TakeDamage(Skill skill, bool isCrit)
     {
+        enemyAI.detectionRange = 70;
 
         float modifier = ElementDamageMatrix.GetDamageModifier(skill.element, enemyElement);
         if (skill.skillType == SkillType.Melee)
@@ -503,9 +512,10 @@ public class EnemyHealth : MonoBehaviour
         Debug.Log("DIE ANIMATION SET");
         animator.SetTrigger("isDead");
         agent.isStopped = true;
+        HideHealthBar();
         yield return new WaitForSeconds(2f);
         DropLoot();
-        yield return new WaitForSeconds(5f);
+        yield return new WaitForSeconds(25f);
         Die();
 
         // Pudota loot kuoleman viiveen jälkeen
@@ -551,7 +561,7 @@ public class EnemyHealth : MonoBehaviour
     // Näytä health bar
     public void ShowHealthBar()
     {
-        if (healthBar != null)
+        if (healthBar != null && isDead == false)
         {
             healthBar.SetActive(true); // Näytä health bar
         }
@@ -575,6 +585,7 @@ public virtual void Revive()
         // Create new enemy
         GameObject newMonster = Instantiate(monsterPrefab, spawnPosition, Quaternion.identity);
         EnemyHealth newMonsterHealth = newMonster.GetComponent<EnemyHealth>();
+        EnemyBuffManager newMonsterBuffManager = newMonster.GetComponent<EnemyBuffManager>();
 
 
         if (newMonsterHealth != null)
@@ -651,6 +662,18 @@ public virtual void Revive()
                     {
                         Debug.LogError("Pelaajan kameraa ei löytynyt!");
                     }
+                                        // Assign buffParent programmatically if it's null
+                    if (newMonsterBuffManager.buffParent == null)
+                    {
+                        // Find or create the buffParent (for example in UI)
+                        newMonsterBuffManager.buffParent = GameObject.Find("EnemyBuffParent")?.transform;
+                        if (newMonsterBuffManager.buffParent == null)
+                        {
+                            Debug.LogError("BuffParent not found! You should assign it manually in the inspector or make sure it's in the scene.");
+                        }
+                    }
+
+                    
                 }
                 else
                 {

@@ -1568,6 +1568,8 @@ MonoBehaviour:
   isMiss: 0
   isHealthBarActive: 0
   isStunned: 0
+  enemyAI: {fileID: 0}
+  playerMovement: {fileID: 0}
 --- !u!114 &6402966706051617070
 MonoBehaviour:
   m_ObjectHideFlags: 0

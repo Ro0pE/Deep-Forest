@@ -5,7 +5,7 @@ public class PlayerMovement : MonoBehaviour
     [Header("Liikkeen asetukset")]
     public float moveSpeed = 10f; // Pelaajan liikenopeus
     public float jumpForce = 35f; // Hyppyvoima
-    private bool isGrounded; // Onko pelaaja maassa?
+    public bool isGrounded; // Onko pelaaja maassa?
     public float originalSpeed = 10f;
     public float castingMoveSpeed = 5f;
     public LayerMask groundLayer; // Maan tarkistamiseen
@@ -16,20 +16,31 @@ public class PlayerMovement : MonoBehaviour
 
     [Header("Hiiren ja kameran asetukset")]
     public Transform cameraTransform; // Pelaajan kamera
+    public Camera mainCamera; // Pääkamera Field of View -muutoksiin
     public float mouseSensitivity = 2f;
+    public float zoomSpeed = 10f; // Zoomauksen nopeus
+    public float minFOV = 15f; // Minimi Field of View
+    public float maxFOV = 90f; // Maksimi Field of View
     private float verticalLookRotation;
+    public bool showEnemyHealthBar = false;
+    public PlayerAttack playerAttack;
 
     [Header("Animaatio")]
     public Animator animator;
 
     private void Start()
     {
-
+        playerAttack = FindObjectOfType<PlayerAttack>();
         // Alustukset
         controller = GetComponent<CharacterController>();
         if (animator == null)
         {
             animator = GetComponent<Animator>();
+        }
+
+        if (mainCamera == null)
+        {
+            mainCamera = Camera.main; // Aseta oletuskamera, jos ei ole määritelty
         }
 
         // Lukitsee hiiren
@@ -39,10 +50,16 @@ public class PlayerMovement : MonoBehaviour
 
     private void Update()
     {
-   
         HandleMovement();
         HandleJump();
         HandleCamera();
+        HandleZoom();
+
+        if (Input.GetKeyDown(KeyCode.V))
+        {
+            showEnemyHealthBar = !showEnemyHealthBar;
+            Debug.Log("Health bar: " + showEnemyHealthBar);
+        }
     }
 
     private void HandleMovement()
@@ -95,8 +112,6 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
-
-
     private void HandleJump()
     {
         // Tarkistetaan, onko pelaaja maassa
@@ -118,56 +133,78 @@ public class PlayerMovement : MonoBehaviour
         // Hyppy
         if (Input.GetButtonDown("Jump") && isGrounded)
         {
-         
-            // Lisää hyppyvoimaa ja tee siitä nopeampi
+            if (playerAttack.attackRange <= 15)
+            {
+                if (playerAttack.isAttacking)
+                {
+                    animator.SetTrigger("JumpMeleeAttacking");
+                }
+                else
+                {
+                     animator.SetTrigger("JumpMelee");
+                }
+            }
+            else if (playerAttack.attackRange > 30)
+            {
+                if (playerAttack.isAttacking)
+                {
+                    animator.SetTrigger("JumpRangedAttack");
+                }
+                else
+                {
+                     animator.SetTrigger("JumpRanged");
+                }
+                
+            }
+            else 
+            {
+                animator.SetTrigger("Jump");
+            }
+            
+           
+            
             velocity.y = Mathf.Sqrt(jumpForce * -2f * Physics.gravity.y); // Nopeampi hyppy
         }
 
         // Putoaminen
-        if (!isGrounded) 
+        if (!isGrounded)
         {
-            // Nopeampi putoaminen
-            velocity.y += Physics.gravity.y * fallMultiplier * Time.deltaTime; 
+            velocity.y += Physics.gravity.y * fallMultiplier * Time.deltaTime; // Nopeampi putoaminen
         }
         else
         {
-            // Jos pelaaja on maassa, pysyy nopeus vähintään -2 (ei leiju)
-            velocity.y = Mathf.Max(velocity.y, -2f);
+            velocity.y = Mathf.Max(velocity.y, -2f); // Varmista, ettei nopeus yläty liian suureksi
         }
 
         // Liikuta pelaajaa
         controller.Move(velocity * Time.deltaTime);
+        //animator.SetBool("isJumping", false);
     }
-
 
     private void HandleCamera()
     {
-        // Tarkista, onko oikea hiiren näppäin painettuna
-        if (Input.GetMouseButton(1))  // 1 on oikea hiiren näppäin
+        if (Input.GetMouseButton(1)) // Oikea hiiren nappi
         {
-            // Hiiren liike kameran pyörittämiseksi (vain jos oikea hiiren näppäin on painettu)
             float horizontal = Input.GetAxis("Mouse X") * mouseSensitivity;
             float vertical = Input.GetAxis("Mouse Y") * mouseSensitivity;
 
-            // Rajoita pystysuuntaista kameran kääntymistä
             verticalLookRotation -= vertical;
-            verticalLookRotation = Mathf.Clamp(verticalLookRotation, -100f, 100f);
+            verticalLookRotation = Mathf.Clamp(verticalLookRotation, -80f, 80f);
 
-            // Aseta kameran paikallinen rotaatio (pystysuunta)
-            cameraTransform.localRotation = Quaternion.Euler(verticalLookRotation, 0f, 0f);
-
-            // Käännä pelaajan suuntaa vaakasuunnassa
             transform.rotation *= Quaternion.Euler(0f, horizontal, 0f);
+            cameraTransform.localRotation = Quaternion.Euler(verticalLookRotation, 0f, 0f);
         }
     }
 
-    private void ResetAnimation()
+    private void HandleZoom()
     {
-        // Resetoi animaatiot, jos pelaaja ei ole maassa
-
+        float scrollInput = Input.GetAxis("Mouse ScrollWheel");
+        if (scrollInput != 0)
+        {
+            mainCamera.fieldOfView -= scrollInput * zoomSpeed;
+            mainCamera.fieldOfView = Mathf.Clamp(mainCamera.fieldOfView, minFOV, maxFOV);
+        }
     }
-
-
 
     public void SetPlayerSpeed(float speed)
     {

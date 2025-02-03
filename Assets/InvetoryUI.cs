@@ -10,6 +10,11 @@ public class InventoryUI : MonoBehaviour
     public Inventory playerInventory;
     public List<InventorySlot> slots; //new List<InventorySlot>();
     public TextMeshProUGUI playerGold;
+    public GameObject confirmationPanelParent;
+    public GameObject confirmationPanel;
+    public Image itemToDelete;
+    public Button yesButton;
+    public Button noButton;
 
 
     void Start()
@@ -17,7 +22,12 @@ public class InventoryUI : MonoBehaviour
         playerInventory = FindObjectOfType<Inventory>();
         UpdateUI();
         slotParent.gameObject.SetActive(false);
+        //confirmationPanel.SetActive(false);
+
     }
+       // public GameObject GetConfirmationPanel() => confirmationPanel;
+       // public Button GetYesButton() => yesButton;
+       // public Button GetNoButton() => noButton;
 
 
     public void UpdateUI()

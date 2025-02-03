@@ -81,7 +81,7 @@ public bool UpdateArrowCount(Equipment arrow)
         return false;
     }
 
-    arrowCount = playerInventory.GetItemCount(arrow);
+    arrowCount = playerInventory.GetEquipmentCount(arrow);
     arrowAmount.text = $"{arrowCount} ea.";
     return arrowCount > 0;
 }
@@ -136,7 +136,7 @@ private void HandleArrowEquipment(Equipment newEquipment)
     equipmentSlots[(int)SlotType.Arrow]?.SetItem(newEquipment);
     playerAttack.autoaAttackElement = newEquipment.element;
 
-    arrowCount = playerInventory.GetItemCount(newEquipment);
+    arrowCount = playerInventory.GetEquipmentCount(newEquipment);
     arrowAmount.text = $"{arrowCount} ea.";
     currentEquipment[(int)SlotType.Arrow] = newEquipment;
 }
@@ -207,10 +207,20 @@ private void ActivateModel(Equipment equipment)
         {
             Debug.Log("Randged weapon!");
             modelInstance.transform.SetParent(weaponParentLeft.transform);
-            modelInstance.transform.localPosition = Vector3.zero;
+            modelInstance.transform.localPosition = new Vector3(-0.2485801f, 0.101f, -0.226f);  // Siirrä ase vähän alaspäin
             modelInstance.transform.localRotation = Quaternion.identity;
             modelInstance.transform.localScale = Vector3.one;
             Debug.Log($"Equipped ranged weapon model: {equipment.modelPrefab.name}.");       
+        }
+        else if (equipment.type == EquipmentType.MeleeWeapon)
+        {
+            Debug.Log("Melee weapon equipped!");
+            modelInstance.transform.SetParent(weaponParentRight.transform);
+            modelInstance.transform.localPosition = new Vector3(0.044f, 0.101f, -0.226f);  // Siirrä ase vähän alaspäin
+            modelInstance.transform.localRotation = Quaternion.identity;
+            modelInstance.transform.localScale = Vector3.one;
+            
+            Debug.Log($"Equipped melee weapon model: {equipment.modelPrefab.name}.");
         }
         else
         {
@@ -235,8 +245,9 @@ private void ActivateModel(Equipment equipment)
         }
 
         }
-            }
         }
+        Debug.Log("Equipment model prefab null");
+    }
    /* playerAttack.autoaAttackElement = newEquipment.element;
     UpdateAllSlots();
     playerAttack.StopMeleeAttack();*/

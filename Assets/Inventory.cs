@@ -156,6 +156,7 @@ public class Inventory : MonoBehaviour
     // Add an item to the inventory, handling stacking and cloning
     public void AddItem(Item item)
     {
+        Debug.Log("Adding item.. " + item.itemName);
         if (item == null)
         {
             Debug.LogWarning("Tried to add a null item to inventory!");
@@ -170,6 +171,7 @@ public class Inventory : MonoBehaviour
             if (existingItem != null)
             {
                 existingItem.quantity += item.quantity; // Add to existing item stack
+                Debug.Log("Quanity nousee");
             }
             else
             {
@@ -199,11 +201,23 @@ public class Inventory : MonoBehaviour
             }
         }
 
+
         // Update UI
         if (inventoryPanel.activeSelf)
         {
             inventoryUI.UpdateUI();
         }
+        QuestManager questManager = FindObjectOfType<QuestManager>();
+        if (questManager != null)
+        {
+            Debug.Log("Quest manager pitäs updatee");
+            // Tämän karhun tappaminen lisää progression Quest "DamnBearsQuestID" tavoitteelle
+            questManager.UpdateCollectQuestProgress(item);
+            
+            
+        }
+        
+
     }
 
     // Remove an item by a specified quantity
@@ -237,10 +251,18 @@ public class Inventory : MonoBehaviour
         {
             Debug.LogWarning("Item not found in inventory: " + item.itemName);
         }
+        QuestManager questManager = FindObjectOfType<QuestManager>();
+        if (questManager != null)
+        {
+            // Tämän karhun tappaminen lisää progression Quest "DamnBearsQuestID" tavoitteelle
+            questManager.UpdateCollectQuestProgress(item);
+            
+            
+        }
     }
 
     // Get the quantity of a specific equipment
-    public int GetItemCount(Equipment equipment)
+    public int GetEquipmentCount(Equipment equipment)
     {
         if (equipment == null)
         {
@@ -250,6 +272,16 @@ public class Inventory : MonoBehaviour
 
         return items.Where(item => item.itemName == equipment.itemName).Sum(item => item.quantity);
     }
+    public int GetItemCount(Item itemToFind)
+    {
+        if (itemToFind == null)
+        {
+            Debug.LogWarning("Equipment is null");
+            return 0;
+        }
+
+        return items.Where(item => item.itemName == itemToFind.itemName).Sum(item => item.quantity);
+    }    
     public void AddGold(int amount)
     {
         playerMoney = playerMoney + amount;

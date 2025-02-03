@@ -171,13 +171,13 @@ MonoBehaviour:
     addCrit: 0
     addDodge: 0
     isPassive: 0
-    infoText: "Restores 19,6 * MATK (<color=green>19,6</color> health)\nIncrease
-      healing 20% of MATK per skill level \nIncrease manacost <color=#1C81CF>20</color>
-      per level"
+    infoText: "Restores 20 * MATK (<color=green>20</color> health)\nIncrease healing
+      20% of MATK per skill level \nIncrease manacost <color=#1C81CF>20</color> per
+      level"
     element: 5
     spellType: 1
     skillType: 2
-    isLearned: 0
+    isLearned: 1
     canInterrup: 0
   - skillName: Lighting Bolt
     skillIcon: {fileID: 21300000, guid: 51f771c76ccdea54187db502a06b2f3f, type: 3}
@@ -447,7 +447,7 @@ MonoBehaviour:
     castTime: 0.2
     manaCost: 9
     manaCostPerLevel: 9
-    damageRange: 25
+    damageRange: 12
     skillLevel: 0
     skillMaxLevel: 5
     totalHeal: 0
@@ -472,7 +472,7 @@ MonoBehaviour:
     damagePerLevel: 0.2
     baseHeal: 0
     healPerLevel: 0
-    cooldown: 3
+    cooldown: 1
     castTime: 0.5
     manaCost: 20
     manaCostPerLevel: 20
@@ -546,5 +546,29 @@ MonoBehaviour:
     element: 7
     spellType: 2
     skillType: 1
+    isLearned: 1
+    canInterrup: 0
+  - skillName: Bleeding Strike
+    skillIcon: {fileID: 21300000, guid: 947a9865ac0fd5b4e809577727a166b9, type: 3}
+    baseDamage: 0.1
+    damagePerLevel: 0.05
+    baseHeal: 0
+    healPerLevel: 0
+    cooldown: 3
+    castTime: 0.4
+    manaCost: 5
+    manaCostPerLevel: 5
+    damageRange: 15
+    skillLevel: 0
+    skillMaxLevel: 5
+    totalHeal: 0
+    totalDamage: 0
+    addCrit: 0
+    addDodge: 0
+    isPassive: 0
+    infoText: Cleave attack with bleeding dot
+    element: 6
+    spellType: 0
+    skillType: 0
     isLearned: 1
     canInterrup: 0

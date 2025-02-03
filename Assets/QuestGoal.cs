@@ -7,6 +7,8 @@ public class QuestGoal
     public string goalDescription; // Tavoitteen kuvaus
     public int requiredAmount; // Kuinka monta tavoitetta pitää saavuttaa
     public int currentAmount; // Nykyinen määrä
+    public string itemToCollect;
+    public string enemyToKill;
     public GoalType goalType; // Tavoitetyyppi (esim. tappaminen, kerääminen)
 
     public bool IsGoalCompleted()

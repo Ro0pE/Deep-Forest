@@ -16,22 +16,42 @@ public class Projectile : MonoBehaviour
     {
         Destroy(gameObject, lifetime); // Tuhotaan projektiili automaattisesti tietyn ajan kuluttua
     }
-
     void Update()
     {
         if (target != null)
         {
-            // Liikuta projektiilia kohti kohdetta
-            transform.position = Vector3.MoveTowards(transform.position, target.position, speed * Time.deltaTime);
+            // Lisätään korkeuden offset kohteeseen
+            Vector3 targetPosition = target.position;
+            targetPosition.y += 1.5f; // Lisää 1.5 yksikköä korkeutta, jotta projektiili osuu ylemmäs
 
-            // Käännä projektiili kohteen suuntaan (valinnainen)
-            transform.LookAt(target);
+            // Tarkista, onko projektiili tarpeeksi lähellä kohdetta
+            if (Vector3.Distance(transform.position, targetPosition) <= 1.5f) // Säätöetäisyys 1.5
+            {
+                Debug.Log("Projektiili osui kohteeseen!");
+                //Invoke("DestroyProjectile", 0.3f); // Tuhotaan 0.3 sekunnin kuluttua
+                //Destroy(gameObject); // Tuhotaan, jos kohde katoaa
+                return;
+            }
+
+            // Liikuta projektiilia kohti kohteen korotettua sijaintia
+            transform.position = Vector3.MoveTowards(transform.position, targetPosition, speed * Time.deltaTime);
+
+            // Käännä projektiili kohti kohdetta
+            transform.LookAt(targetPosition);
         }
         else
         {
             Destroy(gameObject); // Tuhotaan, jos kohde katoaa
         }
     }
+
+    // Metodi projektiilin tuhoamiseen
+    void DestroyProjectile()
+    {
+        Destroy(gameObject); // Tuhotaan projektiili
+    }
+
+
 
     private void OnTriggerEnter(Collider other)
     {
@@ -46,6 +66,11 @@ public class Projectile : MonoBehaviour
                 Debug.Log("osuma!");
                //enemyHealth.TakeDamage(10); // Esimerkkiarvo vahingolle
             }
+        }
+        else if (other.CompareTag("Player"))
+        {
+            Destroy(gameObject); // Tuhotaan, jos kohde katoaa
+            Debug.Log("pelaajaan osu");
         }
     }
 }

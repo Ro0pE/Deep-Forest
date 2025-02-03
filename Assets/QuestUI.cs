@@ -3,63 +3,76 @@ using TMPro;
 
 public class QuestUI : MonoBehaviour
 {
-    public GameObject questPanel;  // Quest listan tausta (panel)
-    public TextMeshProUGUI questText; // Questin tiedot (esim. nimi, progress)
+    public GameObject questPrefab; // Prefab, joka sisältää nimen ja progressin
+    public Transform questListContainer; // Kontaineri, johon quest-prefabit lisätään
+    public GameObject activeQuestText;
     private QuestManager questManager; // Viittaus QuestManageriin
 
     void Start()
     {
         questManager = FindObjectOfType<QuestManager>(); // Hae QuestManager pelistä
-        questPanel.SetActive(false); // Piilota quest-lista aluksi
+        UpdateQuestList(); // Päivitä quest-lista heti alussa
     }
 
     void Update()
     {
         if (questManager.activeQuests.Count > 0)
         {
-            // Näytetään questin tiedot ja progress
-            questPanel.SetActive(true);
-
-            // Päivitä quest-lista
+            activeQuestText.SetActive(true);
+            // Päivitä quest-lista, jos on aktiivisia questeja
             UpdateQuestList();
         }
         else
         {
-            // Piilota quest-lista, jos ei ole aktiivisia questteja
-            questPanel.SetActive(false);
+            activeQuestText.SetActive(false);
         }
     }
 
     private void UpdateQuestList()
     {
-        // Päivitetään UI:n tekstikenttä questin nimellä ja edistymisellä
-        string questInfo = "";
-        
+        // Tyhjennetään vanhat prefab-instanssit kontainerista
+        foreach (Transform child in questListContainer)
+        {
+            Destroy(child.gameObject);
+        }
+
+        // Luodaan uudet prefab-instanssit aktiivisille questeille
         foreach (var quest in questManager.activeQuests)
         {
+            GameObject questInstance = Instantiate(questPrefab, questListContainer);
+
+            // Hae prefabista tekstikentät
+            TextMeshProUGUI titleText = questInstance.transform.Find("QuestNameText").GetComponent<TextMeshProUGUI>();
+            TextMeshProUGUI progressText = questInstance.transform.Find("QuestText").GetComponent<TextMeshProUGUI>();
+
+            // Päivitä questin nimi
+            titleText.text = quest.title;
+
+            // Päivitä questin progress
+            string progressInfo = "";
             if (quest.isReadyForCompletion)
             {
-                questInfo += $"{quest.title}:  COMPLETED!";
+                progressInfo = "Complete!";
             }
             else
             {
-            questInfo += $"{quest.title}:  ";
-            questInfo += $"Progress: {GetQuestProgress(quest)}";
+                foreach (var goal in quest.goals)
+                {
+                    if (goal.goalType == GoalType.Collect)
+                    {
+                        progressInfo += $"Collect {goal.itemToCollect}: {goal.currentAmount}/{goal.requiredAmount}\n";
+                    }
+                    else if (goal.goalType == GoalType.Kill)
+                    {
+                        progressInfo += $"Kill {goal.enemyToKill}: {goal.currentAmount}/{goal.requiredAmount}\n";
+                    }
+                    else
+                    {
+                        progressInfo += $"Progress: {goal.currentAmount}/{goal.requiredAmount}\n";
+                    }
+                }
             }
-
+            progressText.text = progressInfo;
         }
-        
-        questText.text = questInfo;
-    }
-
-    // Palautetaan questin edistyminen tekstinä (tavoitteet / kokonaismäärä)
-    private string GetQuestProgress(Quest quest)
-    {
-        string progress = "";
-        foreach (var goal in quest.goals)
-        {
-            progress += $"{goal.currentAmount}/{goal.requiredAmount} "; // Esim. "10/20"
-        }
-        return progress; // Palautetaan progress
     }
 }

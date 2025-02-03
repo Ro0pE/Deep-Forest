@@ -79,11 +79,6 @@ public void UseSkill(int skillIndex)
     if (playerAttack.targetedEnemy != null)
     {
         float distanceToEnemy = Vector3.Distance(playerAttack.transform.position, playerAttack.targetedEnemy.transform.position);
-        Debug.Log("Distance: " + distanceToEnemy);
-        Debug.Log("Castrange: "+ playerAttack.castingRange);
-        Debug.Log($"Player position: {transform.position}");
-        Debug.Log($"Enemy position: {playerAttack.targetedEnemy.transform.position}");
-        Debug.Log($"Distance: {distanceToEnemy}");
         if (distanceToEnemy > playerAttack.castingRange)
         {
             Debug.Log("Too far!");

@@ -34,7 +34,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchoredPosition: {x: -1.69, y: -2.53}
   m_SizeDelta: {x: 200, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &5380378954150653225
@@ -92,8 +92,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 2
-  m_fontSizeBase: 2
+  m_fontSize: 1
+  m_fontSizeBase: 1
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -262,7 +262,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchoredPosition: {x: -0.28, y: 0}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!223 &1211345016787563023
@@ -322,7 +322,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 1.63, y: -2.56}
   m_SizeDelta: {x: 200, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &1742771505704127964
@@ -380,8 +380,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 2
-  m_fontSizeBase: 2
+  m_fontSize: 1
+  m_fontSizeBase: 1
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -15807,7 +15807,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0.18, y: 0}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!223 &7808608913827142133
@@ -16168,10 +16168,30 @@ MonoBehaviour:
   questCompleted: {fileID: 6273088262790595083}
   questHereMark: {fileID: 1396494263607934661}
   markPanel: {fileID: 8291470596604431113}
-  hasQuestToGive: 0
-  questAccepted: 0
   playerCamera: {fileID: 0}
   nameOffset: {x: 0, y: 0, z: 0}
+  questToGive: []
+  playerStats: {fileID: 0}
+  playerInventory: {fileID: 0}
+  questWindow: {fileID: 0}
+  questTitleText: {fileID: 0}
+  questDescriptionText: {fileID: 0}
+  questRewardItem1: {fileID: 0}
+  questRewardItem2: {fileID: 0}
+  completeReward1: {fileID: 0}
+  completeReward2: {fileID: 0}
+  questRewardExp: {fileID: 0}
+  questRewardGold: {fileID: 0}
+  acceptButton: {fileID: 0}
+  rejectButton: {fileID: 0}
+  questCompletedWindow: {fileID: 0}
+  questCompleteTitleText: {fileID: 0}
+  questCompletedText: {fileID: 0}
+  collectReward: {fileID: 0}
+  availableQuests: {fileID: 0}
+  availableQuestPrefab: {fileID: 0}
+  questLists: {fileID: 0}
+  questIndex: 0
 --- !u!65 &8019706640019254670
 BoxCollider:
   m_ObjectHideFlags: 0

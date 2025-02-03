@@ -1,0 +1,40 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f0c24347ec8ef9f4b8c7e38d4e7785bf, type: 3}
+  m_Name: Bear Pelts for the Winter
+  m_EditorClassIdentifier: 
+  questID: BearPeltsfortheWinter
+  title: Bear Pelts for the Winter
+  description: "\"The harsh winter is approaching, and our village needs warm clothing
+    to survive. The bears of the forest have thick, luxurious pelts that would make
+    excellent winter gear, but they\u2019re not going to give them up easily.  I
+    need you to hunt down a few bears and bring me their pelts. The thicker the fur,
+    the better. It\u2019s dangerous work, but if you succeed, the village will be
+    warm and safe throughout the season. Just be ready\u2014the forest is full of
+    angry bears, and they won\u2019t take kindly to being hunted.\""
+  completeText: "By the gods, you actually did it! These pelts are perfect\u2014thick
+    and warm, just what we need for the coming cold. You\u2019ve done more for this
+    village than you know. With these, we can make coats, blankets, and more to survive
+    the winter. Take this reward as thanks for your bravery and skill."
+  experienceReward: 125
+  goldReward: 55
+  itemRewardNames:
+  - Healing Potion
+  - Minor Restoration Potion
+  goals:
+  - goalDescription: Collect Bear Pelts
+    requiredAmount: 2
+    currentAmount: 4
+    itemToCollect: Bear Pelt
+    enemyToKill: Bear
+    goalType: 1
+  isReadyForCompletion: 0

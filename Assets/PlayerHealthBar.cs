@@ -20,12 +20,15 @@ public class PlayerHealthBar : MonoBehaviour
     public Image elementImage; // Elementin kuva
     public Sprite[] playerElementSprites; // Elementteihin liittyvät spritekuvat (Fire, Water, Earth, jne.)
     private static bool isNextRight = true; // Staattinen muuttuja vuorotteluun
+    public PlayerStats playerStats;
+    public TextMeshProUGUI playerLevel;
 
     void Start()
     {
         // Hae PlayerHealth-komponentti pelaajalta
         playerAttack = FindObjectOfType<PlayerAttack>();
         playerHealthBar = FindObjectOfType<PlayerHealthBar>();
+        playerStats = FindObjectOfType<PlayerStats>();
         playerHealth = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerHealth>();
         //combatText = playerHealth.transform.Find("CombatText"); // Hakee compaText-objektin pelaajan sisältä
         if (combatText == null)
@@ -54,6 +57,7 @@ public class PlayerHealthBar : MonoBehaviour
         // Päivitä terveyden ja manan tekstit
         healthText.text = $"{playerHealth.currentHealth:F1} / {Mathf.RoundToInt(playerHealth.maxHealth)}";
         manaText.text = $"{playerHealth.currentMana:F1} / {Mathf.RoundToInt(playerHealth.maxMana)}";
+        playerLevel.text = $"{playerStats.level}";
         SetElementImage();
     }
         private void SetElementImage()
@@ -127,7 +131,7 @@ public void ShowTextForDuration(TextMeshProUGUI textElement, float amount)
         StartCoroutine(MoveTextUp(newTextElement));
         StartCoroutine(HideRegenAfterDelay(newTextElement));
         }
-        if (textElement ==manaRegenText)
+        if (textElement == manaRegenText)
         {
         TextMeshProUGUI newTextElement = Instantiate(manaRegenText, combatText);
         newTextElement.text = $"+ {amount:F1}"; // Päivittää arvon
@@ -141,7 +145,7 @@ public void ShowTextForDuration(TextMeshProUGUI textElement, float amount)
     private IEnumerator HideRegenAfterDelay(TextMeshProUGUI textElement)
     {
         // Odottaa 3 sekuntia ja piilottaa sitten tekstin
-        yield return new WaitForSeconds(2f);
+        yield return new WaitForSeconds(1f);
         
         // Piilota teksti
         textElement.gameObject.SetActive(false);
@@ -160,7 +164,7 @@ public void ShowTextForDuration(TextMeshProUGUI textElement, float amount)
 private IEnumerator HideTextAfterDelay(TextMeshProUGUI textElement)
 {
     // Odottaa 3 sekuntia ja piilottaa sitten tekstin
-    yield return new WaitForSeconds(3f);
+    yield return new WaitForSeconds(0.45f);
     
     // Piilota teksti
     textElement.gameObject.SetActive(false);
@@ -180,13 +184,13 @@ private IEnumerator HideTextAfterDelay(TextMeshProUGUI textElement)
                 Vector3 originalPosition = textElement.rectTransform.position;
 
                 // Määritä offset arvot
-                float horizontalOffset = isNextRight ? 8f : -8f; // Siirtymä oikealle tai vasemmalle
-                float verticalOffset = 2f; // Siirtymä ylöspäin
+                float horizontalOffset = isNextRight ? 2f : 2f; // Siirtymä oikealle tai vasemmalle
+                float verticalOffset = 1.5f; // Siirtymä ylöspäin
                 Vector3 targetPosition = originalPosition + new Vector3(horizontalOffset, verticalOffset, 0);
                 isNextRight = !isNextRight;
 
                 float elapsedTime = 0;
-                float duration = 1f; // Kesto, kuinka nopeasti teksti liikkuu
+                float duration = 4.2f; // Kesto, kuinka nopeasti teksti liikkuu
 
                 while (elapsedTime < duration)
                 {

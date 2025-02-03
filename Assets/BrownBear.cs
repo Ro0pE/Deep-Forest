@@ -12,17 +12,19 @@ public class BrownBear : EnemyHealth
 
     public override void Start()
     {
+        base.Start();
         monsterName = "Brown Bear";
-        monsterLevel = Random.Range(1, 5);
+        monsterLevel = Random.Range(3, 6);
         enemySprite = Resources.Load<Sprite>("BrownBearAvatar");
         enemyElement = Element.Earth;
         damageModifiers[Element.Fire] = 1.5f; // Heikko tulta vastaan
         damageModifiers[Element.Earth] = 0.0f; // Vastustaa maata
         maxHealth = monsterLevel * 15f;
+        currentHealth = maxHealth;
         experiencePoints = monsterLevel * 12;
 
         StartCoroutine(WaitForItemDatabaseAndAddLoot());
-        base.Start();
+        
     }
 
     private IEnumerator WaitForItemDatabaseAndAddLoot()
@@ -39,8 +41,9 @@ public class BrownBear : EnemyHealth
     {
         lootItems.Clear(); // Tyhjennetään varmuuden vuoksi
 
-        Item healingPotion = itemDatabase.GetItemByName("Minor Healing Potion");
-        Item manaPotion = itemDatabase.GetItemByName("Minor Mana Potion");
+        Item minorHealingPotion = itemDatabase.GetItemByName("Minor Healing Potion");
+        Item minorManaPotion = itemDatabase.GetItemByName("Minor Mana Potion");
+        Item strawberry = itemDatabase.GetItemByName("Strawberry"); // questitem
         Equipment bearHelm = itemDatabase.GetItemByName("Helm of the bear") as Equipment;
         Equipment bearAxe = itemDatabase.GetItemByName("Axe of the bear") as Equipment;
         Equipment bearClaw = itemDatabase.GetItemByName("Bear Claw") as Equipment;
@@ -49,9 +52,11 @@ public class BrownBear : EnemyHealth
         Equipment bearGloves = itemDatabase.GetItemByName("Gloves of the bear") as Equipment;
         Equipment bearBelt = itemDatabase.GetItemByName("Belt of the bear") as Equipment;
         Equipment swordBear = itemDatabase.GetItemByName("Sword of the bear") as Equipment;
+        Item bearPelt = itemDatabase.GetItemByName("Bear Pelt"); 
 
-        healingPotion.dropChance = 200;
-        manaPotion.dropChance = 150;
+        minorHealingPotion.dropChance = 200;
+        minorManaPotion.dropChance = 150;
+        strawberry.dropChance = 990;
         bearHelm.dropChance = 45;
         bearAxe.dropChance = 55;
         bearClaw.dropChance = 10;
@@ -60,12 +65,14 @@ public class BrownBear : EnemyHealth
         bearGloves.dropChance = 102;
         bearBelt.dropChance = 120;
         swordBear.dropChance = 75;
+        bearPelt.dropChance = 990;
 
         bearClaw.SetCardSlots(4);
         bearAxe.SetCardSlots(2);
 
-        lootItems.Add(healingPotion);
-        lootItems.Add(manaPotion);
+        lootItems.Add(minorHealingPotion);
+        lootItems.Add(minorManaPotion);
+        lootItems.Add(strawberry);
         lootItems.Add(bearHelm);
         lootItems.Add(bearAxe);
         lootItems.Add(bearClaw);
@@ -74,6 +81,7 @@ public class BrownBear : EnemyHealth
         lootItems.Add(bearGloves);
         lootItems.Add(bearBelt);
         lootItems.Add(swordBear);
+        lootItems.Add(bearPelt);
 
         Debug.Log("BrownBear loot added.");
     }
@@ -88,8 +96,9 @@ public class BrownBear : EnemyHealth
         if (questManager != null)
         {
             // Tämän karhun tappaminen lisää progression Quest "DamnBearsQuestID" tavoitteelle
-            questManager.UpdateQuestProgress("DamnBears", GoalType.Kill, 1);
-            questManager.OnEnemyKill("Bear");
+            questManager.UpdateKillQuestProgress("DamnBears", GoalType.Kill, 1);
+            
+            //questManager.OnEnemyKill("Bear");
         }
 
         Debug.Log("BrownBear died and quest progress updated.");

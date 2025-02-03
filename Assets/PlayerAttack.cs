@@ -383,52 +383,56 @@ public class PlayerAttack : MonoBehaviour
         }
     }
 
-    void CycleTargets()
+void CycleTargets()
+{
+    UpdateEnemiesInRange(); // Päivitä lista varmasti
+
+    // Poistetaan kuolleet viholliset
+    enemiesInRange.RemoveAll(enemy => enemy == null || enemy.isDead);
+
+    if (enemiesInRange.Count > 1) // Varmista, että on vähintään kaksi validia vihollista
     {
-        if (enemiesInRange.Count == 0)
+        if (targetedEnemy != null)
         {
-            UpdateEnemiesInRange(); // Varmistaa, että lista päivitetään aina
+            targetedEnemy.targetIndicator.SetActive(false);
         }
 
-        if (enemiesInRange.Count > 0)
+        do
         {
-            if (targetedEnemy != null)
-            {
-                targetedEnemy.HideHealthBar(); // Piilota edellisen targetin healthbar
-                targetedEnemy.targetIndicator.SetActive(false);
-            }
-
-            // Siirrytään seuraavaan viholliseen
             currentTargetIndex = (currentTargetIndex + 1) % enemiesInRange.Count;
+        } 
+        while (enemiesInRange[currentTargetIndex] == targetedEnemy); // Etsitään eri targetti
 
-            // Jos targetti ei ole kuollut, valitaan se
-            targetedEnemy = enemiesInRange[currentTargetIndex];
-            
-            if (targetedEnemy != null && !targetedEnemy.isDead)
-            {
-                targetedEnemy.targetIndicator.SetActive(true);
-                //targetedEnemy.ShowHealthBar(); // Näytetään sen healthbar
-
-                // Päivitetään avatar
-                AvatarManager avatarManager = FindObjectOfType<AvatarManager>();
-                if (avatarManager != null)
-                {
-                    if (avatarManager.avatarPanel != null && !avatarManager.avatarPanel.activeSelf)
-                    {
-                        avatarManager.avatarPanel.SetActive(true); // Aktivoi avatarPanel
-                    }
-
-                    avatarManager.AssignEnemy(targetedEnemy, targetedEnemy.enemySprite); // Aseta avatar ja tiedot
-                }
-
-                // Päivitetään actionbar
-                if (actionbarPanel != null)
-                {
-                    actionbarPanel.SetTargetedEnemy(targetedEnemy);
-                }
-            }
-        }
+        targetedEnemy = enemiesInRange[currentTargetIndex];
+        Debug.Log("New target enemy: " + targetedEnemy.name);
     }
+    else if (enemiesInRange.Count == 1)
+    {
+        targetedEnemy = enemiesInRange[0]; // Valitaan ainoa vihollinen
+        targetedEnemy.targetIndicator.SetActive(true);
+    }
+    else
+    {
+        Debug.Log("No valid enemies in range.");
+        targetedEnemy = null;
+    }
+
+    // Päivitä avatar ja actionbar, jos uusi target on löytynyt
+    if (targetedEnemy != null)
+    {
+        targetedEnemy.targetIndicator.SetActive(true);
+
+        AvatarManager avatarManager = FindObjectOfType<AvatarManager>();
+        if (avatarManager != null)
+        {
+            avatarManager.avatarPanel?.SetActive(true);
+            avatarManager.AssignEnemy(targetedEnemy, targetedEnemy.enemySprite);
+        }
+
+        actionbarPanel?.SetTargetedEnemy(targetedEnemy);
+    }
+}
+
 
 
 void UpdateEnemiesInRange()

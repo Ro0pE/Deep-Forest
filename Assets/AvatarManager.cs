@@ -12,11 +12,15 @@ public class AvatarManager : MonoBehaviour
     public TextMeshProUGUI takeDamageText;
     public TextMeshProUGUI healthText; // Tekstikenttä terveyden näyttämiseksi
     public TextMeshProUGUI monsterLevelText;
+    public TextMeshProUGUI monsterNameText;
     public GameObject monsterIconPanel;
     public EnemyHealth enemyHealth; // Viittaus vihollisen terveyteen
     public GameObject avatarPanel; // Paneli, jossa kaikki näkyvät (kuva, palkki, teksti)
     public PlayerStats playerStats;
     public GameObject enemyCastBarPanel;
+    public GameObject enemyBuffPanel;
+    public GameObject buffPrefab;
+    public Transform buffParent; // UI Parent for buffs (optional)
 
     // Varmistetaan, että paneli on piilotettu alussa
     void Start()
@@ -105,7 +109,7 @@ public class AvatarManager : MonoBehaviour
     // Metodi, joka asettaa elementin kuvan sen mukaan, mitä elementtiä vihollinen edustaa
     private void SetElementImage()
     {
-        Debug.Log("Enemy element is " + enemyHealth.enemyElement);
+        
         if (enemyHealth != null && elementImage != null)
         {
             // Aseta elementtikuvan sprite oikean elementin mukaan
@@ -145,39 +149,99 @@ public class AvatarManager : MonoBehaviour
         }
     }
 
-    public void AssignEnemy(EnemyHealth newEnemyHealth, Sprite newAvatarImage)
+public void AssignEnemy(EnemyHealth newEnemyHealth, Sprite newAvatarImage)
+{
+    // Jos vaihdetaan vihollista, piilotetaan vanhan vihollisen avatar ja poistetaan vanhat buffit
+    if (enemyHealth != null && enemyHealth != newEnemyHealth)
     {
-        // Jos vaihdetaan vihollista, piilotetaan vanhan vihollisen avatar
-        if (enemyHealth != null && enemyHealth != newEnemyHealth)
+        // Piilotetaan vanhan vihollisen avatar
+        if (avatarPanel != null && avatarPanel.activeSelf)
         {
-            // Piilotetaan vanhan vihollisen avatar
-            if (avatarPanel != null && avatarPanel.activeSelf)
-            {
-                avatarPanel.SetActive(false);
-            }
+            avatarPanel.SetActive(false);
         }
 
-        // Asetetaan uusi vihollinen
-        enemyHealth = newEnemyHealth;
-
-        if (enemyHealth != null)
+        // Poistetaan kaikki edelliset buffit UI:sta
+        foreach (Transform child in buffParent)
         {
-            // Päivitetään elementtikuvan sprite
-            SetElementImage();
+            Destroy(child.gameObject); // Poistetaan kaikki lapsielementit (buffit)
+        }
+    }
 
-            // Jos avatarPanel ei ole aktiivinen, ei päivitetä UI:tä heti
-            if (avatarPanel != null && !avatarPanel.activeSelf)
+    // Asetetaan uusi vihollinen
+    enemyHealth = newEnemyHealth;
+
+    if (enemyHealth != null)
+    {
+        // Päivitetään elementtikuvan sprite
+        SetElementImage();
+
+        // Jos avatarPanel ei ole aktiivinen, ei päivitetä UI:tä heti
+        if (avatarPanel != null && !avatarPanel.activeSelf)
+        {
+            avatarPanel.SetActive(true); // Aktivoi paneli vain tarvittaessa
+        }
+
+        if (avatarImage != null)
+        {
+            avatarImage.sprite = newAvatarImage; // Asetetaan uusi avatar-kuva
+            avatarImage.enabled = true; // Varmistetaan, että kuva näkyy
+        }
+
+        UpdateHealthBar(); // Päivitetään terveys
+
+        // Tarkistetaan ja lisätään aktiiviset buffit avatarin alle
+        EnemyBuffManager enemyBuffManager = newEnemyHealth.GetComponent<EnemyBuffManager>();
+        if (enemyBuffManager != null)
+        {
+            
+            foreach (Buff buff in enemyBuffManager.activeBuffs)
             {
-                avatarPanel.SetActive(true); // Aktivoi paneli vain tarvittaessa
+                Debug.Log("Haetaan buffin tiedot " + buff.name);
+               // CreateBuffUI(buff); // Luodaan UI buffit
+            }
+        }
+    }
+}
+
+
+
+    public void CreateBuffUI(Buff buff)
+    {
+            EnemyBuffManager buffManager = enemyHealth.GetComponent<EnemyBuffManager>();
+            if (buffManager == null)
+            {
+                Debug.LogError("EnemyBuffManager component not found on the enemy! ENWMY: " + enemyHealth);
+                
             }
 
-            if (avatarImage != null)
+            // Tarkista, onko buffi jo aktiivinen
+            Buff existingBuff = buffManager.activeBuffs.Find(b => b.name == buff.name);
+          /*  if (existingBuff != null)
             {
-                avatarImage.sprite = newAvatarImage; // Asetetaan uusi avatar-kuva
-                avatarImage.enabled = true; // Varmistetaan, että kuva näkyy
-            }
+                Debug.Log($"Buff {buff.name} already exists on this enemy. Updating duration instead.");
+                //existingBuff.duration = Mathf.Max(existingBuff.duration, buff.duration); // Päivitä kesto
+                return; // Ei luoda uutta buffia
+            }*/
+        if (buffPrefab != null && buffParent != null)
+        {
+            Debug.Log("Luodaan avatariin buff ui");
+            EnemyHealthBar enemyHealthBar = enemyHealth.GetComponentInChildren<EnemyHealthBar>();
+            enemyHealthBar.AddBuffIcon(buff);
+            // Luo UI-elementti buffille
+            GameObject newBuffUI = Instantiate(buffPrefab, buffParent);
+            buffUI buffUIComponent = newBuffUI.GetComponent<buffUI>();
+            
+            // Asetetaan buffin ikoni
+            buffUIComponent.buffIcon.sprite = buff.buffIcon;
 
-            UpdateHealthBar(); // Päivitetään terveys
+            // Päivitetään buffin kesto ja pinojen määrä
+            buffUIComponent.UpdateDuration(buff.duration, buff.stacks);
+            
+            // Alustetaan UI
+            buffUIComponent.Initialize(buff);
+            
+            // Liitetään buffin UI komponentti buffiin
+            buff.uiComponent = buffUIComponent;
         }
     }
 
@@ -203,6 +267,7 @@ public class AvatarManager : MonoBehaviour
         
             // Aseta tekstiksi vihollisen taso
     monsterLevelText.text = $"{enemyHealth.monsterLevel}";
+    monsterNameText.text = $"{enemyHealth.monsterName}";
 
     // Laske tasoero
     int levelDifference = playerStats.level - enemyHealth.monsterLevel;

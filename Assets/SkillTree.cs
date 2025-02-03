@@ -44,6 +44,7 @@ public class SkillTree : MonoBehaviour
 
     private ActionbarPanel actionbarPanel; // Viite ActionbarPaneliin
     public PlayerStats playerStats;
+    public Button closeSkillTreeButton;
 
     void Start()
     {
@@ -356,8 +357,9 @@ public class SkillTree : MonoBehaviour
             }
         }
     }
-    public void Test()
+    public void Close()
     {
+        skillTreeUI.SetActive(false);
 
     }
 }
