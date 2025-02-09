@@ -154,9 +154,9 @@ public IEnumerator RemoveBuffUI(Buff buff, EnemyHealthBarBuff buffUIComponent)
         }
         else if (isCritical)
         {
-            newTextElement.text = $"{formattedAmount:F1}";
+            newTextElement.text = $"{amount.ToString("F1")}"; 
             newTextElement.color = Color.yellow;
-            newTextElement.fontSize = 35f;
+            newTextElement.fontSize = 45f;
         }
         else
         {

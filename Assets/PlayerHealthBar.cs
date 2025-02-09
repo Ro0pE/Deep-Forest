@@ -184,13 +184,13 @@ private IEnumerator HideTextAfterDelay(TextMeshProUGUI textElement)
                 Vector3 originalPosition = textElement.rectTransform.position;
 
                 // Määritä offset arvot
-                float horizontalOffset = isNextRight ? 2f : 2f; // Siirtymä oikealle tai vasemmalle
+                float horizontalOffset = isNextRight ? 4f : -4f; // Siirtymä oikealle tai vasemmalle
                 float verticalOffset = 1.5f; // Siirtymä ylöspäin
                 Vector3 targetPosition = originalPosition + new Vector3(horizontalOffset, verticalOffset, 0);
                 isNextRight = !isNextRight;
 
                 float elapsedTime = 0;
-                float duration = 4.2f; // Kesto, kuinka nopeasti teksti liikkuu
+                float duration = 1.2f; // Kesto, kuinka nopeasti teksti liikkuu
 
                 while (elapsedTime < duration)
                 {

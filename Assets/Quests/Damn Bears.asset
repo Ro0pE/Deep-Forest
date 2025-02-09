@@ -34,7 +34,7 @@ MonoBehaviour:
   goals:
   - goalDescription: Kill brown bears
     requiredAmount: 4
-    currentAmount: 4
+    currentAmount: 0
     itemToCollect: 
     enemyToKill: Bear
     goalType: 0

@@ -24,7 +24,7 @@ public class VendorManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        playerInventory = FindObjectOfType<Inventory>();
+
         slots = playerItems.GetComponentsInChildren<VendorInventorySlot>();
         vendorSellSlots = vendorSlots.GetComponentsInChildren<VendorSellSlot>();
         UpdateVendorInventory(); // Päivitä vendorin inventory heti alussa

@@ -17,15 +17,24 @@ public class NPC_vendor : MonoBehaviour
 
     void Update()
     {
+        // Tämä voi jäädä pois, koska emme enää tarvitse 'E' painiketta, mutta jos haluat
+        // jatkaa etäisyyden tarkistusta, voit pitää sen
         if (player != null)
         {
             float distance = Vector3.Distance(player.transform.position, transform.position); // Laske etäisyys pelaajaan
-    
-            if (distance <= interactionRange && Input.GetKeyDown(KeyCode.E)) // Jos pelaaja on tarpeeksi lähellä ja painaa E
+        
+            if (distance <= interactionRange)
             {
-                ToggleVendorPanel();
+                // Tarkista, onko pelaaja klikkaamassa vendorin objektia
+                // Tämä ei ole enää tarpeen, koska käytämme OnMouseDownia
             }
         }
+    }
+
+    void OnMouseDown() 
+    {
+        // Tämä kutsuu ToggleVendorPanel, kun pelaaja klikkaa vendorin objektia
+        ToggleVendorPanel();
     }
 
     void ToggleVendorPanel()
@@ -34,14 +43,8 @@ public class NPC_vendor : MonoBehaviour
         {
             vendorManager.UpdateVendorInventory();
             vendorPanel.SetActive(!vendorPanel.activeSelf); // Vaihda panelin tila
-            
         }
     }
 
-    void OnDrawGizmosSelected()
-    {
-        // Piirrä gizmo etäisyysalueen havainnollistamiseksi Scene-näkymässä
-        Gizmos.color = Color.green;
-        Gizmos.DrawWireSphere(transform.position, interactionRange);
-    }
+
 }

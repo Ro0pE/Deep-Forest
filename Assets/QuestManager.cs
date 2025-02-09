@@ -7,25 +7,48 @@ public class QuestManager : MonoBehaviour
     public List<Quest> completedQuests; // Suoritetut questit
     public Inventory inventory; // Viittaus pelaajan inventaariin
 
-    public void AddQuest(Quest newQuest)
+public void AddQuest(Quest newQuest)
+{
+    if (newQuest == null)
     {
-        if (!activeQuests.Contains(newQuest))
-        {
-            activeQuests.Add(newQuest);
-            Debug.Log($"Quest {newQuest.title} lisätty aktiivisiin questteihin!");
+        Debug.LogError("Quest is null!");
+        return;
+    }
 
-            // Tarkista inventaario uusille keräysquesteille
-            foreach (var goal in newQuest.goals)
+    if (!activeQuests.Contains(newQuest))
+    {
+        activeQuests.Add(newQuest);
+        Debug.Log($"Quest {newQuest.title} lisätty aktiivisiin questteihin!");
+
+        // Tarkista inventaario uusille keräysquesteille
+        foreach (var goal in newQuest.goals)
+        {
+            if (goal.goalType == GoalType.Collect)
             {
-                if (goal.goalType == GoalType.Collect)
+                if (string.IsNullOrEmpty(goal.itemToCollect))
                 {
-                    int itemCount = inventory.GetItemCount(new Item { itemName = goal.itemToCollect });
-                    goal.currentAmount += itemCount;
-                    Debug.Log($"Inventaarion tarkistus: {goal.itemToCollect} määrä päivitetty questille {newQuest.title}: {goal.currentAmount}/{goal.requiredAmount}");
+                    Debug.LogWarning($"Item to collect is missing for goal in quest {newQuest.title}");
+                    continue;
                 }
+
+                if (inventory == null)
+                {
+                    Debug.LogError("Inventory is null!");
+                    return;
+                }
+
+                Item itemInstance = ScriptableObject.CreateInstance<Item>();
+                itemInstance.itemName = goal.itemToCollect;
+                int itemCount = inventory.GetItemCount(itemInstance);
+
+                Debug.Log($"Item count for {goal.itemToCollect}: {itemCount}");
+                goal.currentAmount += itemCount;
+                Debug.Log($"Inventaarion tarkistus: {goal.itemToCollect} määrä päivitetty questille {newQuest.title}: {goal.currentAmount}/{goal.requiredAmount}");
             }
         }
     }
+}
+
 
     public void MarkQuestAsReadyForCompletion(Quest quest)
     {

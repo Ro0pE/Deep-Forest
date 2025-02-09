@@ -1,15 +1,16 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 [System.Serializable]
-
-    public class Card
+[CreateAssetMenu(fileName = "New Card", menuName = "Inventory/Card", order = 1)]
+public class Card : Item
+{
+    public Rarity rarity = Rarity.Legendary; // Oletuksena "Common"
+    
+    public override void Use()
     {
-        public string cardName; // Kortin nimi
-        public string description; // Kortin kuvaus
-        public Sprite cardIcon; // Kortin kuva
-
-        public int statBonus; // Kortin antamat bonusarvot (esimerkiksi vahvistus tietylle statille)
-        
+        base.Use();
+       
     }
+
+
+}

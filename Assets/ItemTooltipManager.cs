@@ -61,7 +61,7 @@ public class ItemTooltipManager : MonoBehaviour
     void Update()
     {
     // Jos tooltip on näkyvissä ja käyttäjä klikkaa jotain muuta kuin tooltipia
-        if ((itemPanel.activeSelf || equipmentPanel.activeSelf) && Input.GetMouseButtonDown(0))
+        if ((itemPanel.activeSelf || equipmentPanel.activeSelf) && Input.GetMouseButton(1))
         {
             bool clickedOutsideItemPanel = !RectTransformUtility.RectangleContainsScreenPoint(itemPanel.GetComponent<RectTransform>(), Input.mousePosition, Camera.main);
             bool clickedOutsideEquipmentPanel = !RectTransformUtility.RectangleContainsScreenPoint(equipmentPanel.GetComponent<RectTransform>(), Input.mousePosition, Camera.main);
@@ -122,12 +122,15 @@ public class ItemTooltipManager : MonoBehaviour
     } */
 public void ShowTooltip(Item item)
 { 
+    Debug.Log("TEST");
+    Debug.Log(item.itemType);
+    Debug.Log(item.itemName);
 
 
     // Handle Potions (if it's a Potion)
     if (item is Potion potion)
     {
-            Debug.Log("Item name:  "+ item.itemName + " " + item.sellPrice);
+        
         itemName.text = item.itemName; // Set item name
         sellPrice.text = item.sellPrice.ToString(); // Set sell price
         infoText.text = item.infoText; // Set item info
@@ -171,11 +174,29 @@ public void ShowTooltip(Item item)
         equipmentPanel.SetActive(true);
         usagePanel.SetActive(false);
     }
+    else if (item is Card cardItem)
+    {
+        Debug.Log("Eli item on kortti");
+        itemName.text = cardItem.itemName; // Set item name
+        itemImage.sprite = cardItem.icon;
+        infoText.text = cardItem.infoText;
+        sellPrice.text = cardItem.sellPrice.ToString();
+        SetRarityColor(itemName, cardItem.rarity);
+        usagePanel.SetActive(true);
+        restoreInfo.gameObject.SetActive(false);
+        equipmentPanel.SetActive(false);
+        itemPanel.SetActive(true); // Show tooltip
+    }
 
     // Handle other item types
     else
     {
+        Debug.Log("Joten miksi tämä runaa");
+        itemImage.sprite = item.icon;
+        itemName.text = item.itemName; // Set item name
+        infoText.text = item.infoText;
         usageText.text = item.infoText;
+        
         usagePanel.SetActive(true);
         restoreInfo.gameObject.SetActive(false);
         equipmentPanel.SetActive(false);
@@ -194,7 +215,7 @@ public void ShowTooltip(Item item)
             return;
         }
 
-        Debug.Log("Value for " + textElement.name + ": " + value);
+       
 
         if (value != 0)
         {

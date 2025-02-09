@@ -122,28 +122,32 @@ public class SkillButton : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndD
         iconRectTransform.anchoredPosition = Vector2.zero;
 
     }
-      public void OnPointerDown(PointerEventData eventData)
+        public void OnPointerDown(PointerEventData eventData)
         {
-  
-            float skillDamage = (skill.baseDamage + (skill.damagePerLevel * (skill.skillLevel -1))) * playerStats.magickAttack;
-            Debug.Log(skill.baseDamage + "xx" + skill.damagePerLevel + "xx" + skill.skillLevel + "xx" + playerStats.magickAttack);
-            Debug.Log(skillDamage);
-            string skillname = skill.skillName;
-            int minLvl = skill.skillLevel;
-            int maxLvl = skill.skillMaxLevel;
-            float manaCost = skill.manaCost;
-            string info = "Deals damage " 
-            + (skill.baseDamage + (skill.damagePerLevel * (skill.skillLevel - 1))) 
-            + " * MATK (<color=red>" + skillDamage + "</color>)\n"
-            + "Increase damage " + (100 * skill.damagePerLevel) + "% per level\n"
-            + "Increase manacost <color=#1C81CF>" + skill.manaCostPerLevel + "</color> per level";
+            if (eventData.button == PointerEventData.InputButton.Right)
+            {
+                float skillDamage = (skill.baseDamage + (skill.damagePerLevel * (skill.skillLevel - 1))) * playerStats.magickAttack;
+                Debug.Log(skill.baseDamage + "xx" + skill.damagePerLevel + "xx" + skill.skillLevel + "xx" + playerStats.magickAttack);
+                Debug.Log(skillDamage);
+                
+                string skillname = skill.skillName;
+                int minLvl = skill.skillLevel;
+                int maxLvl = skill.skillMaxLevel;
+                float manaCost = skill.manaCost;
+                string info = "Deals damage " 
+                    + (skill.baseDamage + (skill.damagePerLevel * (skill.skillLevel - 1))) 
+                    + " * MATK (<color=red>" + skillDamage + "</color>)\n"
+                    + "Increase damage " + (100 * skill.damagePerLevel) + "% per level\n"
+                    + "Increase manacost <color=#1C81CF>" + skill.manaCostPerLevel + "</color> per level";
 
-            string element = skill.element.ToString();
-            float cd = skill.cooldown;
-            Sprite icon = skill.skillIcon;
-            skillTooltipManager.ShowTooltip(skill);
-            //tooltipManager.ShowTooltip(skillname,minLvl,maxLvl,manaCost,info,element,cd,icon,Input.mousePosition);
+                string element = skill.element.ToString();
+                float cd = skill.cooldown;
+                Sprite icon = skill.skillIcon;
+                skillTooltipManager.ShowTooltip(skill);
+                //tooltipManager.ShowTooltip(skillname,minLvl,maxLvl,manaCost,info,element,cd,icon,Input.mousePosition);
+            }
         }
+
 
       public void OnPointerUp(PointerEventData eventData)
         {

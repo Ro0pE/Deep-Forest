@@ -139,6 +139,7 @@ private void HandleArrowEquipment(Equipment newEquipment)
     arrowCount = playerInventory.GetEquipmentCount(newEquipment);
     arrowAmount.text = $"{arrowCount} ea.";
     currentEquipment[(int)SlotType.Arrow] = newEquipment;
+    //playerInventory.RemoveItem(newEquipment,1);
 }
 
 private void HandleTwoHandedEquipment(Equipment newEquipment)
@@ -162,6 +163,7 @@ private void HandleTwoHandedEquipment(Equipment newEquipment)
     playerAttack.autoaAttackElement = newEquipment.element;
     playerStats.EquipItem(newEquipment);
     ActivateModel(newEquipment);
+    playerInventory.RemoveItem(newEquipment,1);
 }
 
 private void HandleRightHandEquipment(Equipment newEquipment)
@@ -183,10 +185,12 @@ private void HandleRightHandEquipment(Equipment newEquipment)
         playerAttack.autoaAttackElement = newEquipment.element;
     playerStats.EquipItem(newEquipment);
     ActivateModel(newEquipment);
+    playerInventory.RemoveItem(newEquipment,1);
 }
 
 private void EquipGenericItem(Equipment newEquipment, int slotIndex)
 {
+    Debug.Log("Puetaan päälle " + newEquipment.itemName + " in slot " + slotIndex);
     Equipment oldEquipment = currentEquipment[slotIndex];
     Unequip(slotIndex);
 
@@ -195,6 +199,8 @@ private void EquipGenericItem(Equipment newEquipment, int slotIndex)
 
     playerStats.EquipItem(newEquipment);
     ActivateModel(newEquipment);
+    Debug.Log("Poistetaan inventorystä " + newEquipment.itemName);
+    playerInventory.RemoveItem(newEquipment,1);
 }
 
 private void ActivateModel(Equipment equipment)
@@ -237,7 +243,7 @@ private void ActivateModel(Equipment equipment)
             helm6Transform.gameObject.SetActive(true);
             helm6Transform.localScale = new Vector3(2.5f, 2.5f, 2.5f);
 
-            Debug.Log($"Equipped armor model: {equipment.modelPrefab.name}.");
+           
         }
         else
         {
@@ -246,7 +252,7 @@ private void ActivateModel(Equipment equipment)
 
         }
         }
-        Debug.Log("Equipment model prefab null");
+       
     }
    /* playerAttack.autoaAttackElement = newEquipment.element;
     UpdateAllSlots();
@@ -296,6 +302,7 @@ public void Unequip(int slotIndex)
 
     else
     {
+        Debug.Log("Otetaan armor tjs pois : " + oldEquipment);
         // General case for other equipment
         currentEquipment[slotIndex] = null;
         equipmentSlots[slotIndex]?.SetItem(null);
@@ -305,6 +312,7 @@ public void Unequip(int slotIndex)
     playerStats.RemoveItem(oldEquipment);
 
     // Add the unequipped item back to the inventory
+    Debug.Log("Add old equipment back to inventory " + oldEquipment);
     playerInventory.AddItem(oldEquipment);
 
 

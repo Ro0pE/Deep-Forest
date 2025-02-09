@@ -19,14 +19,22 @@ public class PlayerHealth : MonoBehaviour
     private Animator animator;
     public PlayerHealthBar playerHealthBar; // Viittaus PlayerHealthBariin
     public Transform spawnPoint;
+    public AudioSource audioSource;
+    public AudioClip dodgeHitSound;
+    public AudioClip getHitSound;
 
     void Start()
     {
-        
+        audioSource = gameObject.AddComponent<AudioSource>();
         currentHealth = maxHealth;
         currentMana = maxMana;
         animator = GetComponent<Animator>();
         playerHealthBar = FindObjectOfType<PlayerHealthBar>(); // Etsii pelaajan terveyspalkin
+        if (audioSource == null)
+        {
+            Debug.LogError("AudioSource komponentti puuttuu pelaajalta!");
+        }
+
     }
 
     void Update()
@@ -119,18 +127,44 @@ public class PlayerHealth : MonoBehaviour
             currentMana -= mana;
         }
     }
+    private void PlayDodgeSound()
+    {
+        if (audioSource != null && dodgeHitSound != null)
+        {
+            Debug.Log("Playing dodge sound");
+            audioSource.PlayOneShot(dodgeHitSound);// Soittaa AudioSourceen asetetun klipin
+        }
+        else
+        {
+            Debug.LogWarning("Ääniklipin toisto epäonnistui. Varmista että AudioSource ja ääni ovat asetettu.");
+        }
+    }
+    private void PlayGetHitSound()
+    {
+        if (audioSource != null && dodgeHitSound != null)
+        {
+            Debug.Log("Get hit sound");
+            audioSource.PlayOneShot(getHitSound);// Soittaa AudioSourceen asetetun klipin
+        }
+        else
+        {
+            Debug.LogWarning("Ääniklipin toisto epäonnistui. Varmista että AudioSource ja ääni ovat asetettu.");
+        }
+    }
 
     public void TakeDamage(float damage)
     {
         if (checkDodge())
         {
-           
+           PlayDodgeSound();
         }
         else
         {
 
         float calculateDef = (defence/100) - 1; 
         takeDamageAmount = damage * Mathf.Abs(calculateDef);
+        animator.SetTrigger("isHit");
+        PlayGetHitSound();
         if (takeDamageAmount < 0)
         {
             takeDamageAmount = 0;

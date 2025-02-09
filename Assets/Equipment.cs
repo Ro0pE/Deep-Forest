@@ -30,7 +30,7 @@ public class Equipment : Item
     public int requiredLevel = 0;
     public int stackSize = 1;
 
-    public Rarity rarity = Rarity.Common; // Oletuksena "Common"
+
     public List<Card> cardSlots = new List<Card>(); // Lista korttipaikoista
     public int maxCardSlots = 0;
 
@@ -61,7 +61,7 @@ public class Equipment : Item
         if (cardSlots.Count < maxCardSlots)
         {
             cardSlots.Add(card);
-            Debug.Log($"Kortti '{card.cardName}' lisätty varusteeseen.");
+            Debug.Log($"Kortti '{card.itemName}' lisätty varusteeseen.");
             return true;
         }
         else

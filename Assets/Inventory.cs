@@ -10,7 +10,7 @@ public class Inventory : MonoBehaviour
     public GameObject inventoryPanel;
     public int maxItems = 20;
     public int playerMoney;
-    InventoryUI inventoryUI;
+    public InventoryUI inventoryUI;
 
     private async void Start()
     {
@@ -42,7 +42,10 @@ public class Inventory : MonoBehaviour
         AddItemToInventoryByName("Minor Mana Potion", 5);
         AddItemToInventoryByName("Training Sword", 1);
         AddItemToInventoryByName("Wooden Bow", 1);
-        AddItemToInventoryByName("Arrow", 570);
+        AddItemToInventoryByName("Arrow", 1000);
+        AddItemToInventoryByName("Novice Hat", 1);
+        AddItemToInventoryByName("Worn Shirt", 1);
+        AddItemToInventoryByName("Spore Card", 1);
     }
 
     // Async method to load the database
@@ -156,7 +159,7 @@ public class Inventory : MonoBehaviour
     // Add an item to the inventory, handling stacking and cloning
     public void AddItem(Item item)
     {
-        Debug.Log("Adding item.. " + item.itemName);
+        Debug.Log("Adding item.. " + item.itemName + " x "  +item.quantity);
         if (item == null)
         {
             Debug.LogWarning("Tried to add a null item to inventory!");
@@ -203,10 +206,7 @@ public class Inventory : MonoBehaviour
 
 
         // Update UI
-        if (inventoryPanel.activeSelf)
-        {
-            inventoryUI.UpdateUI();
-        }
+
         QuestManager questManager = FindObjectOfType<QuestManager>();
         if (questManager != null)
         {
@@ -216,6 +216,7 @@ public class Inventory : MonoBehaviour
             
             
         }
+         inventoryUI.UpdateUI();
         
 
     }
@@ -274,12 +275,13 @@ public class Inventory : MonoBehaviour
     }
     public int GetItemCount(Item itemToFind)
     {
+        
         if (itemToFind == null)
         {
             Debug.LogWarning("Equipment is null");
             return 0;
         }
-
+        Debug.Log("Haetaan item: " + itemToFind.itemName);
         return items.Where(item => item.itemName == itemToFind.itemName).Sum(item => item.quantity);
     }    
     public void AddGold(int amount)

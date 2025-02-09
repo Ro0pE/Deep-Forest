@@ -261,7 +261,7 @@ public class PlayerStats : MonoBehaviour
             castSpeed = 2f;
         }
 
-        Debug.Log("Player aspd =  " + playerAttack.weaponAttackSpeed);
+       
 
 
 

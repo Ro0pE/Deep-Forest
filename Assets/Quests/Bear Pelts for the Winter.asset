@@ -33,7 +33,7 @@ MonoBehaviour:
   goals:
   - goalDescription: Collect Bear Pelts
     requiredAmount: 2
-    currentAmount: 4
+    currentAmount: 0
     itemToCollect: Bear Pelt
     enemyToKill: Bear
     goalType: 1

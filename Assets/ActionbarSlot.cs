@@ -122,6 +122,7 @@ public class ActionbarSlot : MonoBehaviour, IDropHandler
         SkillButton skillButton = eventData.pointerDrag.GetComponent<SkillButton>();
         if (skillButton != null)
         {
+            Debug.Log("Setting up skill");
             SetSkill(skillButton.skill);
         }
         else

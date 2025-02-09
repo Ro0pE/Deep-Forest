@@ -13,6 +13,7 @@ public class Item : ScriptableObject
     public int sellPrice;
     public string infoText;
     public string usageText;
+    public Rarity rarity = Rarity.Common; // Oletuksena "Common"
 
     public Item Clone()
     {

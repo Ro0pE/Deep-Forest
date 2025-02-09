@@ -48,10 +48,13 @@ public class PlayerAttack : MonoBehaviour
     public SkillManager SkillManager;
     public EnemyBuffManager enemyBuffManager;
     public bool showEnemyHealthBar = false;
+    public AudioSource audioSource;
+    public AudioClip shootArrowSound;
+
 
     private void Start()
     {
-        
+        audioSource = gameObject.AddComponent<AudioSource>();
         autoaAttackElement = Element.Neutral;
         playerInventory = FindObjectOfType<Inventory>();
         equipmentManager = FindObjectOfType<EquipmentManager>();
@@ -63,6 +66,11 @@ public class PlayerAttack : MonoBehaviour
         if (animator == null)
         {
             animator = GetComponent<Animator>();
+        }
+                
+        if (audioSource == null)
+        {
+            Debug.LogError("AudioSource komponentti puuttuu pelaajalta!");
         }
 
   
@@ -122,7 +130,7 @@ public class PlayerAttack : MonoBehaviour
         }
 
         // Hyökkää, jos pelaaja on jo targetoinut vihollisen ja on tarpeeksi lähellä
-        if (Input.GetMouseButton(1) && targetedEnemy != null && !isAttacking && !isCasting && !targetedEnemy.isDead) // Aloita hyökkäys hiiren oikealla
+        if (Input.GetKeyDown(KeyCode.Q) && targetedEnemy != null && !isAttacking && !isCasting && !targetedEnemy.isDead) // Aloita hyökkäys hiiren oikealla
         {
             float distanceToEnemy = Vector3.Distance(transform.position, targetedEnemy.transform.position);
     
@@ -251,6 +259,7 @@ public class PlayerAttack : MonoBehaviour
         animator.ResetTrigger("isMeleeAttacking");
         animator.ResetTrigger("isRangedAttacking");
         animator.SetBool("isAttacking", false);
+        animator.speed = 1f;
         StopAllCoroutines(); // Lopettaa kaikki aktiiviset coroutinet
         
     }
@@ -304,6 +313,7 @@ public class PlayerAttack : MonoBehaviour
         else
         {
             animator.SetTrigger("isMeleeAttacking");
+            animator.speed = 1f / attackSpeed;
         }
         
         
@@ -315,10 +325,25 @@ public class PlayerAttack : MonoBehaviour
         isMeleeOnCooldown = false; // Cooldown-tila päättyy
         isRangedAttack = false;
     }
+    private void PlayShootSound()
+    {
+        if (audioSource != null && shootArrowSound != null)
+        {
+            Debug.Log("Playing shoot sound");
+            audioSource.PlayOneShot(shootArrowSound);// Soittaa AudioSourceen asetetun klipin
+        }
+        else
+        {
+            Debug.LogWarning("Ääniklipin toisto epäonnistui. Varmista että AudioSource ja ääni ovat asetettu.");
+        }
+    }
 
     public IEnumerator<GameObject> ShootArrows(EnemyHealth otherEnemy, GameObject arrowPrefab)
     {
         animator.SetTrigger("isRangedAttacking");
+        animator.speed = 1f / attackSpeed;
+
+        PlayShootSound();
 
         if (targetedEnemy == null || otherEnemy == null)
         {

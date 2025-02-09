@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f0c24347ec8ef9f4b8c7e38d4e7785bf, type: 3}
   m_Name: A Thorny Situation
   m_EditorClassIdentifier: 
-  questID: Athornysituation
+  questID: AThornySituation
   title: A Thorny Situation
   description: "Near the forest\u2019s edge, strange cactus-like creatures have started
     sprouting where they don\u2019t belong. They\u2019re not just weird\u2014they\u2019re
@@ -30,7 +30,7 @@ MonoBehaviour:
   goals:
   - goalDescription: Collect Thorns
     requiredAmount: 15
-    currentAmount: 15
+    currentAmount: 0
     itemToCollect: Thorn
     enemyToKill: Spikthorn
     goalType: 1

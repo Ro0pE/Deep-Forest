@@ -67,6 +67,7 @@ public class EnemyHealth : MonoBehaviour
     public bool isStunned = false;
     public EnemyAI enemyAI;
     public PlayerMovement playerMovement;
+    public InventoryUI inventoryUI;
     
 
 
@@ -74,6 +75,7 @@ public class EnemyHealth : MonoBehaviour
     public virtual void Start()
     {
         playerMovement = FindObjectOfType<PlayerMovement>();
+        inventoryUI = FindObjectOfType<InventoryUI>();
         agent = GetComponent<NavMeshAgent>();
         playerStats = FindObjectOfType<PlayerStats>();
         avatarManager = FindObjectOfType<AvatarManager>();
@@ -213,6 +215,7 @@ private void CollectItem(int index)
             if (playerInventory.items.Count < playerInventory.maxItems)
             {
                 playerInventory.AddItem(item);
+                inventoryUI.UpdateUI();
 
                 // Siirretään OnItemCollected tännekin, jotta quest päivittyy myös silloin
 
@@ -450,22 +453,24 @@ private void CollectItem(int index)
     public void TakeDamageMelee(float damage, bool isCrit, Element element)
     {
         float modifier = ElementDamageMatrix.GetDamageModifier(element, enemyElement);
+        EnemyHealthBar enemyHealthBar = playerAttack.targetedEnemy.GetComponentInChildren<EnemyHealthBar>();
         //animator.SetTrigger("TakeDamage modifier " + modifier);
         float finalDamage = damage * modifier;
         if (!CheckIfHits())
         {
             isMiss = true;
-            EnemyHealthBar enemyHealthBar = playerAttack.targetedEnemy.GetComponentInChildren<EnemyHealthBar>();
+            
             enemyHealthBar.ShowTextForDuration(enemyHealthBar.enemyTakeDamageText, finalDamage, isCrit, isMiss);
 
         }
         else
         {
+            Debug.Log("Osuma");
             isMiss = false;
             animator.SetTrigger("takeDamage");
 
             currentHealth -= finalDamage;
-            EnemyHealthBar enemyHealthBar = playerAttack.targetedEnemy.GetComponentInChildren<EnemyHealthBar>();
+            
             enemyHealthBar.ShowTextForDuration(enemyHealthBar.enemyTakeDamageText, finalDamage, isCrit, isMiss);
         }
         if (avatarManager != null)
@@ -480,6 +485,9 @@ private void CollectItem(int index)
 
         if (currentHealth <= 0)
         {
+            Debug.Log("döddis");
+            
+            //enemyHealthBar.ShowTextForDuration(enemyHealthBar.enemyTakeDamageText, finalDamage, isCrit, isMiss);
             isDead = true;
             Debug.Log("Setting enemy isdead true");
             Debug.Log(isDead);

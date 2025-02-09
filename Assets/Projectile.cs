@@ -27,9 +27,9 @@ public class Projectile : MonoBehaviour
             // Tarkista, onko projektiili tarpeeksi lähellä kohdetta
             if (Vector3.Distance(transform.position, targetPosition) <= 1.5f) // Säätöetäisyys 1.5
             {
-                Debug.Log("Projektiili osui kohteeseen!");
+                //Debug.Log("Projektiili osui kohteeseen!");
                 //Invoke("DestroyProjectile", 0.3f); // Tuhotaan 0.3 sekunnin kuluttua
-                //Destroy(gameObject); // Tuhotaan, jos kohde katoaa
+                Destroy(gameObject); // Tuhotaan, jos kohde katoaa
                 return;
             }
 

@@ -89,6 +89,14 @@ public class ItemDatabase : MonoBehaviour
                     // Luo Equipment
                     newItem = CreateEquipmentFromRow(row);
                 }
+                else if (itemType == "Misc")
+                {
+                    newItem = CreateMiscFromRow(row);
+                }
+                else if (itemType == "Card")
+                {
+                    newItem = CreateCardFromRow(row);
+                }
                 else
                 {
                     
@@ -112,6 +120,58 @@ public class ItemDatabase : MonoBehaviour
 // Luo tavallinen Item
 // Luo tavallinen Item
     Item CreateItemFromRow(IList<object> row)
+    {
+        Item newItem = ScriptableObject.CreateInstance<Item>();
+
+        // Asetetaan oletusarvo, jos kenttä on tyhjä
+        newItem.itemName = row[0] != null && !string.IsNullOrEmpty(row[0].ToString()) ? row[0].ToString() : "Unnamed Item";  // Oletusarvona "Unnamed Item"
+        newItem.infoText = row[1] != null && !string.IsNullOrEmpty(row[1].ToString()) ? row[1].ToString() : "No description";  // Oletusarvona "No description"
+        newItem.itemType = row[2].ToString().Trim();  // Tämä on string, joten se ei tarvitse tarkistusta
+      
+
+
+        // Käsitellään isStackable ja quantity, jos kenttä on tyhjä, asetetaan oletusarvoksi false tai 0
+        
+        newItem.quantity = row[6] != null && !string.IsNullOrEmpty(row[6].ToString()) ? int.Parse(row[6].ToString()) : 1;  // Asetetaan oletusarvoksi 1
+        newItem.sellPrice = row[7] != null && !string.IsNullOrEmpty(row[7].ToString()) ? int.Parse(row[7].ToString()) : 0;  // Asetetaan oletusarvoksi 0
+        newItem.usageText = "test";
+
+        // Haetaan sprite Google Sheetsistä (sarakkeen "Sprite" arvon perusteella)
+        string spriteName = row[26] != null && !string.IsNullOrEmpty(row[26].ToString()) ? row[26].ToString() : "default_sprite";  // Oletusarvo "default_sprite"
+        newItem.icon = LoadSprite(spriteName, newItem.itemType);  // Ladataan sprite "Item"-kansiosta
+        newItem.isStackable = row[28] != null && !string.IsNullOrEmpty(row[28].ToString()) ? bool.Parse(row[28].ToString()) : false;
+
+        return newItem;
+
+    }
+     Item CreateCardFromRow(IList<object> row)
+    {
+        Item newItem = ScriptableObject.CreateInstance<Item>();
+
+        // Asetetaan oletusarvo, jos kenttä on tyhjä
+        newItem.itemName = row[0] != null && !string.IsNullOrEmpty(row[0].ToString()) ? row[0].ToString() : "Unnamed Item";  // Oletusarvona "Unnamed Item"
+        newItem.infoText = row[1] != null && !string.IsNullOrEmpty(row[1].ToString()) ? row[1].ToString() : "No description";  // Oletusarvona "No description"
+        newItem.itemType = row[2].ToString().Trim();  // Tämä on string, joten se ei tarvitse tarkistusta
+      
+
+
+        // Käsitellään isStackable ja quantity, jos kenttä on tyhjä, asetetaan oletusarvoksi false tai 0
+        
+        newItem.quantity = row[6] != null && !string.IsNullOrEmpty(row[6].ToString()) ? int.Parse(row[6].ToString()) : 1;  // Asetetaan oletusarvoksi 1
+        newItem.sellPrice = row[7] != null && !string.IsNullOrEmpty(row[7].ToString()) ? int.Parse(row[7].ToString()) : 0;  // Asetetaan oletusarvoksi 0
+        newItem.usageText = "test";
+
+        // Haetaan sprite Google Sheetsistä (sarakkeen "Sprite" arvon perusteella)
+        newItem.rarity = string.IsNullOrEmpty(row[25]?.ToString()) ? Rarity.Common : (Rarity)Enum.Parse(typeof(Rarity), row[25].ToString());
+        string spriteName = row[26] != null && !string.IsNullOrEmpty(row[26].ToString()) ? row[26].ToString() : "default_sprite";  // Oletusarvo "default_sprite"
+        newItem.icon = LoadSprite(spriteName, newItem.itemType);  // Ladataan sprite "Item"-kansiosta
+        newItem.isStackable = row[28] != null && !string.IsNullOrEmpty(row[28].ToString()) ? bool.Parse(row[28].ToString()) : false;
+        
+
+        return newItem;
+
+    }
+    Item CreateMiscFromRow(IList<object> row)
     {
         Item newItem = ScriptableObject.CreateInstance<Item>();
 
@@ -237,6 +297,10 @@ public class ItemDatabase : MonoBehaviour
             {
                 path = "Sprites/Misc/" + spriteName;  // Equipment kansio
             }
+            else if (itemType == "Card")
+            {
+                path = "Sprites/Card/" + spriteName;
+            }
             else
             {
                 Debug.LogError("Unknown item type: " + itemType);
@@ -283,7 +347,7 @@ public class ItemDatabase : MonoBehaviour
             }
             else
             {
-                Debug.Log($"Model '{path}' loaded successfully.");
+                //Debug.Log($"Model '{path}' loaded successfully.");
             }
 
             return loadedModel;

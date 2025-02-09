@@ -11,6 +11,7 @@ TagManager:
   - ActionBarSlot
   - Enemy
   - NPC
+  - Storage
   layers:
   - Default
   - TransparentFX

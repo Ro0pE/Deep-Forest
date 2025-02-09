@@ -33,7 +33,7 @@ MonoBehaviour:
   goals:
   - goalDescription: Collect all the strawberries.
     requiredAmount: 3
-    currentAmount: 4
+    currentAmount: 0
     itemToCollect: Strawberry
     enemyToKill: 
     goalType: 1
