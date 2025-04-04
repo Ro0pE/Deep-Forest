@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f0c24347ec8ef9f4b8c7e38d4e7785bf, type: 3}
   m_Name: A Thorny Situation
   m_EditorClassIdentifier: 
+  npcID: Alberto
   questID: AThornySituation
   title: A Thorny Situation
   description: "Near the forest\u2019s edge, strange cactus-like creatures have started
@@ -22,11 +23,12 @@ MonoBehaviour:
     thorny cores removed, the forest\u2019s edge is safe again, and the paths are
     much easier to walk without those nasty thorns everywhere. Thanks for cleaning
     up the mess!"
+  isCompleted: 0
   experienceReward: 150
   goldReward: 12
-  itemRewardNames:
-  - Healing Potion
-  - Healing Potion
+  itemRewards:
+  - itemName: Great Bow
+    quantity: 1
   goals:
   - goalDescription: Collect Thorns
     requiredAmount: 15
@@ -35,3 +37,4 @@ MonoBehaviour:
     enemyToKill: Spikthorn
     goalType: 1
   isReadyForCompletion: 0
+  preQuestID: FungusAmongUs

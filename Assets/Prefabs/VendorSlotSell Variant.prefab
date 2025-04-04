@@ -626,6 +626,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1181946082341227970, guid: 48ee88e390d9c6547a579c6427c98d38, type: 3}
+      propertyPath: m_text
+      value: 9999
+      objectReference: {fileID: 0}
+    - target: {fileID: 2475249137258014104, guid: 48ee88e390d9c6547a579c6427c98d38, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: -11.1
+      objectReference: {fileID: 0}
     - target: {fileID: 3578483450177562498, guid: 48ee88e390d9c6547a579c6427c98d38, type: 3}
       propertyPath: m_Name
       value: VendorSlotSell Variant

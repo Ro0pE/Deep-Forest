@@ -127,4 +127,6 @@ MonoBehaviour:
   quantityText: {fileID: 0}
   inventoryUI: {fileID: 0}
   itemTooltipManager: {fileID: 0}
+  vendorManager: {fileID: 0}
+  defaultSprite: {fileID: 0}
   doubleClickTimeLimit: 0.5

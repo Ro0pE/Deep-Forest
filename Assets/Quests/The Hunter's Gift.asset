@@ -1,0 +1,36 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f0c24347ec8ef9f4b8c7e38d4e7785bf, type: 3}
+  m_Name: The Hunter's Gift
+  m_EditorClassIdentifier: 
+  npcID: Mary
+  questID: ArrowoftheFrozenWastes
+  title: Arrow of the Frozen Wastes
+  description: '"Defeat enemies to collect different types of diamonds. Exchange
+    them for powerful elemental arrows to aid in your journey."'
+  completeText: '"Thank you for the diamonds! As promised, here are your elemental
+    arrows. Use them wisely!"'
+  isCompleted: 0
+  experienceReward: 100
+  goldReward: 0
+  itemRewards:
+  - itemName: Frost Arrow
+    quantity: 200
+  goals:
+  - goalDescription: Collect water crystal
+    requiredAmount: 1
+    currentAmount: 0
+    itemToCollect: Water Crystal
+    enemyToKill: 
+    goalType: 1
+  isReadyForCompletion: 0
+  preQuestID: 

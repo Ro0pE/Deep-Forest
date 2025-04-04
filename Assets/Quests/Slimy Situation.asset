@@ -1,0 +1,40 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f0c24347ec8ef9f4b8c7e38d4e7785bf, type: 3}
+  m_Name: Slimy Situation
+  m_EditorClassIdentifier: 
+  npcID: Rurik
+  questID: SlimySituation
+  title: Slimy Situation
+  description: You see those slimy Blops? They carry a nice little ingredient called
+    Gloo, bring me some Gloo so I can cook some real shit!
+  completeText: Thanks man! Now find my brother Damien, he might have something for
+    you!
+  isCompleted: 0
+  experienceReward: 80
+  goldReward: 15
+  itemRewards:
+  - itemName: Minor Restoration Potion
+    quantity: 3
+  - itemName: Minor Healing Potion
+    quantity: 1
+  - itemName: Minor Mana Potion
+    quantity: 1
+  goals:
+  - goalDescription: Collect Gloo
+    requiredAmount: 1
+    currentAmount: 0
+    itemToCollect: Gloo
+    enemyToKill: Blop
+    goalType: 1
+  isReadyForCompletion: 0
+  preQuestID: 

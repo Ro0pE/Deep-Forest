@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 2527305836825441995}
   - component: {fileID: 7055862051530728436}
   - component: {fileID: 7511080502074878559}
+  - component: {fileID: 222449210996947982}
   m_Layer: 5
   m_Name: inventorySlotPrefab
   m_TagString: Untagged
@@ -138,6 +139,7 @@ MonoBehaviour:
   itemTransform: {fileID: 814952204698731859}
   currentItem: {fileID: 0}
   quantityText: {fileID: 1181946082341227970}
+  itemImage: {fileID: 0}
   inventoryUI: {fileID: 0}
   itemTooltipManager: {fileID: 0}
   doubleClickTimeLimit: 0.5
@@ -148,6 +150,20 @@ MonoBehaviour:
   glowAnimator: {fileID: 2096975538092100927}
   slotOutline: {fileID: 1486121282117650813}
   itemFrame: {fileID: 4880717865076931585}
+  isMouseRightHeld: 0
+--- !u!114 &222449210996947982
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3578483450177562498}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 04e4965f18383ba499a0dafd1f9d0f2b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  effectResourcePath: UI_Effects/ItemGlow
 --- !u!1 &4182300507081658044
 GameObject:
   m_ObjectHideFlags: 0
@@ -185,7 +201,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 80, y: 80}
+  m_SizeDelta: {x: 85, y: 85}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &2644780088935248766
 CanvasRenderer:
@@ -215,7 +231,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 4293f3f43e7a5524dbcb191b0ef09d9c, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 2b0b3110512b68f4796b67f4c9c4f837, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -719,7 +735,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 4f033cdd2b09f9a43b139729d09d002c, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 380cbb2cc2e72a04fbb7013072d6c1e2, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1

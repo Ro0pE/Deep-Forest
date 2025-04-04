@@ -1,0 +1,35 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d9da3110cd8b0874cb5d33bac446840d, type: 3}
+  m_Name: SpikthornData
+  m_EditorClassIdentifier: 
+  monsterName: Spikthorn
+  minLevel: 3
+  maxLevel: 6
+  prefabPath: Spikthorn
+  enemySprite: {fileID: 21300000, guid: ec26a6c4c1a68754c900635119bb8c62, type: 3}
+  enemyElement: 2
+  baseHealth: 11
+  experiencePoints: 20
+  damageModifiersList:
+  - element: 0
+    modifier: 1.5
+  - element: 2
+    modifier: 0
+  lootItems:
+  - itemName: Minor Healing Potion
+    dropChance: 777
+    itemType: Potion
+  - itemName: Minor Mana Potion
+    dropChance: 555
+    itemType: Potion
+  killQuestName: 

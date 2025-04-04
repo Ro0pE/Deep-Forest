@@ -35,7 +35,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 75, y: 75}
+  m_SizeDelta: {x: 55, y: 55}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &4737809454421636774
 CanvasRenderer:
@@ -112,7 +112,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 78, y: 78}
+  m_SizeDelta: {x: 58, y: 58}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &2730674078997821308
 CanvasRenderer:
@@ -231,7 +231,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 80, y: 80}
+  m_SizeDelta: {x: 60, y: 60}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &976032599031329562
 CanvasRenderer:
@@ -305,7 +305,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: -64.4}
+  m_AnchoredPosition: {x: 0, y: -55.6}
   m_SizeDelta: {x: 200, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &4667650426630942293
@@ -363,8 +363,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 25
-  m_fontSizeBase: 25
+  m_fontSize: 20
+  m_fontSizeBase: 20
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -446,7 +446,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 80, y: 80}
+  m_SizeDelta: {x: 62, y: 62}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &4102547963089592260
 CanvasRenderer:
@@ -509,26 +509,48 @@ MonoBehaviour:
     castTime: 0
     manaCost: 0
     manaCostPerLevel: 0
+    damageRange: 0
     skillLevel: 0
     skillMaxLevel: 0
     totalHeal: 0
     totalDamage: 0
     addCrit: 0
+    addBaseCrit: 0
     addDodge: 0
+    addBaseDodge: 0
+    addAgi: 0
+    addDex: 0
+    addStr: 0
+    addVit: 0
+    addInt: 0
+    addRegenHP: 0
+    addRegenSP: 0
+    addRangedRange: 0
+    addCastingRange: 0
     isPassive: 0
     infoText: 
+    updatedInfoText: 
     element: 0
     spellType: 0
     skillType: 0
+    skillSchool: 0
     isLearned: 0
     canInterrup: 0
+    skillCost: 0
+    noTarget: 0
+    preSkill: 
+    preSkillLevel: 0
+    skillTier: 0
+    isAvailable: 1
   skillIconImage: {fileID: 3250768914607687351}
+  defaultSkillIcon: {fileID: 21300000, guid: 2c4a33bc814c7e9469d88822115edfa5, type: 3}
   actionButton: {fileID: 3879115119561212087}
   manaCostText: {fileID: 6422735701354318562}
   cooldownText: {fileID: 7275715483595377012}
   cooldownOverlay: {fileID: 3361391824533396621}
   playerAttack: {fileID: 0}
   playerHealth: {fileID: 0}
+  skillTooltipManager: {fileID: 0}
 --- !u!1 &6671819416082738929
 GameObject:
   m_ObjectHideFlags: 0
@@ -697,8 +719,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 45.3}
-  m_SizeDelta: {x: 200, y: 50}
+  m_AnchoredPosition: {x: -0.5, y: 40.3}
+  m_SizeDelta: {x: 70, y: 20}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &1801176268860055676
 CanvasRenderer:
@@ -731,7 +753,7 @@ MonoBehaviour:
   m_text: 12
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_sharedMaterial: {fileID: 2100000, guid: e73a58f6e2794ae7b1b7e50b7fb811b0, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -755,8 +777,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 25
-  m_fontSizeBase: 25
+  m_fontSize: 17
+  m_fontSizeBase: 17
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18

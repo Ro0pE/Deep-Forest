@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f0c24347ec8ef9f4b8c7e38d4e7785bf, type: 3}
   m_Name: Fungus Among Us
   m_EditorClassIdentifier: 
+  npcID: Alberto
   questID: FungusAmongUs
   title: Fungus Among Us!
   description: "A bunch of clumsy, mushroom-like creatures has popped up in the forest.
@@ -19,16 +20,18 @@ MonoBehaviour:
     problem. Clear them out before they cause more trouble!"
   completeText: "With the last of the goofy mushroom critters defeated, peace returns
     to the forest. Let\u2019s hope they don\u2019t grow back anytime soon!"
+  isCompleted: 0
   experienceReward: 200
   goldReward: 5
-  itemRewardNames:
-  - Minor Mana Potion
-  - Minor Healing Potion
+  itemRewards:
+  - itemName: Bow
+    quantity: 1
   goals:
   - goalDescription: Kill Spores
-    requiredAmount: 15
-    currentAmount: 0
+    requiredAmount: 3
+    currentAmount: 4
     itemToCollect: 
     enemyToKill: Spore
     goalType: 0
   isReadyForCompletion: 0
+  preQuestID: SlimySituation

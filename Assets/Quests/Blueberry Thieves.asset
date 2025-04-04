@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f0c24347ec8ef9f4b8c7e38d4e7785bf, type: 3}
   m_Name: Blueberry Thieves
   m_EditorClassIdentifier: 
+  npcID: Alberto
   questID: StrawberryThieves
   title: Strawberry Thieves
   description: "\"The bears have stolen all our strawberries, and now my wife, Joanna,
@@ -25,11 +26,12 @@ MonoBehaviour:
     Joanna will be overjoyed when I tell her the news. You\u2019ve saved us, and
     now we can finally enjoy our harvest. Take this reward\u2014consider it a small
     gesture for all your trouble."
+  isCompleted: 0
   experienceReward: 300
   goldReward: 20
-  itemRewardNames:
-  - Mana Potion
-  - Necklace of the owl
+  itemRewards:
+  - itemName: Mana Potion
+    quantity: 4
   goals:
   - goalDescription: Collect all the strawberries.
     requiredAmount: 3
@@ -38,3 +40,4 @@ MonoBehaviour:
     enemyToKill: 
     goalType: 1
   isReadyForCompletion: 0
+  preQuestID: 

@@ -40,8 +40,10 @@ MonoBehaviour:
     element: 0
     spellType: 0
     skillType: 2
+    skillSchool: 0
     isLearned: 1
     canInterrup: 0
+    skillCost: 0
   - skillName: Frostbolt
     skillIcon: {fileID: 21300000, guid: 0e41490ac768a7740a413995072820e4, type: 3}
     baseDamage: 1.5
@@ -69,8 +71,10 @@ MonoBehaviour:
     element: 1
     spellType: 0
     skillType: 2
+    skillSchool: 0
     isLearned: 1
     canInterrup: 0
+    skillCost: 0
   - skillName: Chaosbolt
     skillIcon: {fileID: 21300000, guid: b8bfd2170e096904b8a4f2102b842a41, type: 3}
     baseDamage: 1.6
@@ -98,8 +102,10 @@ MonoBehaviour:
     element: 4
     spellType: 0
     skillType: 2
+    skillSchool: 0
     isLearned: 1
     canInterrup: 0
+    skillCost: 0
   - skillName: Improved Accuracy
     skillIcon: {fileID: 21300000, guid: ef6f834e2225c5b4382023ca8532b16b, type: 3}
     baseDamage: 0
@@ -115,7 +121,7 @@ MonoBehaviour:
     skillMaxLevel: 10
     totalHeal: 0
     totalDamage: 0
-    addCrit: 4
+    addCrit: 5
     addDodge: 0
     isPassive: 1
     infoText: 'Deals damage 0 * MATK (<color=red>0</color>)
@@ -127,8 +133,10 @@ MonoBehaviour:
     element: 7
     spellType: 0
     skillType: 3
+    skillSchool: 1
     isLearned: 1
     canInterrup: 0
+    skillCost: 5
   - skillName: Tiger Reflexes
     skillIcon: {fileID: 21300000, guid: 2a635a453f2a720498f5fe290c979140, type: 3}
     baseDamage: 0
@@ -145,14 +153,16 @@ MonoBehaviour:
     totalHeal: 0
     totalDamage: 0
     addCrit: 0
-    addDodge: 13
+    addDodge: 15
     isPassive: 1
     infoText: 
     element: 7
     spellType: 0
     skillType: 3
-    isLearned: 1
+    skillSchool: 1
+    isLearned: 0
     canInterrup: 0
+    skillCost: 3
   - skillName: Heal
     skillIcon: {fileID: 21300000, guid: 82e106d18cfcea642a5fdbdcc72f015b, type: 3}
     baseDamage: 0
@@ -177,8 +187,10 @@ MonoBehaviour:
     element: 5
     spellType: 1
     skillType: 2
+    skillSchool: 0
     isLearned: 1
     canInterrup: 0
+    skillCost: 0
   - skillName: Lighting Bolt
     skillIcon: {fileID: 21300000, guid: 51f771c76ccdea54187db502a06b2f3f, type: 3}
     baseDamage: 2
@@ -206,8 +218,10 @@ MonoBehaviour:
     element: 3
     spellType: 0
     skillType: 2
+    skillSchool: 0
     isLearned: 0
     canInterrup: 0
+    skillCost: 0
   - skillName: Poison Touch
     skillIcon: {fileID: 21300000, guid: 0e782a9c00e4cf44da101fae69787263, type: 3}
     baseDamage: 0.4
@@ -235,8 +249,10 @@ MonoBehaviour:
     element: 2
     spellType: 0
     skillType: 2
+    skillSchool: 0
     isLearned: 0
     canInterrup: 0
+    skillCost: 0
   - skillName: Burning Heart
     skillIcon: {fileID: 21300000, guid: 531ba51ddfe562546abeb0828e6d1ee4, type: 3}
     baseDamage: 0.5
@@ -264,8 +280,10 @@ MonoBehaviour:
     element: 0
     spellType: 0
     skillType: 2
+    skillSchool: 0
     isLearned: 0
     canInterrup: 0
+    skillCost: 0
   - skillName: Eearth Spikes
     skillIcon: {fileID: 21300000, guid: 21c0a5e8603a28941bd58cecff0b8be0, type: 3}
     baseDamage: 1.6
@@ -293,8 +311,10 @@ MonoBehaviour:
     element: 2
     spellType: 0
     skillType: 2
+    skillSchool: 0
     isLearned: 0
     canInterrup: 0
+    skillCost: 0
   - skillName: Mending Leafs
     skillIcon: {fileID: 21300000, guid: 8a96c3b8bdce6b5439318137d02a1060, type: 3}
     baseDamage: 0
@@ -319,8 +339,10 @@ MonoBehaviour:
     element: 2
     spellType: 1
     skillType: 2
+    skillSchool: 0
     isLearned: 0
     canInterrup: 0
+    skillCost: 0
   - skillName: Flame Shock
     skillIcon: {fileID: 21300000, guid: b1e7ddba9686e764e87b228652221a61, type: 3}
     baseDamage: 0.5
@@ -348,8 +370,10 @@ MonoBehaviour:
     element: 0
     spellType: 0
     skillType: 0
+    skillSchool: 0
     isLearned: 1
     canInterrup: 0
+    skillCost: 0
   - skillName: Double Strike
     skillIcon: {fileID: 21300000, guid: 7c3bfe567e607d548b856acdca28bf08, type: 3}
     baseDamage: 0.8
@@ -377,8 +401,10 @@ MonoBehaviour:
     element: 7
     spellType: 0
     skillType: 1
-    isLearned: 1
+    skillSchool: 1
+    isLearned: 0
     canInterrup: 0
+    skillCost: 1
   - skillName: Basic Attack
     skillIcon: {fileID: 21300000, guid: 0cd68d283806ee9409c19bdf7f799d26, type: 3}
     baseDamage: 1
@@ -406,8 +432,10 @@ MonoBehaviour:
     element: 6
     spellType: 0
     skillType: 0
+    skillSchool: 0
     isLearned: 0
     canInterrup: 0
+    skillCost: 0
   - skillName: Fire Shock
     skillIcon: {fileID: 21300000, guid: bf42194757fbab949b845a3838f1d8ec, type: 3}
     baseDamage: 5
@@ -435,8 +463,10 @@ MonoBehaviour:
     element: 0
     spellType: 0
     skillType: 2
+    skillSchool: 0
     isLearned: 1
     canInterrup: 0
+    skillCost: 0
   - skillName: Multi Arrow
     skillIcon: {fileID: 21300000, guid: cacfeb3917e76294db3be4ebca0b8aab, type: 3}
     baseDamage: 0.3
@@ -464,8 +494,10 @@ MonoBehaviour:
     element: 7
     spellType: 0
     skillType: 1
-    isLearned: 1
+    skillSchool: 1
+    isLearned: 0
     canInterrup: 0
+    skillCost: 2
   - skillName: Stunning Arrow
     skillIcon: {fileID: 21300000, guid: 9efee09b321b23a49bcd8287db98625d, type: 3}
     baseDamage: 0.3
@@ -493,8 +525,10 @@ MonoBehaviour:
     element: 7
     spellType: 0
     skillType: 1
+    skillSchool: 1
     isLearned: 1
     canInterrup: 1
+    skillCost: 1
   - skillName: Bulls Eye
     skillIcon: {fileID: 21300000, guid: 74d743cf912dc474cb9c15bc4b442898, type: 3}
     baseDamage: 3
@@ -522,8 +556,10 @@ MonoBehaviour:
     element: 7
     spellType: 0
     skillType: 1
-    isLearned: 1
+    skillSchool: 1
+    isLearned: 0
     canInterrup: 0
+    skillCost: 5
   - skillName: Hawk Eye
     skillIcon: {fileID: 21300000, guid: 36679ff6c9c67a64f819b28e72d1f86e, type: 3}
     baseDamage: 0
@@ -546,8 +582,10 @@ MonoBehaviour:
     element: 7
     spellType: 2
     skillType: 1
-    isLearned: 1
+    skillSchool: 1
+    isLearned: 0
     canInterrup: 0
+    skillCost: 14
   - skillName: Bleeding Strike
     skillIcon: {fileID: 21300000, guid: 947a9865ac0fd5b4e809577727a166b9, type: 3}
     baseDamage: 0.1
@@ -570,5 +608,7 @@ MonoBehaviour:
     element: 6
     spellType: 0
     skillType: 0
-    isLearned: 1
+    skillSchool: 0
+    isLearned: 0
     canInterrup: 0
+    skillCost: 0

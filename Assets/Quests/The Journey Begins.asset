@@ -1,0 +1,53 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f0c24347ec8ef9f4b8c7e38d4e7785bf, type: 3}
+  m_Name: The Journey Begins
+  m_EditorClassIdentifier: 
+  npcID: Rurik
+  questID: TheJourneyBegins
+  title: The Journey Begins
+  description: "Ah, a traveler! It\u2019s rare to see anyone wander this deep into
+    the forest. You should be careful\u2014this place is not as safe as it once was. 
+    Strange creatures have started appearing, and no one knows where they came from.
+    They attack without reason, and one of them even stole something precious from
+    me\u2014my necklace.  You look like someone who can handle themselves. Please,
+    if you\u2019re willing, could you retrieve my necklace from those creatures?"
+  completeText: "You found it! I can\u2019t thank you enough, traveler. But\u2026
+    something tells me this is only the beginning of our troubles.  I was going to
+    keep this necklace, but I believe you will need it more than I will in the days
+    to come. Take it\u2014may it protect you on your journey.  Also, take these potions.
+    The road ahead will not be easy, and you\u2019ll need all the help you can get."
+  isCompleted: 0
+  experienceReward: 100
+  goldReward: 15
+  itemRewards:
+  - itemName: Found Necklace
+    quantity: 1
+  - itemName: Minor Healing Potion
+    quantity: 4
+  - itemName: Minor Mana Potion
+    quantity: 3
+  - itemName: Minor Restoration Potion
+    quantity: 2
+  - itemName: Boots Of Fury
+    quantity: 1
+  - itemName: Eye of the Akakabuto
+    quantity: 1
+  goals:
+  - goalDescription: Collect Lost Necklace
+    requiredAmount: 1
+    currentAmount: 0
+    itemToCollect: Lost Necklace
+    enemyToKill: Blop
+    goalType: 1
+  isReadyForCompletion: 0
+  preQuestID: 

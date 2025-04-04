@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f0c24347ec8ef9f4b8c7e38d4e7785bf, type: 3}
   m_Name: Damn Bears
   m_EditorClassIdentifier: 
+  npcID: Alberto
   questID: DamnBears
   title: Damn bears!
   description: "\"The bears have been terrorizing my wife, Joanna, and ruining our
@@ -26,11 +27,12 @@ MonoBehaviour:
     I asked. You\u2019ve done a great service to this village and to Joanna, who
     can finally rest easy. We are forever in your debt. Please, take this as a token
     of our gratitude."
+  isCompleted: 0
   experienceReward: 400
   goldReward: 0
-  itemRewardNames:
-  - Large Mana Potion
-  - Bow of the bear
+  itemRewards:
+  - itemName: Belt of the Bear
+    quantity: 1
   goals:
   - goalDescription: Kill brown bears
     requiredAmount: 4
@@ -39,3 +41,4 @@ MonoBehaviour:
     enemyToKill: Bear
     goalType: 0
   isReadyForCompletion: 0
+  preQuestID: 

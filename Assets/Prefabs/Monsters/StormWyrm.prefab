@@ -1718,8 +1718,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 1.8229418, y: 2.0167584, z: 3.1513782}
-  m_Center: {x: -0.030903973, y: 0.62234986, z: -0.043477852}
+  m_Size: {x: 3.8875942, y: 5.787998, z: 6.191742}
+  m_Center: {x: -0.1072734, y: 2.5079699, z: -0.037725326}
 --- !u!195 &6819074304239613316
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -1769,6 +1769,8 @@ MonoBehaviour:
   attackCooldown: 1.5
   walkSpeed: 5
   runSpeed: 10
+  orginalWalkSpeed: 7
+  orginalRunSpeed: 12
   agent: {fileID: 0}
   player: {fileID: 0}
   playerHealth: {fileID: 0}
@@ -1778,6 +1780,8 @@ MonoBehaviour:
   isAttacking: 0
   randomAttack: 0
   distanceToPlayer: 0
+  isChasingPlayer: 0
+  isWandering: 0
 --- !u!114 &894712694236787304
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1838,6 +1842,7 @@ MonoBehaviour:
   playerAttack: {fileID: 0}
   healthBar: {fileID: 5246053769291955525}
   critMultiplier: 2
+  finalDamage: 0
   agent: {fileID: 0}
   lootItems: []
   droppedItems: []
@@ -1862,6 +1867,11 @@ MonoBehaviour:
   isStunned: 0
   enemyAI: {fileID: 7682126124787700319}
   playerMovement: {fileID: 0}
+  inventoryUI: {fileID: 0}
+  noRespawn: 0
+  playerHealth: {fileID: 0}
+  critFocusAttack: 0
+  hunterSkillTree: {fileID: 0}
 --- !u!114 &3449771760456232389
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2936,7 +2946,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: -0.7071068, y: 0.000000059604645, z: 0.000000059604645, w: 0.7071068}
   m_LocalPosition: {x: 0, y: 0.1, z: 0}
-  m_LocalScale: {x: 5, y: 5, z: 5}
+  m_LocalScale: {x: 6, y: 6, z: 6}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 3365155193246787410}
@@ -2983,7 +2993,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_Sprite: {fileID: -2413806693520163455, guid: a86470a33a6bf42c4b3595704624658b, type: 3}
-  m_Color: {r: 0.7735849, g: 0.14231044, b: 0.14231044, a: 0.38431373}
+  m_Color: {r: 0.8113208, g: 0.11098258, b: 0.11098258, a: 0.5137255}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0

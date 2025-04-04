@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f0c24347ec8ef9f4b8c7e38d4e7785bf, type: 3}
   m_Name: Bear Pelts for the Winter
   m_EditorClassIdentifier: 
+  npcID: Alberto
   questID: BearPeltsfortheWinter
   title: Bear Pelts for the Winter
   description: "\"The harsh winter is approaching, and our village needs warm clothing
@@ -25,11 +26,12 @@ MonoBehaviour:
     and warm, just what we need for the coming cold. You\u2019ve done more for this
     village than you know. With these, we can make coats, blankets, and more to survive
     the winter. Take this reward as thanks for your bravery and skill."
+  isCompleted: 0
   experienceReward: 125
   goldReward: 55
-  itemRewardNames:
-  - Healing Potion
-  - Minor Restoration Potion
+  itemRewards:
+  - itemName: Gloves of the Bear
+    quantity: 1
   goals:
   - goalDescription: Collect Bear Pelts
     requiredAmount: 2
@@ -38,3 +40,4 @@ MonoBehaviour:
     enemyToKill: Bear
     goalType: 1
   isReadyForCompletion: 0
+  preQuestID: 
