@@ -328,7 +328,17 @@ private void RemoveSlowEffect(EnemyHealth targetEnemy)
         {
            
             StartCoroutine(LeechingArrows(skill));
-        }                                                                     
+        }
+        else if (skill.skillName == "Sharp Shooter")
+        {
+           
+            StartCoroutine(SharpShooter(skill));
+        }  
+        else if (skill.skillName == "Rain of Arrows")
+        {
+           
+            StartCoroutine(RainOfArrows(skill));
+        }                                                                      
         else
         {
             Debug.Log("Invalid skill");
@@ -377,6 +387,42 @@ private void RemoveSlowEffect(EnemyHealth targetEnemy)
         yield return playerAttack.StartCoroutine(playerAttack.DealDamageAfterDelaySkill(skill, playerAttack.IsCriticalHit()));
         yield return playerAttack.StartCoroutine(playerAttack.DealDamageAfterDelaySkill(skill, playerAttack.IsCriticalHit()));
     }
+        public IEnumerator RainOfArrows(Skill skill)
+        {
+            if (playerAttack.targetedEnemy == null) yield break; // Varmistetaan, että kohde on olemassa
+            
+            int wave = 0;
+            int maxWaves = 4;
+            WaitForSeconds waitBetweenWaves = new WaitForSeconds(0.5f);
+
+            while (wave < maxWaves)
+            {  
+                GameObject freezeEffectPrefab = Resources.Load<GameObject>("Explosions/FreezingTrapEffect");
+                if (freezeEffectPrefab != null)
+                {
+                    GameObject freezeEffect = Instantiate(freezeEffectPrefab, playerAttack.targetedEnemy.transform.position, Quaternion.identity);
+                    Destroy(freezeEffect, 3f); // Poistetaan efekti 3 sekunnin kuluttua
+                }
+                if (playerAttack.targetedEnemy == null) yield break; // Jos vihollinen kuoli kesken, keskeytetään
+                
+                Collider[] hitColliders = Physics.OverlapSphere(playerAttack.targetedEnemy.transform.position, skill.damageRange);
+                List<EnemyHealth> closestEnemies = TakeClosestEnemies(hitColliders, 3);
+
+                foreach (EnemyHealth enemy in closestEnemies)
+                {
+                    if (enemy != null && !enemy.isDead) // Tarkistetaan, onko vihollinen vielä hengissä
+                    {
+                        yield return StartCoroutine(playerAttack.DealDamageAfterDelaySkill(skill, playerAttack.IsCriticalHit(), enemy));
+                    }
+                }
+
+                wave++;
+                yield return waitBetweenWaves; // Odota ennen seuraavaa aaltoa
+            }
+
+            yield return null;
+        }
+
     public IEnumerator LeechingArrows(Skill skill)
     {
         // Ensimmäinen nuoli ja vahinko
@@ -501,6 +547,31 @@ public IEnumerator StunningArrow(Skill skill)
       
         
         
+    }
+    
+    public IEnumerator SharpShooter(Skill skill)
+    {
+        Animator animator = playerAttack.GetComponent<Animator>();
+        animator.SetTrigger("RapidShooting");
+       // playerAttack.animator.speed = 1f / skill.castTime;
+        // Lataa tai aseta BullsEyeArrow-prefab
+        GameObject sharpShooterArrowPrefab = Resources.Load<GameObject>("Projectiles/SharpShooterArrow");
+
+        if (sharpShooterArrowPrefab == null)
+        {
+            Debug.LogError("BullsEyeArrow prefab not found!");
+            yield break;
+        }
+
+        // Käynnistetään ShootArrows coroutine ja odotetaan sen palauttamista
+        GameObject projectile = null;
+       Debug.Log("SHGARP SHOOYER");
+        // Odotetaan ShootArrows coroutinea ja palautetaan projektiili
+
+        animator.ResetTrigger("RapidShooting");
+        yield return StartCoroutine(playerAttack.ShootArrows(playerAttack.targetedEnemy, sharpShooterArrowPrefab));
+        // Vahingon käsittely
+        yield return playerAttack.StartCoroutine(playerAttack.DealDamageAfterDelaySkill(skill, playerAttack.IsCriticalHit()));
     }
 
     public IEnumerator BullsEye(Skill skill)
