@@ -1019,7 +1019,7 @@ MonoBehaviour:
     castTime: 0
     manaCost: 5
     manaCostPerLevel: 5
-    damageRange: 25
+    damageRange: 20
     skillLevel: 0
     skillMaxLevel: 3
     totalHeal: 0
@@ -1140,6 +1140,49 @@ MonoBehaviour:
     canInterrup: 0
     skillCost: 1
     noTarget: 1
+    preSkill: 
+    preSkillLevel: 0
+    skillTier: 7
+    isAvailable: 0
+  - skillName: Ice Trap
+    skillIcon: {fileID: 21300000, guid: 9d6250b3cd71ea847b07f839d8afdd7f, type: 3}
+    baseDamage: 0
+    damagePerLevel: 0
+    baseHeal: 0
+    healPerLevel: 0
+    cooldown: 0
+    castTime: 0
+    manaCost: 0
+    manaCostPerLevel: 0
+    damageRange: 0
+    skillLevel: 0
+    skillMaxLevel: 5
+    totalHeal: 0
+    totalDamage: 0
+    addCrit: 0
+    addBaseCrit: 0
+    addDodge: 0
+    addBaseDodge: 0
+    addAgi: 0
+    addDex: 0
+    addStr: 0
+    addVit: 0
+    addInt: 0
+    addRegenHP: 0
+    addRegenSP: 0
+    addRangedRange: 0
+    addCastingRange: 0
+    isPassive: 0
+    infoText: Trap an enmy in an icy prison for skillLevel * 2  seconds
+    updatedInfoText: Trap an enmy in an icy prison for skillLevel * 2  seconds
+    element: 9
+    spellType: 0
+    skillType: 2
+    skillSchool: 1
+    isLearned: 0
+    canInterrup: 1
+    skillCost: 1
+    noTarget: 0
     preSkill: 
     preSkillLevel: 0
     skillTier: 7

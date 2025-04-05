@@ -49,7 +49,7 @@ public class Inventory : MonoBehaviour
 
         // Add items to the inventory
         AddItemToInventoryByName("Minor Healing Potion", 5);
-        AddItemToInventoryByName("Minor Mana Potion", 5);
+        AddItemToInventoryByName("Frenzy Bow", 1);
         AddItemToInventoryByName("Minor Mana Potion", 4);
         AddItemToInventoryByName("Wooden Bow", 1);
         AddItemToInventoryByName("Arrow", 1000);

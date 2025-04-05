@@ -14,10 +14,10 @@ OcclusionCullingSettings:
 RenderSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 9
-  m_Fog: 0
+  m_Fog: 1
   m_FogColor: {r: 0.5226504, g: 0.8207547, b: 0.6920279, a: 1}
   m_FogMode: 3
-  m_FogDensity: 0.003
+  m_FogDensity: 0.004
   m_LinearFogStart: 0
   m_LinearFogEnd: 300
   m_AmbientSkyColor: {r: 0.764151, g: 0.5627617, b: 0.13336597, a: 1}
@@ -26,7 +26,7 @@ RenderSettings:
   m_AmbientIntensity: 1.34
   m_AmbientMode: 0
   m_SubtractiveShadowColor: {r: 0.06474724, g: 0.071211405, b: 0.14150941, a: 1}
-  m_SkyboxMaterial: {fileID: 2100000, guid: 36a07dddc6cd4af1b89f771ae85ffe5b, type: 2}
+  m_SkyboxMaterial: {fileID: 2100000, guid: cb20c710b0721ef4d88cabbec2aa4da7, type: 2}
   m_HaloStrength: 0.5
   m_FlareStrength: 1
   m_FlareFadeSpeed: 3
@@ -29367,6 +29367,7 @@ MonoBehaviour:
   trapPrefab: {fileID: 7415384315886737861, guid: 41c78eee101612f42a22d6fc20051323, type: 3}
   audioSource: {fileID: 0}
   windRunnerSound: {fileID: 8300000, guid: 71db8f84d74fb5e4395c76caac037c08, type: 3}
+  rainOfArrowPrefab: {fileID: 100006, guid: fcde9819d514b954f815ab60425bfd2c, type: 3}
 --- !u!1001 &833987296
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -76822,6 +76823,26 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2482992986331722980, guid: 90f06609a6f2ba042b035991924d8494, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2595101072654142764, guid: 90f06609a6f2ba042b035991924d8494, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2595101073178308363, guid: 90f06609a6f2ba042b035991924d8494, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2595101073932790447, guid: 90f06609a6f2ba042b035991924d8494, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2595101074375700044, guid: 90f06609a6f2ba042b035991924d8494, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2595101074399709244, guid: 90f06609a6f2ba042b035991924d8494, type: 3}
+      propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3550361177859680466, guid: 90f06609a6f2ba042b035991924d8494, type: 3}

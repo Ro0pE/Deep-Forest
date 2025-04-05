@@ -24,6 +24,7 @@ public class HunterSkillManager : MonoBehaviour
     public AudioClip windRunnerSound;
     private Renderer enemyRenderer;
     private Color originalColor; // Tallennetaan alkuperäinen väri
+    [SerializeField] private GameObject rainOfArrowPrefab;
 
     // Start is called before the first frame update
     void Start()
@@ -338,7 +339,12 @@ private void RemoveSlowEffect(EnemyHealth targetEnemy)
         {
            
             StartCoroutine(RainOfArrows(skill));
-        }                                                                      
+        }
+        else if (skill.skillName == "Ice Trap")
+        {
+           
+            StartCoroutine(IceTrap(skill));
+        }                                                                       
         else
         {
             Debug.Log("Invalid skill");
@@ -387,41 +393,90 @@ private void RemoveSlowEffect(EnemyHealth targetEnemy)
         yield return playerAttack.StartCoroutine(playerAttack.DealDamageAfterDelaySkill(skill, playerAttack.IsCriticalHit()));
         yield return playerAttack.StartCoroutine(playerAttack.DealDamageAfterDelaySkill(skill, playerAttack.IsCriticalHit()));
     }
-        public IEnumerator RainOfArrows(Skill skill)
-        {
-            if (playerAttack.targetedEnemy == null) yield break; // Varmistetaan, että kohde on olemassa
+public void SpawnArrowRainEffect(Transform enemyTarget)
+{
+    int arrowCount = 12;
+    float spawnRadius = 10f;
+    float heightAboveEnemy = 20f;
+    float heightVariation = 5f; // Satunnainen korkeuden vaihtelu
+
+    // Efekti, joka luodaan tippumiskohdassa
+    GameObject spellEffect = Resources.Load<GameObject>("Explosions/RainArrowLocation");
+
+    // Laske alueen keskikohta, johon efektit tulevat
+    Vector3 effectCenter = enemyTarget.position + new Vector3(0, 0, 0); // Keskikohta (tässä oletetaan, että se on vihollisen sijainti, mutta se voidaan muuttaa)
+
+    // Lisätään pieni nostokorjaus efektin korkeuteen
+    float heightOffset = 1f; // Pieni nostokorjaus, voit säätää tätä arvoa
+    effectCenter.y += heightOffset; // Nostataan efektiä ylös
+
+    // Luo yksi suuri efekti alueelle
+    Instantiate(spellEffect, effectCenter, Quaternion.identity);
+
+    for (int i = 0; i < arrowCount; i++)
+    {
+        Vector3 randomOffset = new Vector3(
+            Random.Range(-spawnRadius, spawnRadius),
+            0,  // X ja Z ovat satunnaisia, mutta korkeus (Y) vaihdetaan alla
+            Random.Range(-spawnRadius, spawnRadius)
+        );
+
+        // Satunnainen korkeus, joka vaihtelee heightAboveEnemy +/- heightVariation
+        float randomHeight = Random.Range(heightAboveEnemy - heightVariation, heightAboveEnemy + heightVariation);
+        
+        // Asetetaan spawnPosition käyttämään tätä satunnaista korkeutta
+        Vector3 spawnPosition = enemyTarget.position + new Vector3(0, randomHeight, 0) + randomOffset;
+
+        // Nuolten rotaatio, joka osoittaa suoraan alaspäin
+        Quaternion rotation = Quaternion.LookRotation(Vector3.down);
+
+        // Luo nuoli
+        Instantiate(rainOfArrowPrefab, spawnPosition, rotation);
+    }
+}
+
+
+
+
+
+
+
+    public IEnumerator RainOfArrows(Skill skill)
+    {
+        EnemyHealth firstTarget = playerAttack.targetedEnemy;
+        playerAttack.isAttacking = false; // nollataan castit että pelaaja voi liikkua
+        playerAttack.isCasting = false;
+        if (firstTarget == null) yield break; // Varmistetaan, että kohde on olemassa
+        
+        int wave = 0;
+        int maxWaves = 4;
+        WaitForSeconds waitBetweenWaves = new WaitForSeconds(0.2f);
+
+        while (wave < maxWaves)
+        {  
+            SpawnArrowRainEffect(firstTarget.transform);
+            yield return new WaitForSeconds(1f); // Odotetaan, että nuolet putoavat maahan
             
-            int wave = 0;
-            int maxWaves = 4;
-            WaitForSeconds waitBetweenWaves = new WaitForSeconds(0.5f);
+            // Nyt haetaan viholliset alueelta ja tehdään vahinko
+            Collider[] hitColliders = Physics.OverlapSphere(firstTarget.transform.position, skill.damageRange);
+            List<EnemyHealth> enemiesInRange = TakeAllEnemiesInRange(hitColliders);
 
-            while (wave < maxWaves)
-            {  
-                GameObject freezeEffectPrefab = Resources.Load<GameObject>("Explosions/FreezingTrapEffect");
-                if (freezeEffectPrefab != null)
+            // Vahinko tulee vasta kun nuolet ovat maassa
+            foreach (EnemyHealth enemy in enemiesInRange)
+            {
+                if (enemy != null && !enemy.isDead) // Tarkistetaan, onko vihollinen vielä hengissä
                 {
-                    GameObject freezeEffect = Instantiate(freezeEffectPrefab, playerAttack.targetedEnemy.transform.position, Quaternion.identity);
-                    Destroy(freezeEffect, 3f); // Poistetaan efekti 3 sekunnin kuluttua
+                    yield return StartCoroutine(playerAttack.DealDamageAfterDelaySkill(skill, playerAttack.IsCriticalHit(), enemy));
                 }
-                if (playerAttack.targetedEnemy == null) yield break; // Jos vihollinen kuoli kesken, keskeytetään
-                
-                Collider[] hitColliders = Physics.OverlapSphere(playerAttack.targetedEnemy.transform.position, skill.damageRange);
-                List<EnemyHealth> closestEnemies = TakeClosestEnemies(hitColliders, 3);
-
-                foreach (EnemyHealth enemy in closestEnemies)
-                {
-                    if (enemy != null && !enemy.isDead) // Tarkistetaan, onko vihollinen vielä hengissä
-                    {
-                        yield return StartCoroutine(playerAttack.DealDamageAfterDelaySkill(skill, playerAttack.IsCriticalHit(), enemy));
-                    }
-                }
-
-                wave++;
-                yield return waitBetweenWaves; // Odota ennen seuraavaa aaltoa
             }
 
-            yield return null;
+            wave++;
+            yield return waitBetweenWaves; // Odota ennen seuraavaa aaltoa
         }
+
+        yield return null;
+    }
+
 
     public IEnumerator LeechingArrows(Skill skill)
     {
@@ -993,6 +1048,72 @@ public IEnumerator ShockTrap(Skill skill)
     playerAttack.isCasting = false;
     yield break; // ✅ Tämä varmistaa, että metodi palauttaa IEnumerator-arvon
 }
+public IEnumerator IceTrap(Skill skill)
+{
+    playerAttack.isAttacking = false;  // nollaa hyökkäys
+    GameObject trapObject = PlaceTrap(skill);
+    Trap trapComponent = trapObject.GetComponent<Trap>();
+
+    if (trapComponent != null)
+    {
+        trapComponent.OnTrapActivated += (EnemyHealth enemyHealth) =>
+        {
+            Buff stunData = buffDatabase.GetBuffByName("Stun");
+            EnemyBuffManager targetBuffManager = enemyHealth.GetComponent<EnemyBuffManager>();
+
+            Buff stunBuff = new Buff(
+                stunData.name,
+                skill.skillLevel * 2,
+                stunData.isStackable,
+                stunData.stacks,
+                stunData.buffIcon,
+                BuffType.Debuff,
+                stunData.damage,
+                stunData.effectText,
+                stunData.effectValue,
+                () => ApplyStunEffect(enemyHealth),
+                () => RemoveStunEffect(enemyHealth)
+            );
+
+            if (stunBuff == null)
+            {
+                Debug.LogError("❌ Stun-buffin luonti epäonnistui!");
+            }
+            else
+            {
+                targetBuffManager.AddBuff(stunBuff);
+                Debug.Log("✅ Stun lisätty: " + enemyHealth.monsterName);
+            }
+
+            Debug.Log("💀 Icetrap aktivoitu! kohteen: " + enemyHealth.monsterName);
+            
+            // Ladataan efektin prefab
+            GameObject iceTrapEffect = Resources.Load<GameObject>("Explosions/IceTrapEffect");
+            
+            // Varmistetaan, että efekti löytyy
+            if (iceTrapEffect != null)
+            {
+                // Luodaan efekti vihollisen sijaintiin (ei trap-objektin sisään)
+                GameObject effectInstance = Instantiate(iceTrapEffect, enemyHealth.transform.position, Quaternion.identity);
+                
+                // Asetetaan efekti vihollisen lapseksi, jotta se ei mene trapin mukana
+                effectInstance.transform.SetParent(enemyHealth.transform);
+
+                // Efekti tuhotaan myöhemmin
+                Debug.Log("effect tuhotaan sec: " + skill.skillLevel * 2);
+                Destroy(effectInstance, (skill.skillLevel * 2)); 
+            }
+            else
+            {
+                Debug.LogError("❌ IceTrap efekti ei löytynyt Resources-kansiosta!");
+            }
+
+        };
+    }
+    playerAttack.isCasting = false;
+
+    yield return null;
+}
 
 
 public IEnumerator BonecrusherTrap(Skill skill)
@@ -1066,6 +1187,23 @@ private List<EnemyHealth> TakeClosestEnemies(Collider[] hitColliders, int maxCou
 
     return enemies.Take(maxCount).ToList();
 }
+
+private List<EnemyHealth> TakeAllEnemiesInRange(Collider[] hitColliders)
+{
+    List<EnemyHealth> enemies = new List<EnemyHealth>();
+
+    foreach (Collider hitCollider in hitColliders)
+    {
+        EnemyHealth enemy = hitCollider.GetComponent<EnemyHealth>();
+        if (enemy != null && !enemy.isDead)
+        {
+            enemies.Add(enemy);
+        }
+    }
+
+    return enemies;
+}
+
 
 
 
