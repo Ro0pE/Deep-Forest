@@ -2939,7 +2939,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   targetIndicator: {fileID: 5562418962842454377}
   monsterName: The Great White
-  monsterLevel: 2
+  monsterLevel: 12
   enemyElement: 2
   elementSprites:
   - {fileID: 21300000, guid: b1e7ddba9686e764e87b228652221a61, type: 3}
@@ -2990,12 +2990,12 @@ MonoBehaviour:
   noRespawn: 0
   playerHealth: {fileID: 0}
   critFocusAttack: 0
-  hunterSkillTree: {fileID: 0}
   defaultSlotSprite: {fileID: 0}
   frozenEffectInstance: {fileID: 0}
   enemyRenderer: {fileID: 0}
   originalColor: {r: 0, g: 0, b: 0, a: 0}
   respawnTime: 35
+  isBurning: 0
 --- !u!114 &4366001400600223765
 MonoBehaviour:
   m_ObjectHideFlags: 0

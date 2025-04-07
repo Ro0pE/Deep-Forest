@@ -476,8 +476,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 35
-  m_fontSizeBase: 35
+  m_fontSize: 55
+  m_fontSizeBase: 55
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -1194,6 +1194,7 @@ MonoBehaviour:
   enemyRenderer: {fileID: 0}
   originalColor: {r: 0, g: 0, b: 0, a: 0}
   respawnTime: 35
+  isBurning: 0
   monsterData: {fileID: 11400000, guid: 369a6871ba6d0034e9eb81031f8de720, type: 2}
 --- !u!1 &5669755462088310502
 GameObject:

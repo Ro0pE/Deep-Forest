@@ -139,6 +139,7 @@ public IEnumerator StunningArrow(Skill skill)
         stunData.duration,
         stunData.isStackable,
         stunData.stacks,
+        stunData.maxStacks,
         stunData.buffIcon,
         BuffType.Debuff, // Tämä on debuff
         stunData.damage,
@@ -205,6 +206,7 @@ public IEnumerator StunningArrow(Skill skill)
                 hawkEyeData.duration,
                 hawkEyeData.isStackable,
                 hawkEyeData.stacks,
+                hawkEyeData.maxStacks,
                 hawkEyeData.buffIcon,
                 BuffType.Buff, // Tämä on debuff
                 hawkEyeData.damage,

@@ -365,22 +365,22 @@ private void CollectItem(int index)
         enemyAI.detectionRange = 70;
 
         float modifier = ElementDamageMatrix.GetDamageModifier(skill.element, enemyElement);
+        float randomVariance = Random.Range(0.95f, 1.05f);
+
         if (skill.skillType == SkillType.Melee)
         {
-            
-        finalDamage = Mathf.RoundToInt(CalculateDamageMelee(skill.damage, isCrit) * modifier);
-
-        Debug.Log("Melee damage " + finalDamage);   
+            finalDamage = Mathf.RoundToInt(CalculateDamageMelee(skill.damage, isCrit) * modifier * randomVariance);
+            Debug.Log("Melee damage " + finalDamage);   
         }
         else if (skill.skillType == SkillType.Ranged)
         {
-        finalDamage = Mathf.RoundToInt(CalculateDamageMelee(skill.damage, isCrit) * modifier);
-
-        Debug.Log("Ranged damage " + finalDamage);  
+            finalDamage = Mathf.RoundToInt(CalculateDamageRanged(skill.damage, isCrit) * modifier * randomVariance);
+            Debug.Log("Ranged damage " + finalDamage);  
         }
         else if (skill.skillType == SkillType.Spell)
         {
-        finalDamage = Mathf.RoundToInt(CalculateDamageMelee(skill.damage, isCrit) * modifier);
+        finalDamage = Mathf.RoundToInt(CalculateDamageMelee(skill.damage, isCrit) * modifier * randomVariance);
+        Debug.Log("Spell damage " + finalDamage); 
  
         Debug.Log("Spell damage " + finalDamage);         
         }  
@@ -416,7 +416,7 @@ private void CollectItem(int index)
         if (enemyHealthBar != null)
         {
             
-            enemyHealthBar.ShowTextForDuration(enemyHealthBar.enemyTakeDamageText, finalDamage, isCrit, isMiss);
+            enemyHealthBar.ShowTextForDuration(enemyHealthBar.enemyTakeDamageText, finalDamage, isCrit, isMiss, skill.element);
         }
         else
         {
@@ -495,39 +495,35 @@ private void CollectItem(int index)
         return roll < hitChance; // Osuu, jos arpa on pienempi kuin osumatarkkuus
 
     }
-        public void ApplyBurningArrow(int damage)
+        public void ApplyBurningArrow(Buff buff)
         {
             if (!isBurning)
             {
-                StartCoroutine(BurningCoroutine(damage));
+                StartCoroutine(BurningCoroutine(buff));
             }
         }
 
-        private IEnumerator BurningCoroutine(int damage)
+        private IEnumerator BurningCoroutine(Buff buff)
         {
             isBurning = true;
             float tickInterval = 1f;
 
             while (isBurning)
             {
-                Debug.Log("Burn damagea pitäs tulla: " + damage);
-                currentHealth -= damage;
+                int dynamicDamage = Mathf.RoundToInt(buff.stacks * buff.damage);
+                Debug.Log("Stacks " + buff.stacks + "damage * " + buff.damage + "ATK " + playerStats.attack);
+                Debug.Log("🔥 Burn damagea pitäs tulla: " + dynamicDamage);
+                currentHealth -= dynamicDamage;
+
                 EnemyHealthBar enemyHealthBar = GetComponentInChildren<EnemyHealthBar>();
                 if (enemyHealthBar != null)
                 {
-                    
-                    enemyHealthBar.ShowTextForDuration(enemyHealthBar.enemyTakeDamageText, damage, false, false);
+                    enemyHealthBar.ShowTextForDuration(enemyHealthBar.enemyTakeDamageText, dynamicDamage, false, false, Element.Fire);
                 }
-                else
-                {
-                    Debug.LogWarning("EnemyHealthBar not found on enemy: " + gameObject.name);
-                }
-                //GetComponent<EnemyHealth>().TakeDamage(damage); // Oletan että käytät tällaista metodia
 
                 yield return new WaitForSeconds(tickInterval);
             }
         }
-
         public void RemoveBurningArrow()
         {
             isBurning = false;
@@ -556,12 +552,13 @@ private void CollectItem(int index)
         Debug.Log("MODIFIER " + modifier + " ELEMENT: " + element + "Enemy ELEMENT " + enemyElement);
         EnemyHealthBar enemyHealthBar = GetComponentInChildren<EnemyHealthBar>();
         //animator.SetTrigger("TakeDamage modifier " + modifier);
-        int finalDamage = Mathf.RoundToInt(damage * modifier);
+        float randomVariance = Random.Range(0.95f, 1.05f);
+        int finalDamage = Mathf.RoundToInt(damage * modifier * randomVariance);
         if (!CheckIfHits())
         {
             isMiss = true;
             
-            enemyHealthBar.ShowTextForDuration(enemyHealthBar.enemyTakeDamageText, finalDamage, isCrit, isMiss);
+            enemyHealthBar.ShowTextForDuration(enemyHealthBar.enemyTakeDamageText, finalDamage, isCrit, isMiss, element);
 
         }
         else
@@ -582,6 +579,7 @@ private void CollectItem(int index)
                         criticalFocusData.duration,
                         criticalFocusData.isStackable,
                         criticalFocusData.stacks,
+                        criticalFocusData.maxStacks,
                         criticalFocusData.buffIcon,
                         BuffType.Buff, // Tämä on buff
                         criticalFocusData.damage,
@@ -624,18 +622,22 @@ private void CollectItem(int index)
                 // Tarkistetaan, että criticalFocusData ei ole null ennen sen käyttöä
                 if (burningArrowData != null)
                 {
-                    Buff burningArrowBuff = new Buff(
+                    Buff burningArrowBuff = null; // alustetaan ensin nulliksi
+
+                    // Luo buffi ja samalla viitataan siihen itseensä lambdoissa
+                    burningArrowBuff = new Buff(
                         burningArrowData.name,
                         burningArrowData.duration,
                         burningArrowData.isStackable,
                         burningArrowData.stacks,
+                        burningArrowData.maxStacks,
                         burningArrowData.buffIcon,
-                        BuffType.Debuff, // Tämä on buff
-                        burningArrowData.damage,
+                        BuffType.Debuff,
+                        burningArrowData.damage * (playerStats.attack + playerStats.weaponAttack),
                         burningArrowData.effectText,
                         burningArrowData.effectValue,
-                        () => ApplyBurningArrow(Mathf.RoundToInt(burningArrowData.stacks * burningArrowData.damage * playerStats.attack)), // Käytetään lambda-funktiota
-                        () => RemoveBurningArrow() // Sama täällä
+                        () => ApplyBurningArrow(burningArrowBuff), // toimii nyt!
+                        () => RemoveBurningArrow()
                     );
                     Debug.Log("Burning Arrow  debuff tulossa");
                    // Debug.Log(criticalFocusData.effectText);
@@ -654,16 +656,12 @@ private void CollectItem(int index)
             }
 
             currentHealth -= finalDamage;
-            enemyHealthBar.ShowTextForDuration(enemyHealthBar.enemyTakeDamageText, finalDamage, isCrit, isMiss);
-        }
-        if (avatarManager != null)
-        {
-           
-            avatarManager.DisplayDamage(finalDamage);
-        }
-        else
-        {
-           
+            enemyHealthBar.ShowTextForDuration(enemyHealthBar.enemyTakeDamageText, finalDamage, isCrit, isMiss, element);
+            if (avatarManager != null)
+            {
+            
+                avatarManager.DisplayDamage(finalDamage);
+            }
         }
 
         if (currentHealth <= 0)

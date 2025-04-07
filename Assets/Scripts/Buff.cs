@@ -14,6 +14,7 @@ public class Buff
     public float duration;
     public bool isStackable;
     public int stacks;
+    public int maxStacks;
     public Sprite buffIcon;
     public BuffType buffType;
     public float damage; // Vahinkoa tekevien buffien arvo
@@ -28,13 +29,14 @@ public class Buff
 
 
     
-    public Buff(string name, float duration, bool isStackable, int stacks, Sprite icon, BuffType buffType,
+    public Buff(string name, float duration, bool isStackable, int stacks, int maxStacks, Sprite icon, BuffType buffType,
                 float damage, string effect, float effectValue, System.Action applyEffect, System.Action removeEffect)
     {
         this.name = name;
         this.duration = duration;
         this.isStackable = isStackable;
         this.stacks = stacks;
+        this.maxStacks = maxStacks;
         this.buffIcon = icon;
         this.buffType = buffType;
         this.damage = damage;

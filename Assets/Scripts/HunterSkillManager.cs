@@ -344,7 +344,17 @@ private void RemoveSlowEffect(EnemyHealth targetEnemy)
         {
            
             StartCoroutine(IceTrap(skill));
-        }                                                                       
+        } 
+        else if (skill.skillName == "Bear Trap")
+        {
+           
+            StartCoroutine(BearTrap(skill));
+        }     
+        else if (skill.skillName == "Arrow Stab")
+        {
+           
+            StartCoroutine(ArrowStab(skill));
+        }                                                                          
         else
         {
             Debug.Log("Invalid skill");
@@ -382,6 +392,48 @@ private void RemoveSlowEffect(EnemyHealth targetEnemy)
     }
         
     }
+    public IEnumerator BearTrap(Skill skill)
+    {
+        playerAttack.isAttacking = false;  // nollaa hyökkäys
+        GameObject trapObject = PlaceTrap(skill);
+        Trap trapComponent = trapObject.GetComponent<Trap>();
+
+        if (trapComponent != null)
+        {
+            trapComponent.OnTrapActivated += (EnemyHealth enemyHealth) =>
+            {
+                Debug.Log("💀 Bear Trap aktivoitu! Vahinkoa ottaa: " + enemyHealth.monsterName);
+                GameObject boneCrusherTrapEffect = Resources.Load<GameObject>("Explosions/BearTrapEffect");
+
+                // Vahinko viiveellä
+                StartCoroutine(playerAttack.DealDamageAfterDelaySkill(skill, playerAttack.IsCriticalHit(), enemyHealth));
+
+                if (boneCrusherTrapEffect != null)
+                {
+                    GameObject effectInstance = Instantiate(boneCrusherTrapEffect, trapObject.transform.position, Quaternion.identity);
+                    Destroy(effectInstance, 5f);
+                }
+                else
+                {
+                    Debug.LogError("❌ Beartrap ei löytynyt Resources-kansiosta!");
+                }
+
+                // enemyHealth.ApplyBuff(new ArmorBreakDebuff()); // Lisää panssarin särkyminen
+            };
+        }
+
+        playerAttack.isCasting = false;
+        yield return null;
+    }
+
+    public IEnumerator ArrowStab(Skill skill)
+    {
+         Animator animator = playerAttack.GetComponent<Animator>();
+         animator.SetTrigger("ArrowStab");
+         yield return new WaitForSeconds(0.51f);
+         animator.ResetTrigger("ArrowStab");
+         yield return playerAttack.StartCoroutine(playerAttack.DealDamageAfterDelaySkill(skill, playerAttack.IsCriticalHit()));
+    }
     public IEnumerator DoubleStrike(Skill skill)
     {
         // Ensimmäinen nuoli ja vahinko
@@ -393,53 +445,48 @@ private void RemoveSlowEffect(EnemyHealth targetEnemy)
         yield return playerAttack.StartCoroutine(playerAttack.DealDamageAfterDelaySkill(skill, playerAttack.IsCriticalHit()));
         yield return playerAttack.StartCoroutine(playerAttack.DealDamageAfterDelaySkill(skill, playerAttack.IsCriticalHit()));
     }
-public void SpawnArrowRainEffect(Transform enemyTarget)
-{
-    int arrowCount = 12;
-    float spawnRadius = 10f;
-    float heightAboveEnemy = 20f;
-    float heightVariation = 5f; // Satunnainen korkeuden vaihtelu
 
-    // Efekti, joka luodaan tippumiskohdassa
-    GameObject spellEffect = Resources.Load<GameObject>("Explosions/RainArrowLocation");
-
-    // Laske alueen keskikohta, johon efektit tulevat
-    Vector3 effectCenter = enemyTarget.position + new Vector3(0, 0, 0); // Keskikohta (tässä oletetaan, että se on vihollisen sijainti, mutta se voidaan muuttaa)
-
-    // Lisätään pieni nostokorjaus efektin korkeuteen
-    float heightOffset = 1f; // Pieni nostokorjaus, voit säätää tätä arvoa
-    effectCenter.y += heightOffset; // Nostataan efektiä ylös
-
-    // Luo yksi suuri efekti alueelle
-    Instantiate(spellEffect, effectCenter, Quaternion.identity);
-
-    for (int i = 0; i < arrowCount; i++)
+    public void SpawnArrowRainEffect(Transform enemyTarget)
     {
-        Vector3 randomOffset = new Vector3(
-            Random.Range(-spawnRadius, spawnRadius),
-            0,  // X ja Z ovat satunnaisia, mutta korkeus (Y) vaihdetaan alla
-            Random.Range(-spawnRadius, spawnRadius)
-        );
+        int arrowCount = 12;
+        float spawnRadius = 10f;
+        float heightAboveEnemy = 20f;
+        float heightVariation = 5f; // Satunnainen korkeuden vaihtelu
 
-        // Satunnainen korkeus, joka vaihtelee heightAboveEnemy +/- heightVariation
-        float randomHeight = Random.Range(heightAboveEnemy - heightVariation, heightAboveEnemy + heightVariation);
-        
-        // Asetetaan spawnPosition käyttämään tätä satunnaista korkeutta
-        Vector3 spawnPosition = enemyTarget.position + new Vector3(0, randomHeight, 0) + randomOffset;
+        // Efekti, joka luodaan tippumiskohdassa
+        GameObject spellEffect = Resources.Load<GameObject>("Explosions/RainArrowLocation");
 
-        // Nuolten rotaatio, joka osoittaa suoraan alaspäin
-        Quaternion rotation = Quaternion.LookRotation(Vector3.down);
+        // Laske alueen keskikohta, johon efektit tulevat
+        Vector3 effectCenter = enemyTarget.position + new Vector3(0, 0, 0); // Keskikohta (tässä oletetaan, että se on vihollisen sijainti, mutta se voidaan muuttaa)
 
-        // Luo nuoli
-        Instantiate(rainOfArrowPrefab, spawnPosition, rotation);
+        // Lisätään pieni nostokorjaus efektin korkeuteen
+        float heightOffset = 1f; // Pieni nostokorjaus, voit säätää tätä arvoa
+        effectCenter.y += heightOffset; // Nostataan efektiä ylös
+
+        // Luo yksi suuri efekti alueelle
+        Instantiate(spellEffect, effectCenter, Quaternion.identity);
+
+        for (int i = 0; i < arrowCount; i++)
+        {
+            Vector3 randomOffset = new Vector3(
+                Random.Range(-spawnRadius, spawnRadius),
+                0,  // X ja Z ovat satunnaisia, mutta korkeus (Y) vaihdetaan alla
+                Random.Range(-spawnRadius, spawnRadius)
+            );
+
+            // Satunnainen korkeus, joka vaihtelee heightAboveEnemy +/- heightVariation
+            float randomHeight = Random.Range(heightAboveEnemy - heightVariation, heightAboveEnemy + heightVariation);
+            
+            // Asetetaan spawnPosition käyttämään tätä satunnaista korkeutta
+            Vector3 spawnPosition = enemyTarget.position + new Vector3(0, randomHeight, 0) + randomOffset;
+
+            // Nuolten rotaatio, joka osoittaa suoraan alaspäin
+            Quaternion rotation = Quaternion.LookRotation(Vector3.down);
+
+            // Luo nuoli
+            Instantiate(rainOfArrowPrefab, spawnPosition, rotation);
+        }
     }
-}
-
-
-
-
-
-
 
     public IEnumerator RainOfArrows(Skill skill)
     {
@@ -490,6 +537,7 @@ public void SpawnArrowRainEffect(Transform enemyTarget)
                 leechingArrowData.duration,
                 leechingArrowData.isStackable,
                 leechingArrowData.stacks,
+                leechingArrowData.maxStacks,
                 leechingArrowData.buffIcon,
                 BuffType.Buff, // Tämä on debuff
                 leechingArrowData.damage,
@@ -576,6 +624,7 @@ public IEnumerator StunningArrow(Skill skill)
         skill.skillLevel,
         stunData.isStackable,
         stunData.stacks,
+        stunData.maxStacks,
         stunData.buffIcon,
         BuffType.Debuff, // Tämä on debuff
         stunData.damage,
@@ -670,6 +719,7 @@ public IEnumerator StunningArrow(Skill skill)
                 (hawkEyeData.duration * skill.skillLevel), // TESTAA! 
                 hawkEyeData.isStackable,
                 hawkEyeData.stacks,
+                hawkEyeData.maxStacks,
                 hawkEyeData.buffIcon,
                 BuffType.Buff, // Tämä on buff
                 hawkEyeData.damage,
@@ -725,6 +775,7 @@ public IEnumerator BleedingStrike(Skill skill)
                         bleedData.duration,
                         bleedData.isStackable,
                         bleedData.stacks,
+                        bleedData.maxStacks,
                         bleedData.buffIcon,
                         BuffType.Debuff,
                         bleedData.damage,
@@ -752,6 +803,7 @@ public IEnumerator BleedingStrike(Skill skill)
                 huntersResilienceBuffData.duration,
                 huntersResilienceBuffData.isStackable,
                 huntersResilienceBuffData.stacks,
+                huntersResilienceBuffData.maxStacks,
                 huntersResilienceBuffData.buffIcon,
                 BuffType.Buff, // Tämä on buff
                 huntersResilienceBuffData.damage,
@@ -773,6 +825,7 @@ public IEnumerator BleedingStrike(Skill skill)
                 recoveryMasterData.duration,
                 recoveryMasterData.isStackable,
                 recoveryMasterData.stacks,
+                recoveryMasterData.maxStacks,
                 recoveryMasterData.buffIcon,
                 BuffType.Buff, // Tämä on buff
                 recoveryMasterData.damage,
@@ -794,6 +847,7 @@ public IEnumerator BleedingStrike(Skill skill)
                 windrunnerBuffData.duration,
                 windrunnerBuffData.isStackable,
                 windrunnerBuffData.stacks,
+                windrunnerBuffData.maxStacks,
                 windrunnerBuffData.buffIcon,
                 BuffType.Buff, // Tämä on buff
                 windrunnerBuffData.damage,
@@ -832,6 +886,7 @@ public IEnumerator BleedingStrike(Skill skill)
                 skill.skillLevel,// Fixed duration, 4skillLevel
                 slowBuffData.isStackable,
                 slowBuffData.stacks,
+                slowBuffData.maxStacks,
                 slowBuffData.buffIcon,
                 BuffType.Buff, // Tämä on buff
                 slowBuffData.damage,
@@ -950,6 +1005,7 @@ public IEnumerator FreezingTrap(Skill skill)
                         skill.skillLevel * 2, // Kiinteä kesto, 5 sekuntia
                         slowBuffData.isStackable,
                         slowBuffData.stacks,
+                        slowBuffData.maxStacks,
                         slowBuffData.buffIcon,
                         BuffType.Buff, // Tämä on buff
                         slowBuffData.damage,
@@ -1011,6 +1067,7 @@ public IEnumerator ShockTrap(Skill skill)
                     skill.skillLevel,
                     stunData.isStackable,
                     stunData.stacks,
+                    stunData.maxStacks,
                     stunData.buffIcon,
                     BuffType.Debuff,
                     stunData.damage,
@@ -1066,6 +1123,7 @@ public IEnumerator IceTrap(Skill skill)
                 skill.skillLevel * 2,
                 stunData.isStackable,
                 stunData.stacks,
+                stunData.maxStacks,
                 stunData.buffIcon,
                 BuffType.Debuff,
                 stunData.damage,

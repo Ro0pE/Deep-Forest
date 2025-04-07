@@ -30,7 +30,11 @@ public class EnemyBuffManager : MonoBehaviour
         {
             if (buff.isStackable)
             {
-                existingBuff.stacks++;
+                if (existingBuff.stacks < buff.maxStacks)
+                {
+                    existingBuff.stacks++;
+                }
+
                 existingBuff.duration = buff.duration;
                 existingBuff.applyEffect();
                 UpdateEffectText(existingBuff);
@@ -45,14 +49,15 @@ public class EnemyBuffManager : MonoBehaviour
         }
         else
         {
-            activeBuffs.Add(buff);
-            buff.applyEffect();
-            UpdateEffectText(buff);
-
             if (buff.isStackable)
             {
                 buff.stacks = 1; // Start with one stack
             }
+            activeBuffs.Add(buff);
+            buff.applyEffect();
+            UpdateEffectText(buff);
+
+
 
             // Päivitetään UI
             if (buffParent != null && buffPrefab != null)
@@ -76,7 +81,7 @@ public class EnemyBuffManager : MonoBehaviour
        
         if (buff.effectText.Contains("damage per second"))
         {
-            float totalDamage = buff.damage * buff.stacks;
+            float totalDamage = Mathf.RoundToInt(buff.damage * buff.stacks);
             buff.effectText = $"Inflicts {totalDamage} damage per second";
         }
         else if (buff.effectText.Contains("Slow"))

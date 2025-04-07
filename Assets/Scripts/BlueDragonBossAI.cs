@@ -273,7 +273,8 @@ public class BlueDragonBossAI : MonoBehaviour
                 slowBuffData.name,               // Buffin nimi
                 slowBuffData.duration,           // Kesto
                 slowBuffData.isStackable,        // Voiko pinota
-                slowBuffData.stacks,             // Pinojen määrä
+                slowBuffData.stacks,
+                slowBuffData.maxStacks,             // Pinojen määrä
                 slowBuffData.buffIcon,           // Kuvake
                 BuffType.Debuff,                 // Buffin tyyppi (Debuff, koska hidastus on yleensä debuff)
                 slowBuffData.damage,
@@ -362,6 +363,7 @@ public class BlueDragonBossAI : MonoBehaviour
                 burningHeartBuffData.duration,
                 burningHeartBuffData.isStackable,
                 burningHeartBuffData.stacks,
+                burningHeartBuffData.maxStacks,
                 burningHeartBuffData.buffIcon,
                 BuffType.Debuff,  // Esimerkki: Jos tämä on debuff, käytä BuffType.Debuff
                 burningHeartBuffData.damage,  // Tässä oletetaan, että "damage" on mukana BuffDatabase:ssa

@@ -80,7 +80,8 @@ public class FrostWyrmLeaderAI : EnemyAI
                 slowBuffData.name,                // Buffin nimi
                 7,                                // Modattu kesto
                 slowBuffData.isStackable,         // Voiko pinota
-                slowBuffData.stacks,              // Pinojen määrä
+                slowBuffData.stacks,
+                slowBuffData.maxStacks,              // Pinojen määrä
                 slowBuffData.buffIcon,            // Kuvake
                 BuffType.Debuff,                  // Buffin tyyppi
                 slowBuffData.damage,

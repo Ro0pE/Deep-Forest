@@ -27,9 +27,9 @@ public class WhiteBear : EnemyHealth
         enemyElement = Element.Earth;
         damageModifiers[Element.Fire] = 1.5f; // Heikko tulta vastaan
         damageModifiers[Element.Earth] = 0.0f; // Vastustaa maata
-        maxHealth = monsterLevel * 25;
+        maxHealth = monsterLevel * 150000;
         currentHealth = maxHealth;
-        experiencePoints = monsterLevel * 30;
+        experiencePoints = monsterLevel * 3035;
 
         StartCoroutine(WaitForItemDatabaseAndAddLoot());
     }

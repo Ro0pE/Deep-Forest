@@ -793,7 +793,7 @@ MonoBehaviour:
     isAvailable: 0
   - skillName: Bonecrusher Trap
     skillIcon: {fileID: 21300000, guid: e86b5a59e7c468145a8dba0919e66659, type: 3}
-    baseDamage: 5
+    baseDamage: 8
     damagePerLevel: 0
     baseHeal: 0
     healPerLevel: 0
@@ -924,7 +924,7 @@ MonoBehaviour:
   - skillName: Bear Trap
     skillIcon: {fileID: 21300000, guid: 30fa221e02a556f4e9e9f49f0c301067, type: 3}
     baseDamage: 5
-    damagePerLevel: 0
+    damagePerLevel: 2
     baseHeal: 0
     healPerLevel: 0
     cooldown: 5
@@ -954,7 +954,7 @@ MonoBehaviour:
     updatedInfoText: When detonades, deals massive damage to enemy
     element: 9
     spellType: 0
-    skillType: 2
+    skillType: 1
     skillSchool: 1
     isLearned: 0
     canInterrup: 0
@@ -1019,7 +1019,7 @@ MonoBehaviour:
     castTime: 0
     manaCost: 5
     manaCostPerLevel: 5
-    damageRange: 20
+    damageRange: 15
     skillLevel: 0
     skillMaxLevel: 3
     totalHeal: 0
@@ -1129,7 +1129,7 @@ MonoBehaviour:
     addCastingRange: 0
     isPassive: 1
     infoText: Your shots have a 10% change to add a stacking debuff to enemy. Burns
-      enemies 0.05% of ATK per sec (max 10 stacks)
+      enemies 5% of ATK per sec (max 10 stacks)
     updatedInfoText: Your shots have a 10% change to add a stacking debuff to enemy.
       Burns enemies 5 sec for 0.05% of ATK  (max 5 stacks)
     element: 9
@@ -1150,7 +1150,7 @@ MonoBehaviour:
     damagePerLevel: 0
     baseHeal: 0
     healPerLevel: 0
-    cooldown: 0
+    cooldown: 1
     castTime: 0
     manaCost: 0
     manaCostPerLevel: 0
@@ -1178,6 +1178,51 @@ MonoBehaviour:
     element: 9
     spellType: 0
     skillType: 2
+    skillSchool: 1
+    isLearned: 0
+    canInterrup: 1
+    skillCost: 1
+    noTarget: 0
+    preSkill: 
+    preSkillLevel: 0
+    skillTier: 7
+    isAvailable: 0
+  - skillName: Arrow Stab
+    skillIcon: {fileID: 21300000, guid: 148fd37e6bc81df40a2bfd3bd9e28cab, type: 3}
+    baseDamage: 0.3
+    damagePerLevel: 0.3
+    baseHeal: 0
+    healPerLevel: 0
+    cooldown: 0
+    castTime: 0
+    manaCost: 0
+    manaCostPerLevel: 0
+    damageRange: 0
+    skillLevel: 0
+    skillMaxLevel: 3
+    totalHeal: 0
+    totalDamage: 0
+    addCrit: 0
+    addBaseCrit: 0
+    addDodge: 0
+    addBaseDodge: 0
+    addAgi: 0
+    addDex: 0
+    addStr: 0
+    addVit: 0
+    addInt: 0
+    addRegenHP: 0
+    addRegenSP: 0
+    addRangedRange: 0
+    addCastingRange: 0
+    isPassive: 0
+    infoText: "You stab the enemy with an arrow, dealing 0.3 \xD7 ATK damage, pushing
+      them back by 2 \xD7 skill level, and interrupting spellcasting."
+    updatedInfoText: "You stab the enemy with an arrow, dealing 0.3 \xD7 ATK damage,
+      pushing them back by 2 \xD7 skill level, and interrupting spellcasting."
+    element: 9
+    spellType: 0
+    skillType: 1
     skillSchool: 1
     isLearned: 0
     canInterrup: 1

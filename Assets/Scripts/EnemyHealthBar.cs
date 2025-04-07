@@ -135,38 +135,60 @@ public IEnumerator RemoveBuffUI(Buff buff, EnemyHealthBarBuff buffUIComponent)
 }
 
 
-
-    public void ShowTextForDuration(TextMeshProUGUI textElement, int amount, bool isCritical, bool isMiss)
+    public void ShowTextForDuration(TextMeshProUGUI textElement, int amount, bool isCritical, bool isMiss, Element element)
     {
-        // Luodaan uusi tekstielementti vahinkotekstille ja asetetaan se combatText-objektin lapseksi
         TextMeshProUGUI newTextElement = Instantiate(textElement, combatText);
         newTextElement.gameObject.SetActive(true);
-        
+
         if (isMiss)
         {
             newTextElement.text = "Miss";
+            newTextElement.fontSize = 24f;
             newTextElement.color = Color.grey;
-            newTextElement.transform.localScale = new Vector3(0.5f, 0.5f, 0.5f);
+           // newTextElement.transform.localScale = new Vector3(0.5f, 0.5f, 0.5f);
         }
-        else if (amount <= 0)
+        else if (amount == 0)
         {
             newTextElement.text = "Immune";
+            newTextElement.fontSize = 24f;
+            newTextElement.color = Color.grey;
+           // newTextElement.transform.localScale = new Vector3(0.5f, 0.5f, 0.5f);
         }
-        else if (isCritical)
+        else if (amount < 1)
         {
-            newTextElement.text = $"{amount}"; 
-            newTextElement.color = Color.yellow;
-            newTextElement.fontSize = 55f;
+            newTextElement.text = string.Empty; // Ei näytetä mitään, jos damage on liian pieni
         }
         else
         {
             newTextElement.text = $"{amount}";
+
+            // Fonttikoko dynaamisesti damagen perusteella
+            float minFontSize = 20f;
+            float maxFontSize = 80f;
+            int minDamage = 1;
+            int maxDamage = 10000;
+            float clampedDamage = Mathf.Clamp(amount, minDamage, maxDamage);
+            float normalized = (clampedDamage - minDamage) / (float)(maxDamage - minDamage);
+            newTextElement.fontSize = Mathf.Lerp(minFontSize, maxFontSize, normalized);
+
+            // Väri elementin mukaan
+            newTextElement.color = GetElementColor(element);
+
+            // Korostetaan kriittistä vielä kirkkaammalla sävyllä (valinnainen)
+        if (isCritical)
+        {
+            //newTextElement.text = $"{amount}"; 
+            newTextElement.color = new Color(1f, 0.2f, 0.6f); // Pinkki (RGB: 255, 51, 153)
+            newTextElement.fontSize = 55f;
+            newTextElement.fontStyle = FontStyles.Bold;
+        }
         }
 
-        // Aloitetaan coroutine-funktiot
         StartCoroutine(MoveTextUp(newTextElement));
-        StartCoroutine(HideTextAfterDelay(newTextElement)); // Piilottaa sen 3 sekunnin kuluttua
+        StartCoroutine(HideTextAfterDelay(newTextElement));
     }
+
+
 
     private IEnumerator HideTextAfterDelay(TextMeshProUGUI textElement)
     {
@@ -218,4 +240,26 @@ public IEnumerator RemoveBuffUI(Buff buff, EnemyHealthBarBuff buffUIComponent)
             }
         }
     }
+    private Color GetElementColor(Element element)
+    {
+        switch (element)
+        {
+            case Element.Fire:
+                return new Color(1f, 0.5f, 0f); // oranssi
+            case Element.Wind:
+                return new Color(1f, 1f, 0.7f); // vaalea keltainen
+            case Element.Water:
+                return new Color(0.6f, 0.8f, 1f); // vaalea sininen
+            case Element.Earth:
+                return new Color(0.7f, 0.5f, 0.3f); // vaalea ruskea
+            case Element.Shadow:
+                return Color.black;
+            case Element.Holy:
+                return new Color(1f, 0.95f, 0.6f); // kirkas keltainen
+            case Element.Neutral:
+            default:
+                return Color.white;
+        }
+    }
+
 }

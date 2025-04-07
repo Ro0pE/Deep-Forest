@@ -578,12 +578,12 @@ MonoBehaviour:
   noRespawn: 0
   playerHealth: {fileID: 0}
   critFocusAttack: 0
-  hunterSkillTree: {fileID: 0}
   defaultSlotSprite: {fileID: 21300000, guid: 4293f3f43e7a5524dbcb191b0ef09d9c, type: 3}
   frozenEffectInstance: {fileID: 0}
   enemyRenderer: {fileID: 0}
   originalColor: {r: 0, g: 0, b: 0, a: 0}
   respawnTime: 35
+  isBurning: 0
   monsterData: {fileID: 11400000, guid: f79861f3736883049b5c788c7c1aad4c, type: 2}
 --- !u!1 &2251519101906971203
 GameObject:
@@ -1658,7 +1658,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 6.500162, y: -64.30009}
+  m_AnchoredPosition: {x: 6.500162, y: -34}
   m_SizeDelta: {x: 600, y: 300}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &3595444421998339853

@@ -17,6 +17,7 @@ MonoBehaviour:
     duration: 20
     isStackable: 1
     stacks: 1
+    maxStacks: 50
     buffIcon: {fileID: 21300000, guid: 3e1f3724a7f105b428621a271c7f1e4d, type: 3}
     buffType: 0
     damage: 2
@@ -26,6 +27,7 @@ MonoBehaviour:
     duration: 20
     isStackable: 0
     stacks: 0
+    maxStacks: 1
     buffIcon: {fileID: 21300000, guid: 27d2d31189bc80345bced578b3040508, type: 3}
     buffType: 1
     damage: 0
@@ -35,6 +37,7 @@ MonoBehaviour:
     duration: 4
     isStackable: 0
     stacks: 0
+    maxStacks: 1
     buffIcon: {fileID: 21300000, guid: 89cf2a845981aee408c8603d8de393e9, type: 3}
     buffType: 1
     damage: 0
@@ -44,6 +47,7 @@ MonoBehaviour:
     duration: 60
     isStackable: 0
     stacks: 0
+    maxStacks: 1
     buffIcon: {fileID: 21300000, guid: 36679ff6c9c67a64f819b28e72d1f86e, type: 3}
     buffType: 0
     damage: 0
@@ -53,6 +57,7 @@ MonoBehaviour:
     duration: 10
     isStackable: 0
     stacks: 0
+    maxStacks: 1
     buffIcon: {fileID: 21300000, guid: 299e837b7de144a49bb0d66f7600bf95, type: 3}
     buffType: 1
     damage: 1
@@ -62,6 +67,7 @@ MonoBehaviour:
     duration: 60
     isStackable: 0
     stacks: 0
+    maxStacks: 1
     buffIcon: {fileID: 21300000, guid: cfc94f15d4780834d80e6dc35aae91b3, type: 3}
     buffType: 0
     damage: 0
@@ -71,6 +77,7 @@ MonoBehaviour:
     duration: 16
     isStackable: 0
     stacks: 0
+    maxStacks: 1
     buffIcon: {fileID: 21300000, guid: d519dd12c15e7bb4b8ed644e8b1f406e, type: 3}
     buffType: 0
     damage: 0
@@ -80,6 +87,7 @@ MonoBehaviour:
     duration: 7
     isStackable: 0
     stacks: 0
+    maxStacks: 1
     buffIcon: {fileID: 21300000, guid: 6920950608c19ca4386243bc1566889a, type: 3}
     buffType: 0
     damage: 0
@@ -89,6 +97,7 @@ MonoBehaviour:
     duration: 15
     isStackable: 0
     stacks: 0
+    maxStacks: 1
     buffIcon: {fileID: 21300000, guid: cfa25f2407a97fc4b9a234cae9ce757e, type: 3}
     buffType: 0
     damage: 0
@@ -98,6 +107,7 @@ MonoBehaviour:
     duration: 50
     isStackable: 0
     stacks: 0
+    maxStacks: 1
     buffIcon: {fileID: 21300000, guid: 72332540bd1422c40b09044b53993e5b, type: 3}
     buffType: 0
     damage: 0
@@ -106,9 +116,10 @@ MonoBehaviour:
   - name: BurningArrow
     duration: 5
     isStackable: 1
-    stacks: 5
+    stacks: 0
+    maxStacks: 10
     buffIcon: {fileID: 21300000, guid: 7b6b6aa26a04e5642807b21520a3df80, type: 3}
     buffType: 1
-    damage: 0.02
-    effectText: Burns target stacks * 2% ATK
+    damage: 0.05
+    effectText: Burns target 5% of ATK damage per second
     effectValue: 0
