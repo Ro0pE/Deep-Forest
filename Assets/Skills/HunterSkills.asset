@@ -17,6 +17,8 @@ MonoBehaviour:
     skillIcon: {fileID: 21300000, guid: 7c3bfe567e607d548b856acdca28bf08, type: 3}
     baseDamage: 0.4
     damagePerLevel: 0.2
+    aoeDamage: 0
+    aoeDamagePerLevel: 0
     baseHeal: 0
     healPerLevel: 0
     cooldown: 0.5
@@ -42,7 +44,7 @@ MonoBehaviour:
     addRangedRange: 0
     addCastingRange: 0
     isPassive: 0
-    infoText: 'Shoots rapidly 2 arrows, each making ATK damage to enemy '
+    infoText: 'Shoots rapidly 2 arrows, each making (ATK) damage to enemy '
     updatedInfoText: 
     element: 7
     spellType: 0
@@ -60,6 +62,8 @@ MonoBehaviour:
     skillIcon: {fileID: 21300000, guid: 702a27eb6293beb4abc847ff8df03cc4, type: 3}
     baseDamage: 0
     damagePerLevel: 0
+    aoeDamage: 0
+    aoeDamagePerLevel: 0
     baseHeal: 0
     healPerLevel: 0
     cooldown: 0
@@ -85,7 +89,7 @@ MonoBehaviour:
     addRangedRange: 0
     addCastingRange: 0
     isPassive: 1
-    infoText: +(2*skillLevel)% CRIT
+    infoText: +2*skillLevel% CRIT
     updatedInfoText: 
     element: 9
     spellType: 0
@@ -103,6 +107,8 @@ MonoBehaviour:
     skillIcon: {fileID: 21300000, guid: 1d2cf95ac9033ea4e9150b0db6607874, type: 3}
     baseDamage: 0
     damagePerLevel: 0
+    aoeDamage: 0
+    aoeDamagePerLevel: 0
     baseHeal: 0
     healPerLevel: 0
     cooldown: 2
@@ -129,7 +135,7 @@ MonoBehaviour:
     addCastingRange: 0
     isPassive: 0
     infoText: Detonates, freezing all enemies within a 30-unit radius, slowing them
-      by 50% for skillLevel * 2 seconds.
+      by 50% for (skillLevel*2) seconds.
     updatedInfoText: 
     element: 9
     spellType: 0
@@ -137,7 +143,7 @@ MonoBehaviour:
     skillSchool: 1
     isLearned: 0
     canInterrup: 0
-    skillCost: 2
+    skillCost: 1
     noTarget: 1
     preSkill: 
     preSkillLevel: 0
@@ -146,7 +152,9 @@ MonoBehaviour:
   - skillName: Chillshot
     skillIcon: {fileID: 21300000, guid: e5b4ccdb57f382c479ea2a30774fc07d, type: 3}
     baseDamage: 0.4
-    damagePerLevel: 0
+    damagePerLevel: 0.2
+    aoeDamage: 0
+    aoeDamagePerLevel: 0
     baseHeal: 0
     healPerLevel: 0
     cooldown: 6
@@ -172,7 +180,7 @@ MonoBehaviour:
     addRangedRange: 0
     addCastingRange: 0
     isPassive: 0
-    infoText: Deals 0.4x ATK damage and slows the target by 50% for skillLevel seconds.
+    infoText: Deals ATK damage and slows the target by 50% for skillLevel seconds.
     updatedInfoText: 
     element: 9
     spellType: 0
@@ -190,6 +198,8 @@ MonoBehaviour:
     skillIcon: {fileID: 21300000, guid: cacfeb3917e76294db3be4ebca0b8aab, type: 3}
     baseDamage: 0.4
     damagePerLevel: 0.15
+    aoeDamage: 0
+    aoeDamagePerLevel: 0
     baseHeal: 0
     healPerLevel: 0
     cooldown: 1
@@ -215,8 +225,8 @@ MonoBehaviour:
     addRangedRange: 0
     addCastingRange: 0
     isPassive: 0
-    infoText: Shoots multiple arrows in a small area, each arrow does ATK damage
-      to enemy
+    infoText: Shoots multiple arrows in a small area, each arrow making ATK damage
+      to enemy.
     updatedInfoText: 
     element: 7
     spellType: 0
@@ -226,14 +236,16 @@ MonoBehaviour:
     canInterrup: 0
     skillCost: 1
     noTarget: 0
-    preSkill: Double Strike
-    preSkillLevel: 3
+    preSkill: 
+    preSkillLevel: 0
     skillTier: 2
     isAvailable: 0
   - skillName: Longshot Mastery
     skillIcon: {fileID: 21300000, guid: 117e7468e84c6f149830844772d78d33, type: 3}
     baseDamage: 0
     damagePerLevel: 0
+    aoeDamage: 0
+    aoeDamagePerLevel: 0
     baseHeal: 0
     healPerLevel: 0
     cooldown: 0
@@ -259,7 +271,7 @@ MonoBehaviour:
     addRangedRange: 3
     addCastingRange: 0
     isPassive: 1
-    infoText: Extends your ranged attack distance by skillLevel
+    infoText: Extends your ranged attack distance by 3*skillLevel
     updatedInfoText: 
     element: 9
     spellType: 0
@@ -269,14 +281,16 @@ MonoBehaviour:
     canInterrup: 0
     skillCost: 1
     noTarget: 1
-    preSkill: Deadeye Precision
-    preSkillLevel: 3
+    preSkill: 
+    preSkillLevel: 0
     skillTier: 2
     isAvailable: 0
   - skillName: Shock Trap
     skillIcon: {fileID: 21300000, guid: f2200808e14999c43be85ea7d2b23b38, type: 3}
     baseDamage: 0.5
     damagePerLevel: 0
+    aoeDamage: 0
+    aoeDamagePerLevel: 0
     baseHeal: 0
     healPerLevel: 0
     cooldown: 5
@@ -313,14 +327,16 @@ MonoBehaviour:
     canInterrup: 0
     skillCost: 1
     noTarget: 1
-    preSkill: Freezing Trap
-    preSkillLevel: 3
+    preSkill: 
+    preSkillLevel: 0
     skillTier: 2
     isAvailable: 0
   - skillName: Stunning Arrow
     skillIcon: {fileID: 21300000, guid: 9efee09b321b23a49bcd8287db98625d, type: 3}
     baseDamage: 0.3
     damagePerLevel: 0
+    aoeDamage: 0
+    aoeDamagePerLevel: 0
     baseHeal: 0
     healPerLevel: 0
     cooldown: 10
@@ -346,7 +362,7 @@ MonoBehaviour:
     addRangedRange: 0
     addCastingRange: 0
     isPassive: 0
-    infoText: Stuns the target for skillLevel sec (Can interrupt enemy spellcasting)
+    infoText: Stuns the target for skillLevel seconds. (Can interrupt enemy spellcasting)
     updatedInfoText: 
     element: 7
     spellType: 0
@@ -356,14 +372,16 @@ MonoBehaviour:
     canInterrup: 1
     skillCost: 1
     noTarget: 0
-    preSkill: Chillshot
-    preSkillLevel: 1
+    preSkill: 
+    preSkillLevel: 0
     skillTier: 2
     isAvailable: 0
   - skillName: Rapid Barrage
     skillIcon: {fileID: 21300000, guid: 125bb49b217257347be09ede099b888d, type: 3}
     baseDamage: 0.5
     damagePerLevel: 0.3
+    aoeDamage: 0
+    aoeDamagePerLevel: 0
     baseHeal: 0
     healPerLevel: 0
     cooldown: 3
@@ -399,14 +417,16 @@ MonoBehaviour:
     canInterrup: 0
     skillCost: 1
     noTarget: 0
-    preSkill: Multi Arrow
-    preSkillLevel: 3
+    preSkill: 
+    preSkillLevel: 0
     skillTier: 3
     isAvailable: 0
   - skillName: Improved Accuracy
     skillIcon: {fileID: 21300000, guid: ef6f834e2225c5b4382023ca8532b16b, type: 3}
     baseDamage: 0
     damagePerLevel: 0
+    aoeDamage: 0
+    aoeDamagePerLevel: 0
     baseHeal: 0
     healPerLevel: 0
     cooldown: 0
@@ -432,7 +452,7 @@ MonoBehaviour:
     addRangedRange: 0
     addCastingRange: 0
     isPassive: 1
-    infoText: +(addDex * skillLevel) DEX
+    infoText: +5*skillLevel DEX
     updatedInfoText: 
     element: 7
     spellType: 0
@@ -442,14 +462,16 @@ MonoBehaviour:
     canInterrup: 0
     skillCost: 1
     noTarget: 1
-    preSkill: Longshot Mastery
-    preSkillLevel: 3
+    preSkill: 
+    preSkillLevel: 0
     skillTier: 3
     isAvailable: 0
   - skillName: Tiger Reflexes
     skillIcon: {fileID: 21300000, guid: 63405004336d860469c17090dc2e7d89, type: 3}
     baseDamage: 0
     damagePerLevel: 0
+    aoeDamage: 0
+    aoeDamagePerLevel: 0
     baseHeal: 0
     healPerLevel: 0
     cooldown: 0
@@ -475,7 +497,7 @@ MonoBehaviour:
     addRangedRange: 0
     addCastingRange: 0
     isPassive: 1
-    infoText: +skillLevel * 3% DODGE
+    infoText: +skillLevel*3% DODGE
     updatedInfoText: 
     element: 7
     spellType: 0
@@ -485,14 +507,16 @@ MonoBehaviour:
     canInterrup: 0
     skillCost: 1
     noTarget: 1
-    preSkill: Stunning Arrow
-    preSkillLevel: 1
+    preSkill: 
+    preSkillLevel: 0
     skillTier: 3
     isAvailable: 0
   - skillName: Recovery Training
     skillIcon: {fileID: 21300000, guid: 4ad4cbe9d2a7e08488c306e721d1d48c, type: 3}
     baseDamage: 0
     damagePerLevel: 0
+    aoeDamage: 0
+    aoeDamagePerLevel: 0
     baseHeal: 0
     healPerLevel: 0
     cooldown: 0
@@ -536,6 +560,8 @@ MonoBehaviour:
     skillIcon: {fileID: 21300000, guid: 6920950608c19ca4386243bc1566889a, type: 3}
     baseDamage: 0
     damagePerLevel: 0
+    aoeDamage: 0
+    aoeDamagePerLevel: 0
     baseHeal: 0
     healPerLevel: 0
     cooldown: 0
@@ -561,7 +587,7 @@ MonoBehaviour:
     addRangedRange: 0
     addCastingRange: 0
     isPassive: 1
-    infoText: After critical hit, incearses your ATK 20% for 7sec
+    infoText: After critical hit, incearses your damage 20% for 3*skillLevel seconds.
     updatedInfoText: 
     element: 9
     spellType: 2
@@ -571,14 +597,16 @@ MonoBehaviour:
     canInterrup: 0
     skillCost: 1
     noTarget: 1
-    preSkill: Rapid Barrage
-    preSkillLevel: 3
+    preSkill: 
+    preSkillLevel: 0
     skillTier: 4
     isAvailable: 0
   - skillName: Hawk Eye
     skillIcon: {fileID: 21300000, guid: 36679ff6c9c67a64f819b28e72d1f86e, type: 3}
     baseDamage: 0
     damagePerLevel: 0
+    aoeDamage: 0
+    aoeDamagePerLevel: 0
     baseHeal: 0
     healPerLevel: 0
     cooldown: 5
@@ -604,7 +632,7 @@ MonoBehaviour:
     addRangedRange: 0
     addCastingRange: 0
     isPassive: 0
-    infoText: Increases AGi and DEX 25 % for skillLevel minutes
+    infoText: Increases AGi and DEX 25 % for skillLevel minutes.
     updatedInfoText: 
     element: 7
     spellType: 2
@@ -614,14 +642,16 @@ MonoBehaviour:
     canInterrup: 0
     skillCost: 1
     noTarget: 1
-    preSkill: Improved Accuracy
-    preSkillLevel: 3
+    preSkill: 
+    preSkillLevel: 0
     skillTier: 4
     isAvailable: 0
   - skillName: Windrunner
     skillIcon: {fileID: 21300000, guid: d519dd12c15e7bb4b8ed644e8b1f406e, type: 3}
     baseDamage: 0
     damagePerLevel: 0
+    aoeDamage: 0
+    aoeDamagePerLevel: 0
     baseHeal: 0
     healPerLevel: 0
     cooldown: 30
@@ -630,7 +660,7 @@ MonoBehaviour:
     manaCostPerLevel: 0
     damageRange: 0
     skillLevel: 0
-    skillMaxLevel: 1
+    skillMaxLevel: 5
     totalHeal: 0
     totalDamage: 0
     addCrit: 0
@@ -647,7 +677,7 @@ MonoBehaviour:
     addRangedRange: 0
     addCastingRange: 0
     isPassive: 0
-    infoText: Increase your speed by 100% for 16sec
+    infoText: Increase your speed by 100% for 4*skillLevel seconds.
     updatedInfoText: 
     element: 9
     spellType: 2
@@ -657,14 +687,16 @@ MonoBehaviour:
     canInterrup: 0
     skillCost: 1
     noTarget: 1
-    preSkill: Tiger Reflexes
-    preSkillLevel: 3
+    preSkill: 
+    preSkillLevel: 0
     skillTier: 4
     isAvailable: 0
   - skillName: Recovery Mastery
     skillIcon: {fileID: 21300000, guid: 68953f0a783e08f42a5e9e9ca47ee3ba, type: 3}
     baseDamage: 0
     damagePerLevel: 0
+    aoeDamage: 0
+    aoeDamagePerLevel: 0
     baseHeal: 0
     healPerLevel: 0
     cooldown: 120
@@ -673,7 +705,7 @@ MonoBehaviour:
     manaCostPerLevel: 0
     damageRange: 0
     skillLevel: 0
-    skillMaxLevel: 1
+    skillMaxLevel: 3
     totalHeal: 0
     totalDamage: 0
     addCrit: 0
@@ -690,7 +722,7 @@ MonoBehaviour:
     addRangedRange: 0
     addCastingRange: 0
     isPassive: 0
-    infoText: Increase HP and SP regen by 20 for 60sec
+    infoText: Increase HP and SP regen by 20 for 30*skillLevel seconds.
     updatedInfoText: 
     element: 9
     spellType: 2
@@ -700,14 +732,16 @@ MonoBehaviour:
     canInterrup: 0
     skillCost: 1
     noTarget: 1
-    preSkill: Recovery Training
-    preSkillLevel: 3
+    preSkill: 
+    preSkillLevel: 0
     skillTier: 4
     isAvailable: 0
   - skillName: Bulls Eye
     skillIcon: {fileID: 21300000, guid: 74d743cf912dc474cb9c15bc4b442898, type: 3}
     baseDamage: 2
     damagePerLevel: 2
+    aoeDamage: 0
+    aoeDamagePerLevel: 0
     baseHeal: 0
     healPerLevel: 0
     cooldown: 2
@@ -733,7 +767,7 @@ MonoBehaviour:
     addRangedRange: 0
     addCastingRange: 0
     isPassive: 0
-    infoText: Blast target with massive damage (skillLevel * 2)  * ATK
+    infoText: Blast target with massive damage ATK.
     updatedInfoText: 
     element: 7
     spellType: 0
@@ -749,15 +783,17 @@ MonoBehaviour:
     isAvailable: 0
   - skillName: Meteor Arrows
     skillIcon: {fileID: 21300000, guid: a024c0cf32c946240861a2ef86a64a69, type: 3}
-    baseDamage: 4
+    baseDamage: 5
     damagePerLevel: 0
+    aoeDamage: 1
+    aoeDamagePerLevel: 0
     baseHeal: 0
     healPerLevel: 0
     cooldown: 1
     castTime: 1
     manaCost: 0
     manaCostPerLevel: 0
-    damageRange: 35
+    damageRange: 12
     skillLevel: 0
     skillMaxLevel: 1
     totalHeal: 0
@@ -776,8 +812,9 @@ MonoBehaviour:
     addRangedRange: 0
     addCastingRange: 0
     isPassive: 0
-    infoText: Fires four massive arrows at random targets for 400% ATK and explodes
-      100%  ATK AoE damage to 15 radius of the main targets enemies.
+    infoText: Fires four massive arrows at random targets, each dealing <b>ATK</b>
+      damage. Upon impact, each arrow explodes, dealing <b>AOE</b> damage to all
+      enemies within a 15-meter radius of the target.
     updatedInfoText: 
     element: 9
     spellType: 0
@@ -789,19 +826,21 @@ MonoBehaviour:
     noTarget: 0
     preSkill: 
     preSkillLevel: 0
-    skillTier: 5
-    isAvailable: 0
+    skillTier: 6
+    isAvailable: 1
   - skillName: Bonecrusher Trap
     skillIcon: {fileID: 21300000, guid: e86b5a59e7c468145a8dba0919e66659, type: 3}
-    baseDamage: 8
-    damagePerLevel: 0
+    baseDamage: 12
+    damagePerLevel: 12
+    aoeDamage: 3
+    aoeDamagePerLevel: 0
     baseHeal: 0
     healPerLevel: 0
     cooldown: 1
     castTime: 0
     manaCost: 4
     manaCostPerLevel: 4
-    damageRange: 0
+    damageRange: 20
     skillLevel: 0
     skillMaxLevel: 1
     totalHeal: 0
@@ -820,8 +859,8 @@ MonoBehaviour:
     addRangedRange: 0
     addCastingRange: 0
     isPassive: 0
-    infoText: Detonates, dealing massive damage (5x ATK) to the target and 0.5x ATK
-      damage to enemies within a 15-radius area.
+    infoText: When detones, deals <b>ATK</b> damage to main target and <b>AOE</b>
+      damage to enemies in 20 radius.
     updatedInfoText: 
     element: 9
     spellType: 0
@@ -833,12 +872,14 @@ MonoBehaviour:
     noTarget: 1
     preSkill: 
     preSkillLevel: 0
-    skillTier: 5
+    skillTier: 6
     isAvailable: 0
   - skillName: Hunter's Resilience
     skillIcon: {fileID: 21300000, guid: 5d897709bb83d5b4b9909851110117b1, type: 3}
     baseDamage: 0
     damagePerLevel: 0
+    aoeDamage: 0
+    aoeDamagePerLevel: 0
     baseHeal: 0
     healPerLevel: 0
     cooldown: 3
@@ -882,6 +923,8 @@ MonoBehaviour:
     skillIcon: {fileID: 21300000, guid: d8a4c4f65e3ab7e408bdec81b4dcb286, type: 3}
     baseDamage: 0
     damagePerLevel: 0
+    aoeDamage: 0
+    aoeDamagePerLevel: 0
     baseHeal: 0
     healPerLevel: 0
     cooldown: 2
@@ -923,8 +966,10 @@ MonoBehaviour:
     isAvailable: 0
   - skillName: Bear Trap
     skillIcon: {fileID: 21300000, guid: 30fa221e02a556f4e9e9f49f0c301067, type: 3}
-    baseDamage: 5
-    damagePerLevel: 2
+    baseDamage: 1.5
+    damagePerLevel: 1.5
+    aoeDamage: 0
+    aoeDamagePerLevel: 0
     baseHeal: 0
     healPerLevel: 0
     cooldown: 5
@@ -950,8 +995,8 @@ MonoBehaviour:
     addRangedRange: 0
     addCastingRange: 0
     isPassive: 0
-    infoText: When detonades, deals massive damage to enemy
-    updatedInfoText: When detonades, deals massive damage to enemy
+    infoText: When detonades, deals masssive ATK damage to enemy
+    updatedInfoText: 
     element: 9
     spellType: 0
     skillType: 1
@@ -962,12 +1007,14 @@ MonoBehaviour:
     noTarget: 1
     preSkill: 
     preSkillLevel: 0
-    skillTier: 6
+    skillTier: 5
     isAvailable: 0
   - skillName: Leeching Arrows
     skillIcon: {fileID: 21300000, guid: 72332540bd1422c40b09044b53993e5b, type: 3}
     baseDamage: 0
     damagePerLevel: 0
+    aoeDamage: 0
+    aoeDamagePerLevel: 0
     baseHeal: 0
     healPerLevel: 0
     cooldown: 5
@@ -1007,12 +1054,14 @@ MonoBehaviour:
     noTarget: 1
     preSkill: 
     preSkillLevel: 0
-    skillTier: 6
+    skillTier: 5
     isAvailable: 0
   - skillName: Rain of Arrows
     skillIcon: {fileID: 21300000, guid: 3e35525049d8a1c409249edddfefeb1a, type: 3}
     baseDamage: 3
     damagePerLevel: 1
+    aoeDamage: 0
+    aoeDamagePerLevel: 0
     baseHeal: 0
     healPerLevel: 0
     cooldown: 5
@@ -1058,6 +1107,8 @@ MonoBehaviour:
     skillIcon: {fileID: 21300000, guid: 8551efc039533ac4e96cf9a14296eaae, type: 3}
     baseDamage: 10
     damagePerLevel: 0
+    aoeDamage: 0
+    aoeDamagePerLevel: 0
     baseHeal: 0
     healPerLevel: 0
     cooldown: 5
@@ -1103,6 +1154,8 @@ MonoBehaviour:
     skillIcon: {fileID: 21300000, guid: 7b6b6aa26a04e5642807b21520a3df80, type: 3}
     baseDamage: 0.05
     damagePerLevel: 0
+    aoeDamage: 0
+    aoeDamagePerLevel: 0
     baseHeal: 0
     healPerLevel: 0
     cooldown: 0
@@ -1128,10 +1181,9 @@ MonoBehaviour:
     addRangedRange: 0
     addCastingRange: 0
     isPassive: 1
-    infoText: Your shots have a 10% change to add a stacking debuff to enemy. Burns
+    infoText: Your attacks have a 10% change to add a stacking debuff to enemy. Burns
       enemies 5% of ATK per sec (max 10 stacks)
-    updatedInfoText: Your shots have a 10% change to add a stacking debuff to enemy.
-      Burns enemies 5 sec for 0.05% of ATK  (max 5 stacks)
+    updatedInfoText: 
     element: 9
     spellType: 0
     skillType: 3
@@ -1148,6 +1200,8 @@ MonoBehaviour:
     skillIcon: {fileID: 21300000, guid: 9d6250b3cd71ea847b07f839d8afdd7f, type: 3}
     baseDamage: 0
     damagePerLevel: 0
+    aoeDamage: 0
+    aoeDamagePerLevel: 0
     baseHeal: 0
     healPerLevel: 0
     cooldown: 1
@@ -1191,6 +1245,8 @@ MonoBehaviour:
     skillIcon: {fileID: 21300000, guid: 148fd37e6bc81df40a2bfd3bd9e28cab, type: 3}
     baseDamage: 0.3
     damagePerLevel: 0.3
+    aoeDamage: 0
+    aoeDamagePerLevel: 0
     baseHeal: 0
     healPerLevel: 0
     cooldown: 0

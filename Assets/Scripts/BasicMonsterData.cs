@@ -8,6 +8,7 @@ public class BasicMonsterData : ScriptableObject
     public string monsterName;
     public int minLevel;
     public int maxLevel;
+    public int baseAtk;
     public string prefabPath;
     public Sprite enemySprite;
     public Element enemyElement;
@@ -24,6 +25,9 @@ public class BasicMonsterData : ScriptableObject
 
     [Header("Quest Settings")]
     public string killQuestName;
+
+    [Header("Skill List")]
+    public List<string> skills;
 
 }
 
@@ -42,4 +46,5 @@ public class LootItemData
     public string itemName;
     public int dropChance; // Drop chance prosentteina (esim. 200 = 2.00%)
     public string itemType;
+    public int quantity;
 }

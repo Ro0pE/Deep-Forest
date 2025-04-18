@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using UnityEngine.UI;
 using TMPro;
 using System.Linq; 
+using System.Text.RegularExpressions;
+
 
 
 
@@ -43,28 +45,31 @@ public class HunterSkillTree : MonoBehaviour
 
 public void UpdatePlayerSkillsInfo()
 {
-
     foreach (var skill in filteredSkills)
     {
-        if (skill != null)
+        if (skill == null) continue;
+
+        // Varmistetaan että alkuperäinen info tallessa
+        if (string.IsNullOrEmpty(skill.updatedInfoText))
         {
-            
-
-            // Tallennetaan alkuperäinen teksti VAIN JOS sitä ei ole jo tallennettu
-            if (string.IsNullOrEmpty(skill.updatedInfoText))
-            {
-                skill.updatedInfoText = skill.infoText;
-            }
-
-            // Päivitetään infoText uudella tiedolla
-            skill.updatedInfoText = skill.infoText
-                .Replace("skillLevel", skill.skillLevel.ToString())
-                .Replace("ATK", $"<color=#FF0000>{skill.damage}</color>"); // Punainen
-
-
-
-            //Debug.Log("Updated infoText: " +skill.skillName +" " + skill.updatedInfoText);
+            skill.updatedInfoText = skill.infoText;
         }
+
+        // Lasketaan kaikki muodossa X*skillLevel
+        string pattern = @"([-+]?\d+)\*skillLevel"; // Esim: 2*skillLevel tai -5*skillLevel
+        skill.updatedInfoText = Regex.Replace(skill.infoText, pattern, match =>
+        {
+            int multiplier = int.Parse(match.Groups[1].Value);
+            int result = multiplier * skill.skillLevel;
+            return result.ToString();
+        });
+
+        // Muut korvaukset, esim. ATK ja dmgPerLevel
+        skill.updatedInfoText = skill.updatedInfoText
+            .Replace("skillLevel", skill.skillLevel.ToString())
+            .Replace("dmgPerLevel", skill.damagePerLevel.ToString())
+            .Replace("ATK", $"<color=#FF0000>{skill.damage}</color>")
+            .Replace("AOE", $"<color=#FF0000>{skill.aoeDmg}</color>");
     }
 }
 
@@ -190,6 +195,21 @@ void PopulateSkillTree(SkillSchool skillSchool)
             playerStats.UpdateSkillPoints();
         }
     }
+    public int GetUsedSkillPointsInPreviousTier(int currentTier)
+    {
+        int totalPoints = 0;
+
+        foreach (var skill in filteredSkills)
+        {
+            if (skill != null && skill.skillTier == currentTier - 1)
+            {
+                totalPoints += skill.skillLevel * skill.skillCost;
+            }
+        }
+
+        return 10; // MUUTA
+    }
+
     public void IncreaseSkillLevel(Skill skill, Transform parent)
     {
         bool preSkillStatus = true; // Oletetaan, että preskill vaatimuksia ei ole
@@ -201,7 +221,7 @@ void PopulateSkillTree(SkillSchool skillSchool)
                 int requiredPreSkillLevel = skill.preSkillLevel;
 
                 
-                if (preSkill != null) // Tarkistetaan, että preSkill löytyy
+               /* if (preSkill != null) // Tarkistetaan, että preSkill löytyy
                 {
                     if (preSkill.skillLevel >= requiredPreSkillLevel) 
                     {
@@ -216,7 +236,18 @@ void PopulateSkillTree(SkillSchool skillSchool)
                 {
                     Debug.LogError("Edeltävää skilliä '" + skill.preSkill + "' ei löytynyt!");
                     return; // Lopetetaan suoritus, jos vaadittu preSkill puuttuu
+                } */
+                // Tier-check: Estä oppiminen jos ei tarpeeksi pisteitä aiemmassa tierissä
+                if (skill.skillTier > 1) // Tier 1 skilleillä ei ole vaatimuksia
+                {
+                    int usedPoints = GetUsedSkillPointsInPreviousTier(skill.skillTier);
+                    if (usedPoints < 10)
+                    {
+                        Debug.Log("Tarvitset vähintään 10 pistettä tierissä " + (skill.skillTier - 1));
+                        return;
+                    }
                 }
+
                 if (playerStats.skillPoints >= skill.skillCost) // Tarkistetaan, onko tarpeeksi skillipisteitä
                 {
                     skill.LearnSkill(playerStats);
@@ -302,7 +333,7 @@ void PopulateSkillTree(SkillSchool skillSchool)
     {
         UpdatePlayerSkillsInfo();
         // Käydään läpi kaikki tier-alueet ja päivitetään niiden UI:t
-        Transform[] allTiers = { tier1, tier2, tier3, tier4, tier5 };
+        Transform[] allTiers = { tier1, tier2, tier3, tier4, tier5, tier6, tier7 };
 
         foreach (Transform tier in allTiers)
         {
@@ -322,36 +353,29 @@ void PopulateSkillTree(SkillSchool skillSchool)
     }
     private void UpdateAvailableSkills()
     {
-        
-        foreach (Skill skill in filteredSkills) // filteredSkills = lista skilleistä, jotka on suodatettu
+        foreach (Skill skill in filteredSkills)
         {
-            // Jos preSkill on tyhjä, skilli on aina saatavilla
-            if (string.IsNullOrEmpty(skill.preSkill))
+            // Tier 1 -skillit ovat aina saatavilla
+            if (skill.skillTier == 1) // VAIHDA TÄMÄ!
             {
                 skill.isAvailable = true;
-       
+                continue;
             }
-            else
-            {
-                Skill preSkill = GetFilteredSkillByName(skill.preSkill);
-                
-                // Tarkistetaan, että preSkill löytyy ja sen taso täyttää vaatimukset
-                if (preSkill != null && preSkill.skillLevel >= skill.preSkillLevel)
-                {
-                    skill.isAvailable = true; // Skilli on saatavilla, koska preSkillin taso täyttyy
-                   
-                }
-                else
-                {
-                    skill.isAvailable = false; // Skilli ei ole saatavilla, koska preSkillin taso ei täyty
-                }
-            }
-         
+
+            // Lasketaan kuinka monta skillipistettä on käytetty edellisessä tierissä
+            int previousTier = skill.skillTier - 1;
+            int spentInPreviousTier = filteredSkills
+                .Where(s => s.skillTier == previousTier)
+                .Sum(s => s.skillLevel * s.skillCost);
+
+            // Jos käytettyjen pisteiden määrä edellisessä tierissä on vähintään 10, skilli on saatavilla
+            skill.isAvailable = spentInPreviousTier >= 0; // MUUTA!!!
         }
-        
+
         // Päivitetään UI kaikille skilleille
         UpdateAllSkillUIs();
     }
+
 
 
 

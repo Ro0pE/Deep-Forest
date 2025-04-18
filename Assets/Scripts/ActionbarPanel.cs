@@ -92,6 +92,16 @@ public class ActionbarPanel : MonoBehaviour
                 return;
             }
         }
+        if (playerAttack.targetedEnemy == null && slot.assignedSkill.noTarget == false )
+        {
+            ShowInfoText("Invalid target");
+            return;
+        }
+        if (playerAttack.targetedEnemy.isDead)
+        {
+            ShowInfoText("Target is dead");
+            return;
+        }
 
 
         // Tarkista, onko taito käytettävissä
@@ -253,7 +263,7 @@ private IEnumerator CastSkill(int skillIndex, float castTime, int manaCost, Acti
 
     private void SpawnProjectile(ActionbarSlot slot)
     {
-        // Peruslogiikka projektiilin spawnaukseen
+      /*  // Peruslogiikka projektiilin spawnaukseen
         Vector3 spawnPosition = castPoint.position + castPoint.forward * 0.5f + castPoint.up * 3.5f;
 
         // Erilaisia taikoja
@@ -281,7 +291,7 @@ private IEnumerator CastSkill(int skillIndex, float castTime, int manaCost, Acti
         {
            // GameObject projectile = Instantiate(projectilePrefab, spawnPosition, Quaternion.identity);
            // projectile.GetComponent<Projectile>().Initialize(targetedEnemy.transform);
-        }
+        }*/
     }
 
 

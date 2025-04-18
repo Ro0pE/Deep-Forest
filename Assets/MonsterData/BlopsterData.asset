@@ -15,6 +15,7 @@ MonoBehaviour:
   monsterName: Blopster
   minLevel: 3
   maxLevel: 5
+  baseAtk: 25
   prefabPath: Blopster
   enemySprite: {fileID: 21300000, guid: 53f18eb8f9e68bd4b826e09a90890e0b, type: 3}
   enemyElement: 1
@@ -29,19 +30,25 @@ MonoBehaviour:
   - itemName: Restoration Potion
     dropChance: 350
     itemType: Potion
+    quantity: 3
   - itemName: Large Mana Potion
     dropChance: 666
     itemType: Potion
+    quantity: 3
   - itemName: Leather Boots
     dropChance: 88
     itemType: Equipment
+    quantity: 1
   - itemName: Leather Tunica
     dropChance: 66
     itemType: Equipment
+    quantity: 1
   - itemName: Leather Pants
     dropChance: 55
     itemType: Equipment
+    quantity: 1
   - itemName: Leather Cap
     dropChance: 77
     itemType: Equipment
+    quantity: 1
   killQuestName: 

@@ -14,11 +14,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   monsterName: Spore
   minLevel: 2
-  maxLevel: 5
+  maxLevel: 6
+  baseAtk: 4
   prefabPath: Spore
   enemySprite: {fileID: 21300000, guid: a1ae33b7ad7b38043951e4e777abfe86, type: 3}
   enemyElement: 2
-  baseHealth: 8
+  baseHealth: 15
   experiencePoints: 15
   damageModifiersList:
   - element: 0
@@ -29,10 +30,13 @@ MonoBehaviour:
   - itemName: Minor Healing Potion
     dropChance: 666
     itemType: Potion
+    quantity: 4
   - itemName: Minor Mana Potion
     dropChance: 666
     itemType: Potion
+    quantity: 2
   - itemName: Bow
     dropChance: 155
     itemType: Equipment
+    quantity: 1
   killQuestName: FungusAmongUs

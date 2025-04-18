@@ -11,6 +11,7 @@ public class PlayerAttack : MonoBehaviour
     public int baseHitRating = 50;
     public float attackSpeed = 2f;
     public float attackSpeedReduction = 0f;
+    public float castSpeedReduction = 0f;
     public float weaponAttackSpeed = 0f;
     public Animator animator;
     public bool isAttacking;
@@ -56,10 +57,13 @@ public class PlayerAttack : MonoBehaviour
     public BuffManager buffManager;
     public BuffDatabase buffDatabase;
     public PlayerMovement playerMovement;
+    private ShooterType shooterType = ShooterType.Player;
+    
 
 
     private void Start()
     {
+
         playerMovement = FindObjectOfType<PlayerMovement>();
         buffManager = GetComponent<BuffManager>();
         audioSource = gameObject.AddComponent<AudioSource>();
@@ -361,7 +365,7 @@ public class PlayerAttack : MonoBehaviour
         isMeleeOnCooldown = false; // Cooldown-tila päättyy
         isRangedAttack = false;
     }
-    private void PlayShootSound()
+    public void PlayShootSound()
     {
         if (audioSource != null && shootArrowSound != null)
         {
@@ -374,34 +378,61 @@ public class PlayerAttack : MonoBehaviour
         }
     }
 
-    public IEnumerator<GameObject> ShootArrows(EnemyHealth otherEnemy, GameObject arrowPrefab)
-    {
-        //animator.SetTrigger("isRangedAttacking");
-        //animator.speed = 1f / attackSpeed;
+        public IEnumerator<GameObject> ShootArrows(EnemyHealth otherEnemy, GameObject arrowPrefab)
+        {
+            PlayShootSound();
 
+            if (targetedEnemy == null || otherEnemy == null)
+            {
+                Debug.LogWarning("Targeted enemy is null. Cancelling arrow shot.");
+                yield break;
+            }
+
+            Vector3 spawnPosition = castPoint.position + castPoint.forward * 0.5f + castPoint.up * 3.5f;
+
+            // Käytetään tarkkaa "hit positionia", jos määritelty
+            Vector3 targetPosition = otherEnemy.hitPosition != null 
+                ? otherEnemy.hitPosition.position 
+                : otherEnemy.transform.position;
+
+            Vector3 directionToTarget = (targetPosition - spawnPosition).normalized;
+
+            GameObject projectile = Instantiate(arrowPrefab, spawnPosition, Quaternion.identity);
+            projectile.transform.forward = directionToTarget;
+            Transform hitPoint = otherEnemy.hitPosition != null ? otherEnemy.hitPosition : otherEnemy.transform;
+            projectile.GetComponent<Projectile>().Initialize(hitPoint, shooterType);
+
+
+            yield return projectile;
+        }
+    public IEnumerator<GameObject> ShootMeteorArrowsFromAbove(EnemyHealth otherEnemy, GameObject arrowPrefab, Skill skill, bool isCrit, GameObject effect)
+    {
+        // meteor-nuolen laukaisu (ylhäältä tuleva efekti)
         PlayShootSound();
 
         if (targetedEnemy == null || otherEnemy == null)
         {
-            Debug.LogWarning("Targeted enemy is null. Cancelling arrow shot.");
+            Debug.LogWarning("Targeted enemy is null. Cancelling meteor arrow shot.");
             yield break;
         }
 
-        Vector3 spawnPosition = castPoint.position + castPoint.forward * 0.5f + castPoint.up * 3.5f;
+        // Spawnataan korkean yläpuolelle
+        Vector3 spawnPosition = otherEnemy.transform.position + Vector3.up * 20f;
+
+        // Suunta alas viholliseen
         Vector3 directionToTarget = (otherEnemy.transform.position - spawnPosition).normalized;
 
-        // Instanssioidaan nuoli annetusta prefabista
-        GameObject projectile = Instantiate(arrowPrefab, spawnPosition, Quaternion.identity);
-
-        // Asetetaan nuolen kierto niin, että se osoittaa vihollista kohti
+        GameObject projectile = Instantiate(arrowPrefab, spawnPosition, Quaternion.LookRotation(directionToTarget));
         projectile.transform.forward = directionToTarget;
 
-        // Alusta nuoli omilla arvoilla, kuten nopeus ja suunta
-        projectile.GetComponent<Projectile>().Initialize(otherEnemy.transform);
+        // Alustetaan räjähtävä nuoli
+        Debug.Log("EFFECT " + effect);
+        projectile.GetComponent<ExplosiveProjectile>().Initialize(otherEnemy.transform, skill, true, isCrit, effect);
 
-        yield return projectile; // Palautetaan projektiili
+        yield return projectile;
     }
-    public IEnumerator<GameObject> ShootExplosiveArrows(EnemyHealth otherEnemy, GameObject arrowPrefab, Skill skill, bool isCrit)
+
+    public IEnumerator<GameObject> ShootExplosiveArrows(EnemyHealth otherEnemy, GameObject arrowPrefab, Skill skill, bool isCrit, GameObject effect)
     {
     // animator.SetTrigger("isRangedAttacking");
     // animator.speed = 1f / attackSpeed;
@@ -421,7 +452,8 @@ public class PlayerAttack : MonoBehaviour
         projectile.transform.forward = directionToTarget;
 
         // Alustetaan räjähtävä nuoli
-        projectile.GetComponent<ExplosiveProjectile>().Initialize(otherEnemy.transform, skill, true, isCrit);
+        Debug.Log("EFFECT " + effect);
+        projectile.GetComponent<ExplosiveProjectile>().Initialize(otherEnemy.transform, skill, true, isCrit, effect);
 
         yield return projectile; // Palautetaan projektiili
     }
@@ -598,6 +630,37 @@ public IEnumerator Attack(Skill skill)
 
         //StartCoroutine(ResetAttack());
     }
+    public IEnumerator DealDamageAfterDelayAoe(Skill skill, bool isCrit, EnemyHealth targetEnemy = null)
+    {
+        
+        // Jos targetEnemy on null, käytä targetedEnemy
+        if (targetEnemy == null)
+        {
+            targetEnemy = targetedEnemy;
+        }
+
+        
+
+        if (targetEnemy != null)
+        {
+            
+            float finalDamage = CalculateDamageSkill(skill.aoeDmg);
+            Debug.Log("Final AOE DAMAGE" + finalDamage);
+            //Element weaponElement = equipmentManager.WeaponCurrentElement();
+            targetEnemy.TakeDamageMelee(finalDamage, wasCritHit, autoaAttackElement);
+            
+            // Toteuta vahinko määritetylle viholliselle
+           
+        }
+
+
+        // Käynnistä ResetAttack vain kerran pääkohteelle
+        if (targetEnemy == targetedEnemy)
+        {
+            StartCoroutine(ResetAttack());
+        }
+        yield return null;
+    }
     public IEnumerator DealDamageAfterDelaySkill(Skill skill, bool isCrit, EnemyHealth targetEnemy = null)
     {
         
@@ -613,7 +676,7 @@ public IEnumerator Attack(Skill skill)
         {
             
             float finalDamage = CalculateDamageSkill(skill.damage);
-            Debug.Log("Final damage " + finalDamage);
+            Debug.Log("Final skill damage " + finalDamage);
             //Element weaponElement = equipmentManager.WeaponCurrentElement();
             targetEnemy.TakeDamageMelee(finalDamage, wasCritHit, autoaAttackElement);
             

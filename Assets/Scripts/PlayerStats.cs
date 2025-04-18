@@ -254,28 +254,33 @@ public class PlayerStats : MonoBehaviour
         totalStr = baseStr + strength + skillStr + buffStr + itemStr;
         totalVit = baseVit + vitality + skillVit + buffVit + itemVit; 
         totalInt = baseInt + intellect + skillInt + buffInt + itemInt; 
-        attack = (totalStr * 2) + (totalDex / 2) + buffAttack;
+        int strBonus = (totalStr / 10) * (5 + (totalStr / 10));
+        attack = (totalStr * 2) + strBonus + (totalDex / 2) + buffAttack;
         playerAttack.attackDamage = attack + weaponAttack;
-        aspd = ((totalAgi) / 200f);
-        tempHP = (totalVit * 13);  
+        aspd = ((totalAgi) / 100f);
+        tempHP = (totalVit * 20);  
         def = (totalVit / 6) + itemDefValue + skillDef;
         playerHealth.defence = def;
-        playerHealth.maxHealth = tempHP + playerHealth.baseHealth; 
+        int vitBonus = (totalVit / 10) * (150+ (totalVit / 10));
+        playerHealth.maxHealth = tempHP + vitBonus + playerHealth.baseHealth; 
         magickAttack = (totalInt * 2);
-        tempSP = (totalInt * 8);
-        playerHealth.maxMana = tempSP + playerHealth.baseMana;
+        tempSP = (totalInt * 15);
+        int intBonus = (totalInt / 10) * (100 + (totalInt / 10));
+        playerHealth.maxMana = tempSP + intBonus + playerHealth.baseMana;
         playerAttack.magickAttackDamage = magickAttack;
-        dodge = (totalAgi / 8f);
+        dodge = (totalAgi / 6f);
         crit = (totalAgi / 8f);
         playerHealth.dodgeChance = dodge + itemDodgeValue + skillDodge;
         playerAttack.critChance = crit + itemCritValue + skillCrit;
-        castSpeed = (totalDex / 25f) + itemCastSpeedValue + itemCastSpeedValue;
-        hpRegen = Mathf.RoundToInt(itemHpRegValue + skillHpReg + buffHP + totalVit + (Mathf.Pow(vitality / 10, 2) * 2));
-        spRegen = Mathf.RoundToInt(itemSpRegValue + skillSpReg + buffSP + totalInt + (Mathf.Pow(intellect / 10, 2) * 2));
+        castSpeed = (totalDex / 50f) + itemCastSpeedValue + itemCastSpeedValue;
+
+        hpRegen = Mathf.RoundToInt(itemHpRegValue + skillHpReg + buffHP + totalVit + (Mathf.Pow(totalVit / 9f, 2) * 2));
+        spRegen = Mathf.RoundToInt(itemSpRegValue + skillSpReg + buffSP + totalInt + (Mathf.Pow(totalInt / 11f, 2) * 2));
         hit = totalDex + itemHitValue + skillHitValue;  
         playerHealth.healthRegen = hpRegen;
         playerHealth.manaRegen = spRegen;
         playerAttack.attackSpeedReduction = aspd;
+        playerAttack.castSpeedReduction = castSpeed;
         //playerAttack.rangedAttackRange = skillRangedRange;
         
 
@@ -407,44 +412,42 @@ public class PlayerStats : MonoBehaviour
             levelUpEffect.transform.localPosition = Vector3.zero;
 
             // Poistetaan efekti 15 sekunnin kuluttua
-            Destroy(levelUpEffect, 15f);
+            Destroy(levelUpEffect, 0.3f);
         }
     }
 
-    private void LevelUp()
+    public void LevelUp()
     {
-        level++;
-        currentExperience -= experienceToNextLevel; // Vähennetään kokemuspisteet
-        experienceToNextLevel = Mathf.RoundToInt(experienceToNextLevel * 1.2f); // Pyöristä kokonaisluvuksi
-        statusPoints++;
-        statusPoints++;
-        skillPoints++;
+        StartCoroutine(LevelUpCoroutine());
+    }
 
-        
-        PlayeLevelUpSound();
-        FlashExpBar(); // Kutsutaan välähdysanimaatio
-        LevelUpEffect();
-        // Tarkista, nouseeko taso useita kertoja
+    private IEnumerator LevelUpCoroutine()
+    {
         while (currentExperience >= experienceToNextLevel)
         {
             currentExperience -= experienceToNextLevel;
             level++;
+            experienceToNextLevel = Mathf.RoundToInt(experienceToNextLevel * 1.1f);
+            
+            statusPoints += 2;
             skillPoints++;
-            statusPoints++;
-            statusPoints++;
-            experienceToNextLevel = Mathf.RoundToInt(experienceToNextLevel * 1.2f);
+            yield return new WaitForSeconds(0.3f); // pieni viive ennen seuraavaa leveliä
             PlayeLevelUpSound();
-            FlashExpBar(); // Kutsutaan välähdysanimaatio
+            FlashExpBar();
             LevelUpEffect();
+
+            playerHealth.baseHealth = Mathf.RoundToInt(playerHealth.baseHealth * 1.05f);
+            playerHealth.baseMana = Mathf.RoundToInt(playerHealth.baseMana * 1.04f);
+            playerHealth.currentHealth = playerHealth.maxHealth;
+            playerHealth.currentMana = playerHealth.maxHealth;
+            Debug.Log("HP " + playerHealth.baseHealth);
+            skillPointsLeftText.text = $"Skill points: {skillPoints}";
+
+            
         }
-        
-        playerHealth.baseHealth = Mathf.RoundToInt((playerHealth.baseHealth * 1.1f)); 
-        playerHealth.baseMana = Mathf.RoundToInt((playerHealth.baseMana * 1.05f));
-        playerHealth.currentHealth = playerHealth.baseHealth;
-        playerHealth.currentMana = playerHealth.baseMana;
-        skillPointsLeftText.text = $"Skill points: {skillPoints}";
-        // Voit myös lisätä tason nousuun liittyviä muita toimintoja, kuten pelaajan statuksien parantaminen
+        UpdateStats();
     }
+
 
     private void FlashExpBar()
     {

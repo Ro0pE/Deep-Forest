@@ -1345,7 +1345,7 @@ BoxCollider:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 1
+  m_IsTrigger: 0
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
@@ -1419,7 +1419,6 @@ MonoBehaviour:
   groundLayer:
     serializedVersion: 2
     m_Bits: 128
-  attackDamage: 3
   groundCheckDistance: 1.5
   attackCooldown: 1.5
   walkSpeed: 4
@@ -1437,6 +1436,8 @@ MonoBehaviour:
   distanceToPlayer: 0
   isChasingPlayer: 0
   isWandering: 0
+  isOnCooldown: 0
+  isCasting: 0
 --- !u!114 &8289695889791633267
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1466,9 +1467,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0fbb13be10948e7459ec53aaa02e1dca, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  hitPosition: {fileID: 0}
   targetIndicator: {fileID: 8248012620639193167}
   monsterName: Brown Bear
   monsterLevel: 0
+  attackDamage: 0
   enemyElement: 2
   elementSprites:
   - {fileID: 21300000, guid: b1e7ddba9686e764e87b228652221a61, type: 3}
@@ -1519,12 +1522,15 @@ MonoBehaviour:
   noRespawn: 0
   playerHealth: {fileID: 0}
   critFocusAttack: 0
-  hunterSkillTree: {fileID: 0}
   defaultSlotSprite: {fileID: 21300000, guid: 4293f3f43e7a5524dbcb191b0ef09d9c, type: 3}
   frozenEffectInstance: {fileID: 0}
   enemyRenderer: {fileID: 0}
   originalColor: {r: 0, g: 0, b: 0, a: 0}
   respawnTime: 35
+  isBurning: 0
+  audioSource: {fileID: 0}
+  arrowHitEnemySound: {fileID: 0}
+  baseRunSpeed: 0
   monsterData: {fileID: 11400000, guid: fadc2726903952b41bc7af25bb453249, type: 2}
 --- !u!1 &4253451241872584632
 GameObject:
@@ -3030,7 +3036,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_Sprite: {fileID: 10901, guid: 0000000000000000f000000000000000, type: 0}
-  m_Color: {r: 1, g: 0, b: 0, a: 1}
+  m_Color: {r: 0.16313633, g: 0.735849, b: 0.181016, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0

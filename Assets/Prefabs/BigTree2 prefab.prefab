@@ -24,6 +24,18 @@ PrefabInstance:
       propertyPath: m_LODs.Array.data[2].screenRelativeHeight
       value: 0.053763904
       objectReference: {fileID: 0}
+    - target: {fileID: 843555359311739293, guid: 95b81cfce6f144c8ba21ee367f07e03e, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 1313265463415911488, guid: 95b81cfce6f144c8ba21ee367f07e03e, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 1720004491545499706, guid: 95b81cfce6f144c8ba21ee367f07e03e, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
     - target: {fileID: 5114893065634433212, guid: 95b81cfce6f144c8ba21ee367f07e03e, type: 3}
       propertyPath: m_LocalPosition.x
       value: 439.42
@@ -67,6 +79,14 @@ PrefabInstance:
     - target: {fileID: 5597992513853952518, guid: 95b81cfce6f144c8ba21ee367f07e03e, type: 3}
       propertyPath: m_Name
       value: BigTree2 prefab
+      objectReference: {fileID: 0}
+    - target: {fileID: 5597992513853952518, guid: 95b81cfce6f144c8ba21ee367f07e03e, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 5852828202939501390, guid: 95b81cfce6f144c8ba21ee367f07e03e, type: 3}
+      propertyPath: m_Layer
+      value: 7
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

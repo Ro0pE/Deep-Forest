@@ -1,0 +1,38 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d9da3110cd8b0874cb5d33bac446840d, type: 3}
+  m_Name: DragonlingData
+  m_EditorClassIdentifier: 
+  monsterName: Dragonling
+  minLevel: 9
+  maxLevel: 15
+  baseAtk: 3
+  prefabPath: Dragonling
+  enemySprite: {fileID: 0}
+  enemyElement: 2
+  baseHealth: 15
+  experiencePoints: 25
+  damageModifiersList: []
+  lootItems:
+  - itemName: Ring of the owl
+    dropChance: 899
+    itemType: Equipment
+    quantity: 1
+  - itemName: Gloves of the owl
+    dropChance: 566
+    itemType: Equipment
+    quantity: 1
+  - itemName: 'Restoration Potion '
+    dropChance: 999
+    itemType: Potion
+    quantity: 5
+  killQuestName: 

@@ -1535,6 +1535,7 @@ MonoBehaviour:
   playerAttack: {fileID: 0}
   healthBar: {fileID: 2468554027147137042}
   critMultiplier: 2
+  finalDamage: 0
   agent: {fileID: 0}
   lootItems:
   - {fileID: 11400000, guid: bfa8dbc8264ca54458fa22cd76492067, type: 2}
@@ -1570,6 +1571,18 @@ MonoBehaviour:
   isStunned: 0
   enemyAI: {fileID: 0}
   playerMovement: {fileID: 0}
+  inventoryUI: {fileID: 0}
+  noRespawn: 0
+  playerHealth: {fileID: 0}
+  critFocusAttack: 0
+  defaultSlotSprite: {fileID: 0}
+  frozenEffectInstance: {fileID: 0}
+  enemyRenderer: {fileID: 0}
+  originalColor: {r: 0, g: 0, b: 0, a: 0}
+  respawnTime: 0
+  isBurning: 0
+  audioSource: {fileID: 0}
+  arrowHitEnemySound: {fileID: 0}
 --- !u!114 &6402966706051617070
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1582,6 +1595,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 97e00af73c88e7d4f920b3cac4f468f1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  buffParent: {fileID: 0}
+  miniBuffPrefab: {fileID: 0}
   healthBar: {fileID: 8824584157563292018}
   monsterName: {fileID: 1167526172794252983}
   healthText: {fileID: 1380058844944573367}
@@ -1591,6 +1606,7 @@ MonoBehaviour:
   healthBarParent: {fileID: 5872271233531269900}
   playerCamera: {fileID: 0}
   healthBarOffset: {x: 0, y: 6, z: 0}
+  activeBuffIcons: []
 --- !u!65 &8639804243321742937
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -1606,7 +1622,7 @@ BoxCollider:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 1
+  m_IsTrigger: 0
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3

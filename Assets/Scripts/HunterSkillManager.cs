@@ -143,8 +143,8 @@ private void ApplySlowEffect(EnemyHealth targetEnemy)
     if (targetEnemy.enemyRenderer != null)
     {
         Debug.Log("Laitetaan vähän sinistä väriä");
-        Color frostColor = Color.Lerp(targetEnemy.originalColor, Color.blue, 0.5f); // 50% sinisemmäksi
-        targetEnemy.enemyRenderer.material.color = frostColor;
+        //Color frostColor = Color.Lerp(targetEnemy.originalColor, Color.blue, 0.5f); // 50% sinisemmäksi
+        //targetEnemy.enemyRenderer.material.color = frostColor;
         
     }
 
@@ -158,7 +158,7 @@ private void RemoveSlowEffect(EnemyHealth targetEnemy)
     targetEnemy.enemyAI.runSpeed = targetEnemy.enemyAI.orginalRunSpeed;
      if (targetEnemy.enemyRenderer != null)
         {
-            targetEnemy.enemyRenderer.material.color = targetEnemy.originalColor; // Palautetaan alkuperäinen väri
+            //targetEnemy.enemyRenderer.material.color = targetEnemy.originalColor; // Palautetaan alkuperäinen väri
         }
     if (targetEnemy.frozenEffectInstance != null)
     {
@@ -189,6 +189,7 @@ private void RemoveSlowEffect(EnemyHealth targetEnemy)
     private void ApplyStunEffect(EnemyHealth targetEnemy)
     {
         targetEnemy.isStunned = true;
+        targetEnemy.isInterrupted = true;
         targetEnemy.agent.isStopped = true;
         targetEnemy.animator.SetBool("isStunned", true);
         
@@ -198,6 +199,7 @@ private void RemoveSlowEffect(EnemyHealth targetEnemy)
     {
         Debug.Log("Removing stun");
         targetEnemy.isStunned = false;
+        targetEnemy.isInterrupted = false;
         targetEnemy.animator.SetBool("isStunned", false);
         targetEnemy.agent.isStopped = false;
     }
@@ -403,14 +405,15 @@ private void RemoveSlowEffect(EnemyHealth targetEnemy)
             trapComponent.OnTrapActivated += (EnemyHealth enemyHealth) =>
             {
                 Debug.Log("💀 Bear Trap aktivoitu! Vahinkoa ottaa: " + enemyHealth.monsterName);
-                GameObject boneCrusherTrapEffect = Resources.Load<GameObject>("Explosions/BearTrapEffect");
+                GameObject bearTrapEffect = Resources.Load<GameObject>("Explosions/BearTrapEffect");
 
                 // Vahinko viiveellä
                 StartCoroutine(playerAttack.DealDamageAfterDelaySkill(skill, playerAttack.IsCriticalHit(), enemyHealth));
 
-                if (boneCrusherTrapEffect != null)
+
+                if (bearTrapEffect != null)
                 {
-                    GameObject effectInstance = Instantiate(boneCrusherTrapEffect, trapObject.transform.position, Quaternion.identity);
+                    GameObject effectInstance = Instantiate(bearTrapEffect, trapObject.transform.position, Quaternion.identity);
                     Destroy(effectInstance, 5f);
                 }
                 else
@@ -491,16 +494,43 @@ private void RemoveSlowEffect(EnemyHealth targetEnemy)
     public IEnumerator RainOfArrows(Skill skill)
     {
         EnemyHealth firstTarget = playerAttack.targetedEnemy;
-        playerAttack.isAttacking = false; // nollataan castit että pelaaja voi liikkua
-        playerAttack.isCasting = false;
+        Animator animator = playerAttack.GetComponent<Animator>();
+        float originalSpeed = animator.speed; // Tallennetaan alkuperäinen nopeus
+        animator.speed = 1f; // Nostetaan nopeus
+
         if (firstTarget == null) yield break; // Varmistetaan, että kohde on olemassa
         
         int wave = 0;
         int maxWaves = 4;
+        int i = 0;
+        int a = 0;
         WaitForSeconds waitBetweenWaves = new WaitForSeconds(0.2f);
+        while (i < maxWaves)
+        {
+            while (a < maxWaves)
+            {
+                animator.SetTrigger("RapidShooting");
+                playerAttack.PlayShootSound();
+                a++;
+                
+                yield return new WaitForSeconds(0.1f);
+            }
+            animator.ResetTrigger("RapidShooting");
+            a = 0;
+            i++;
+            yield return new WaitForSeconds(0.2f);
+        }
+        animator.speed = originalSpeed; // Palautetaan alkuperäinen nopeus
+        playerAttack.isAttacking = false; // nollataan castit että pelaaja voi liikkua
+        playerAttack.isCasting = false;
+
+
+            
 
         while (wave < maxWaves)
         {  
+
+            
             SpawnArrowRainEffect(firstTarget.transform);
             yield return new WaitForSeconds(1f); // Odotetaan, että nuolet putoavat maahan
             
@@ -513,14 +543,16 @@ private void RemoveSlowEffect(EnemyHealth targetEnemy)
             {
                 if (enemy != null && !enemy.isDead) // Tarkistetaan, onko vihollinen vielä hengissä
                 {
+                            
+
                     yield return StartCoroutine(playerAttack.DealDamageAfterDelaySkill(skill, playerAttack.IsCriticalHit(), enemy));
                 }
             }
-
+ 
             wave++;
             yield return waitBetweenWaves; // Odota ennen seuraavaa aaltoa
         }
-
+        
         yield return null;
     }
 
@@ -655,11 +687,13 @@ public IEnumerator StunningArrow(Skill skill)
     
     public IEnumerator SharpShooter(Skill skill)
     {
+        AudioClip sharpShooterBlast = Resources.Load<AudioClip>("Sounds/SharpShooterHit");
         Animator animator = playerAttack.GetComponent<Animator>();
         animator.SetTrigger("RapidShooting");
        // playerAttack.animator.speed = 1f / skill.castTime;
         // Lataa tai aseta BullsEyeArrow-prefab
         GameObject sharpShooterArrowPrefab = Resources.Load<GameObject>("Projectiles/SharpShooterArrow");
+        GameObject explosionEffect = Resources.Load<GameObject>("Explosions/SharpShooterExplosion");
 
         if (sharpShooterArrowPrefab == null)
         {
@@ -673,8 +707,9 @@ public IEnumerator StunningArrow(Skill skill)
         // Odotetaan ShootArrows coroutinea ja palautetaan projektiili
 
         animator.ResetTrigger("RapidShooting");
-        yield return StartCoroutine(playerAttack.ShootArrows(playerAttack.targetedEnemy, sharpShooterArrowPrefab));
+        yield return StartCoroutine(playerAttack.ShootExplosiveArrows(playerAttack.targetedEnemy, sharpShooterArrowPrefab, skill, playerAttack.IsCriticalHit(), explosionEffect));
         // Vahingon käsittely
+        playerAttack.audioSource.PlayOneShot(sharpShooterBlast);
         yield return playerAttack.StartCoroutine(playerAttack.DealDamageAfterDelaySkill(skill, playerAttack.IsCriticalHit()));
     }
 
@@ -822,7 +857,7 @@ public IEnumerator BleedingStrike(Skill skill)
        
             Buff recoMasterBuff = new Buff(
                 recoveryMasterData.name,
-                recoveryMasterData.duration,
+                recoveryMasterData.duration * skill.skillLevel,
                 recoveryMasterData.isStackable,
                 recoveryMasterData.stacks,
                 recoveryMasterData.maxStacks,
@@ -844,7 +879,7 @@ public IEnumerator BleedingStrike(Skill skill)
        
             Buff windrunnerBuff = new Buff(
                 windrunnerBuffData.name,
-                windrunnerBuffData.duration,
+                windrunnerBuffData.duration * skill.skillLevel,
                 windrunnerBuffData.isStackable,
                 windrunnerBuffData.stacks,
                 windrunnerBuffData.maxStacks,
@@ -947,21 +982,56 @@ public IEnumerator BleedingStrike(Skill skill)
 public IEnumerator MeteorArrows(Skill skill)
 {
     GameObject explosiveArrowPrefab = Resources.Load<GameObject>("Projectiles/ExplosiveArrow");
+    GameObject explosiveArrowAoEPrefab = Resources.Load<GameObject>("Explosions/ExplosiveArrowAoE");
+    GameObject explosionEffect = Resources.Load<GameObject>("Explosions/Explosion2");
     if (playerAttack.targetedEnemy == null)
     {
         yield break;
     }
-        yield return StartCoroutine(playerAttack.ShootExplosiveArrows(playerAttack.targetedEnemy, explosiveArrowPrefab, skill, playerAttack.IsCriticalHit()));
+        yield return StartCoroutine(playerAttack.ShootMeteorArrowsFromAbove(playerAttack.targetedEnemy, explosiveArrowPrefab, skill, playerAttack.IsCriticalHit(), explosionEffect));
         yield return StartCoroutine(playerAttack.DealDamageAfterDelaySkill(skill, playerAttack.IsCriticalHit(),playerAttack.targetedEnemy));
-        yield return new WaitForSeconds(0.1f);
-    Collider[] hitColliders = Physics.OverlapSphere(playerAttack.targetedEnemy.transform.position, skill.damageRange);
+                if (explosiveArrowAoEPrefab != null)
+                    {
+                        yield return new WaitForSeconds(0.2f);
+                        Debug.Log("Aoe effect");
+                        GameObject explosiveAoE = Instantiate(explosiveArrowAoEPrefab, playerAttack.targetedEnemy.transform.position, Quaternion.identity);
+                        explosiveAoE.transform.SetParent(playerAttack.targetedEnemy.transform);
+                        Destroy(explosiveAoE, 2f); // Poistetaan efekti 3 sekunnin kuluttua
+                    }
+        yield return StartCoroutine(playerAttack.DealDamageAfterDelayAoe(skill, playerAttack.IsCriticalHit(), playerAttack.targetedEnemy));
+
+    Collider[] hitColliders = Physics.OverlapSphere(playerAttack.targetedEnemy.transform.position, skill.damageRange * 3);
     List<EnemyHealth> closestEnemies = TakeClosestEnemies(hitColliders, 3);
 
     foreach (EnemyHealth enemy in closestEnemies)
     {
-        yield return StartCoroutine(playerAttack.ShootExplosiveArrows(enemy, explosiveArrowPrefab, skill, playerAttack.IsCriticalHit()));
-        yield return StartCoroutine(playerAttack.DealDamageAfterDelaySkill(skill, playerAttack.IsCriticalHit(),enemy));
-        yield return new WaitForSeconds(0.3f);
+        
+            if (explosiveArrowAoEPrefab != null)
+                {
+                    yield return new WaitForSeconds(0.2f);
+                    Debug.Log("Aoe effect");
+                    GameObject explosiveAoE = Instantiate(explosiveArrowAoEPrefab, enemy.transform.position, Quaternion.identity);
+                    explosiveAoE.transform.SetParent(enemy.transform);
+                    Destroy(explosiveAoE, 2f); // Poistetaan efekti 3 sekunnin kuluttua
+                }
+
+            yield return StartCoroutine(playerAttack.ShootMeteorArrowsFromAbove(enemy, explosiveArrowPrefab, skill, playerAttack.IsCriticalHit(), explosionEffect));
+            yield return StartCoroutine(playerAttack.DealDamageAfterDelaySkill(skill, playerAttack.IsCriticalHit(),enemy));
+
+            Collider[] hitCollidersAoe = Physics.OverlapSphere(enemy.transform.position, skill.damageRange);
+            List<EnemyHealth> aoeEnemies = TakeAllEnemiesInRange(hitColliders);
+            yield return new WaitForSeconds(0.3f);
+
+            foreach (EnemyHealth enemyAoE in aoeEnemies)
+            {
+                if (enemyAoE != enemy)
+                {
+
+                    yield return StartCoroutine(playerAttack.DealDamageAfterDelayAoe(skill, playerAttack.IsCriticalHit(), enemyAoE));
+                    
+                }
+
+            }
     }
 }
 
@@ -1151,15 +1221,51 @@ public IEnumerator IceTrap(Skill skill)
             // Varmistetaan, että efekti löytyy
             if (iceTrapEffect != null)
             {
-                // Luodaan efekti vihollisen sijaintiin (ei trap-objektin sisään)
+                if (enemyHealth.hitPosition != null)
+                {
+                    // Määritetään efektin sijainti hitPositionista alaspäin
+                    Vector3 effectPosition = enemyHealth.hitPosition.position + Vector3.down * 3f; // voit säätää -2f sopivaksi
+
+                    // Luodaan efekti
+                    GameObject effectInstance = Instantiate(iceTrapEffect, effectPosition, Quaternion.identity);
+
+                    // Asetetaan lapseksi, jotta seuraa vihollista
+                    effectInstance.transform.SetParent(enemyHealth.transform);
+                    float scaleFactor = enemyHealth.transform.localScale.y;
+                    effectInstance.transform.localScale *= scaleFactor;
+                    ParticleSystem ps = effectInstance.GetComponentInChildren<ParticleSystem>();
+
+                    if (ps != null)
+                    {
+                        Debug.Log("PS LÖYTY!!!!");
+                        var emission = ps.emission;
+                        emission.rateOverTime = emission.rateOverTime.constant * scaleFactor;
+                        var main = ps.main;
+                        main.startSize = main.startSize.constant * scaleFactor;
+                        main.startSpeed = main.startSpeed.constant * scaleFactor;
+
+                    }
+
+
+                    // Skaalaa efektin vihollisen koon mukaan (jos haluat)
+
+
+                    Destroy(effectInstance, skill.skillLevel * 2);
+                }
+                else
+                {
                 GameObject effectInstance = Instantiate(iceTrapEffect, enemyHealth.transform.position, Quaternion.identity);
                 
                 // Asetetaan efekti vihollisen lapseksi, jotta se ei mene trapin mukana
                 effectInstance.transform.SetParent(enemyHealth.transform);
+                effectInstance.transform.localPosition = Vector3.zero;
 
                 // Efekti tuhotaan myöhemmin
                 Debug.Log("effect tuhotaan sec: " + skill.skillLevel * 2);
                 Destroy(effectInstance, (skill.skillLevel * 2)); 
+                }
+                // Luodaan efekti vihollisen sijaintiin (ei trap-objektin sisään)
+
             }
             else
             {
@@ -1176,6 +1282,7 @@ public IEnumerator IceTrap(Skill skill)
 
 public IEnumerator BonecrusherTrap(Skill skill)
 {
+
     playerAttack.isAttacking = false;  // nollaa hyökkäys
     GameObject trapObject = PlaceTrap(skill);
     Trap trapComponent = trapObject.GetComponent<Trap>();
@@ -1186,7 +1293,19 @@ public IEnumerator BonecrusherTrap(Skill skill)
         {
             Debug.Log("💀 Bonecrusher Trap aktivoitu! VAhinkoa ottaa : " + enemyHealth.monsterName);
             GameObject boneCrusherTrapEffect = Resources.Load<GameObject>("Explosions/BoneCrusherTrapEffect");
-            enemyHealth.TakeDamage(skill, playerAttack.IsCriticalHit());
+            //enemyHealth.TakeDamage(skill, playerAttack.IsCriticalHit());
+            StartCoroutine(playerAttack.DealDamageAfterDelaySkill(skill, playerAttack.IsCriticalHit(),enemyHealth));
+            Collider[] hitColliders = Physics.OverlapSphere(enemyHealth.transform.position, skill.damageRange);
+            List<EnemyHealth> enemiesInRange = TakeAllEnemiesInRange(hitColliders);
+
+            // Vahinko tulee vasta kun nuolet ovat maassa
+            foreach (EnemyHealth enemy in enemiesInRange)
+            {
+                if (enemy != null && !enemy.isDead && enemy != enemyHealth) // Tarkistetaan, onko vihollinen vielä hengissä
+                {
+                    StartCoroutine(playerAttack.DealDamageAfterDelayAoe(skill, playerAttack.IsCriticalHit(), enemy));
+                }
+            }
             if (boneCrusherTrapEffect != null)
             {
                 GameObject effectInstance = Instantiate(boneCrusherTrapEffect, trapObject.transform.position, Quaternion.identity);
@@ -1231,7 +1350,7 @@ private List<EnemyHealth> TakeClosestEnemies(Collider[] hitColliders, int maxCou
     foreach (Collider hitCollider in hitColliders)
     {
         EnemyHealth enemy = hitCollider.GetComponent<EnemyHealth>();
-        if (enemy != null && !enemy.isDead)
+        if (enemy != null && !enemy.isDead && enemy != playerAttack.targetedEnemy)
         {
             enemies.Add(enemy);
         }
@@ -1252,6 +1371,7 @@ private List<EnemyHealth> TakeAllEnemiesInRange(Collider[] hitColliders)
 
     foreach (Collider hitCollider in hitColliders)
     {
+        if (hitCollider == null) continue;
         EnemyHealth enemy = hitCollider.GetComponent<EnemyHealth>();
         if (enemy != null && !enemy.isDead)
         {

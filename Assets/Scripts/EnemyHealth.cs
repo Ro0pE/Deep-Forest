@@ -24,15 +24,17 @@ public enum Element
 
 public class EnemyHealth : MonoBehaviour
 {
+    public Transform hitPosition;
     public GameObject targetIndicator; // Viittaus kohteen merkkiin (punainen rinkula)
     public string monsterName = "";
     public int monsterLevel = 0;
+    public int attackDamage;
     public Element enemyElement;
     public Sprite[] elementSprites; // Elementteihin liittyvät spritekuvat (Fire, Water, Earth, jne.)
     public Dictionary<Element, float> damageModifiers = new Dictionary<Element, float>();
-    public int maxHealth = 100; // Maksimikestopisteet
+    public int maxHealth; // Maksimikestopisteet
     public int currentHealth; // Nykyiset kestopisteet
-    public int experiencePoints = 50; // Kokemuspisteet, jotka vihollinen antaa
+    public int experiencePoints; // Kokemuspisteet, jotka vihollinen antaa
     public bool isDead = false;
     public bool isInterrupted = false;
     public Animator animator;
@@ -79,6 +81,10 @@ public class EnemyHealth : MonoBehaviour
     public Color originalColor; // Tallennetaan alkuperäinen väri
     public float respawnTime;
     public bool isBurning;
+    public AudioSource audioSource;
+    public AudioClip arrowHitEnemySound;
+    public float baseRunSpeed;
+
 
     
 
@@ -86,8 +92,9 @@ public class EnemyHealth : MonoBehaviour
 
     public virtual void Start()
     {
+        
         enemyRenderer = GetComponentInChildren<Renderer>();
-
+        audioSource = gameObject.AddComponent<AudioSource>();
         playerMovement = FindObjectOfType<PlayerMovement>();
         inventoryUI = FindObjectOfType<InventoryUI>();
         agent = GetComponent<NavMeshAgent>();
@@ -98,6 +105,11 @@ public class EnemyHealth : MonoBehaviour
         playerInventory = FindObjectOfType<Inventory>();
         currentHealth = maxHealth;
         animator = GetComponent<Animator>();
+        if (animator == null)
+        {
+            Debug.Log("Animatori löytykin lapsesta");
+            animator = GetComponentInChildren<Animator>();
+        }
         itemDatabase = FindObjectOfType<ItemDatabase>();
         playerHealth = FindObjectOfType<PlayerHealth>();
         lootItems = new List<Item>(); // alustetaan lista aina, niin ei mee puurot ja vellit sekaste
@@ -108,7 +120,16 @@ public class EnemyHealth : MonoBehaviour
         lootWindow.SetActive(false);
         Button closeButton = lootWindow.transform.Find("CloseButton").GetComponent<Button>();
         targetIndicator.SetActive(false);
-        
+        if (audioSource == null)
+        {
+            Debug.LogError("AudioSource komponentti puuttuu pelaajalta!");
+        }
+        arrowHitEnemySound = Resources.Load<AudioClip>("Sounds/ArrowHitEnemy");
+
+        if (arrowHitEnemySound == null)
+        {
+            Debug.LogWarning("EnemyTakeHit-ääntä ei löytynyt Resources/Sounds-kansiosta!");
+        }
         if (closeButton != null)
         {
             closeButton.onClick.AddListener(HideLootWindow);
@@ -121,6 +142,7 @@ public class EnemyHealth : MonoBehaviour
         {
             originalColor = enemyRenderer.material.color; // Tallennetaan alkuperäinen väri
         }
+        baseRunSpeed = enemyAI.runSpeed;
     }
 
     public void Update()
@@ -153,7 +175,6 @@ public class EnemyHealth : MonoBehaviour
     }
 
 
-
     private void ShowLootWindow()
     {
       /*  if (lootWindow == null || lootBackground == null || lootButtons == null || lootButtons.Count == 0)
@@ -184,11 +205,24 @@ public class EnemyHealth : MonoBehaviour
 
                 // Asetetaan painikkeen kuva esineen spriten mukaiseksi
                 Image buttonImage = lootButtons[i].GetComponent<Image>();
+                TextMeshProUGUI lootQuantity = lootButtons[i].transform.Find("Quantity")?.GetComponentInChildren<TextMeshProUGUI>();
                 if (buttonImage != null && droppedItems[i].icon != null)
                 {
                     Debug.Log("Dropped item" + droppedItems[i].itemName);
                     Item tempItem = itemDatabase.GetItemByName(droppedItems[i].itemName);
                     buttonImage.sprite = tempItem.icon;
+                    if (droppedItems[i].quantity <= 1)
+                    {
+                    lootQuantity.text = "";
+                    }
+                    else
+                    {
+                    
+                    lootQuantity.text = droppedItems[i].quantity.ToString();
+                    }
+
+                    
+
                 }
                 else
                 {
@@ -359,10 +393,20 @@ private void CollectItem(int index)
         }
 
     }
-
+    private IEnumerator StopAgentTemporarily(float duration)
+    {
+        
+        enemyAI.runSpeed = 0;
+        Debug.Log("Osuma, agentti stopille!");
+        yield return new WaitForSeconds(duration);
+        enemyAI.runSpeed = baseRunSpeed;
+    }
     public virtual void TakeDamage(Skill skill, bool isCrit)
     {
+        audioSource.PlayOneShot(arrowHitEnemySound);
+
         enemyAI.detectionRange = 70;
+ 
 
         float modifier = ElementDamageMatrix.GetDamageModifier(skill.element, enemyElement);
         float randomVariance = Random.Range(0.95f, 1.05f);
@@ -403,6 +447,7 @@ private void CollectItem(int index)
             Debug.Log("Immune, cant interrup");
         }
         animator.SetTrigger("takeDamage");
+
         Buff lifeLeechBuff = playerAttack.buffManager.activeBuffs.Find(b => b.name == "LifeLeech");
         Debug.Log("LifeLeech activoitu ");
         if (lifeLeechBuff != null)
@@ -442,7 +487,7 @@ private void CollectItem(int index)
 
             animator.SetBool("isWalking", false);
             animator.SetBool("isRunning", false);
-            
+            animator.SetTrigger("isDead");
             agent.isStopped = true;
             playerAttack.StopMeleeAttack();
             currentHealth = 0;
@@ -548,6 +593,8 @@ private void CollectItem(int index)
     }
     public void TakeDamageMelee(float damage, bool isCrit, Element element)
     {
+        
+
         float modifier = ElementDamageMatrix.GetDamageModifier(element, enemyElement);
         Debug.Log("MODIFIER " + modifier + " ELEMENT: " + element + "Enemy ELEMENT " + enemyElement);
         EnemyHealthBar enemyHealthBar = GetComponentInChildren<EnemyHealthBar>();
@@ -567,6 +614,7 @@ private void CollectItem(int index)
         {
             Debug.Log("IS CRIT");
             // Tarkistetaan, onko skilli opittu
+            Skill criticalFocusSkill = playerStats.hunterSkillTree.GetFilteredSkillByName("Critical Focus");
             if (playerStats.hunterSkillTree != null && playerStats.hunterSkillTree.IsSkillLearned("Critical Focus"))
             {
                 Buff criticalFocusData = playerAttack.buffDatabase.GetBuffByName("CriticalFocus");
@@ -576,7 +624,7 @@ private void CollectItem(int index)
                 {
                     Buff criticalFocus = new Buff(
                         criticalFocusData.name,
-                        criticalFocusData.duration,
+                        criticalFocusData.duration * criticalFocusSkill.skillLevel,
                         criticalFocusData.isStackable,
                         criticalFocusData.stacks,
                         criticalFocusData.maxStacks,
@@ -605,7 +653,9 @@ private void CollectItem(int index)
 
             
             isMiss = false;
+            audioSource.PlayOneShot(arrowHitEnemySound);
             animator.SetTrigger("takeDamage");
+            StartCoroutine(StopAgentTemporarily(0.4f));
             Buff lifeLeechBuff = playerAttack.buffManager.activeBuffs.Find(b => b.name == "LifeLeech");
         
             if (lifeLeechBuff != null)
@@ -709,28 +759,28 @@ private void CollectItem(int index)
 
     public virtual IEnumerator DeathDelay()
     {
-        Debug.Log("kutsutaan deahtdelay mobilta : " + this.monsterName);
+        Debug.Log("kutsutaan deathdelay mobilta : " + this.monsterName);
         
         animator.SetTrigger("isDead");
         agent.isStopped = true;
         HideHealthBar();
         UpdateQuestProgress();
-        yield return new WaitForSeconds(2f);
-        DropLoot();
-        yield return new WaitForSeconds(respawnTime-3f);
+        
+        yield return new WaitForSeconds(2f);  // Animaation kesto
+        
+        DropLoot();  // Esineet putoavat
+        
+        // Laskeutumisprosessi
         if (lootWindow != null)
         {
-        lootWindow.SetActive(false);
+            lootWindow.SetActive(false);
         }
 
-        yield return new WaitForSeconds(respawnTime);
-        Die();
-
-        // Pudota loot kuoleman viiveen jälkeen
-
-        
-
+        yield return new WaitForSeconds(respawnTime);  // Odotetaan respawn-aikaa
+        Die();  // Kuolee
     }
+
+
     public void CalculateDroppedLoot()
     {
         if (noRespawn) return;

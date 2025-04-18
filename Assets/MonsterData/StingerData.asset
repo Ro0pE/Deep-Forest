@@ -1,0 +1,34 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d9da3110cd8b0874cb5d33bac446840d, type: 3}
+  m_Name: StingerData
+  m_EditorClassIdentifier: 
+  monsterName: Stinger
+  minLevel: 12
+  maxLevel: 16
+  baseAtk: 4
+  prefabPath: Stinger
+  enemySprite: {fileID: 0}
+  enemyElement: 2
+  baseHealth: 18
+  experiencePoints: 35
+  damageModifiersList: []
+  lootItems:
+  - itemName: Major Healing Potion
+    dropChance: 855
+    itemType: Potion
+    quantity: 4
+  - itemName: Major Restoration Potion
+    dropChance: 855
+    itemType: Potion
+    quantity: 12
+  killQuestName: 

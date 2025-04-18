@@ -173,7 +173,7 @@ public class PlayerHealth : MonoBehaviour
         animator.SetTrigger("isHit");
         PlayGetHitSound();
         Buff huntersResilienceBuff = buffManager.activeBuffs.Find(b => b.name == "HuntersResilience");
-        Debug.Log("Damagea tulee " + takeDamageAmount);
+
         if (huntersResilienceBuff != null)
         {
             // Jos HuntersResilience buffi on aktiivinen, tee tietty toiminto (esimerkiksi puolita vahinko)

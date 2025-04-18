@@ -16,14 +16,16 @@ public class ExplosiveProjectile : MonoBehaviour
     private bool isExplosive = false;  // Onko nuoli räjähtävä?
     private Skill skill;  // Skill, joka aiheuttaa vahingon
     private bool isCrit; // Onko kriittinen isku?
+    private GameObject hitEffect;
 
     // Alusta nuoli ja määritä, onko se räjähtävä
-    public void Initialize(Transform targetTransform, Skill skillData, bool explosive = false, bool critical = false)
+    public void Initialize(Transform targetTransform, Skill skillData, bool explosive = false, bool critical = false, GameObject effectPrefab = null)
     {
         target = targetTransform;
         skill = skillData;
         isExplosive = explosive;
         isCrit = critical;
+        hitEffect = effectPrefab;  // Talletetaan efekti
     }
 
     void Start()
@@ -39,11 +41,11 @@ public class ExplosiveProjectile : MonoBehaviour
             targetPosition.y += 1.5f; // Pieni korotus, jotta osuu kohteen yläpuolelle
 
             // Tarkistetaan, onko nuoli tarpeeksi lähellä kohdetta
-            if (Vector3.Distance(transform.position, targetPosition) <= 1.5f)
+            if (Vector3.Distance(transform.position, targetPosition) <= 6.5f)
             {
                 Debug.Log("Update räjähys");
                 Explode(); // Käynnistetään räjähdys
-                Destroy(gameObject);
+                
                 return;
             }
 
@@ -69,66 +71,46 @@ public class ExplosiveProjectile : MonoBehaviour
     
 
     // Räjähtävän nuolen AOE-vahinko
-        void Explode()
+        private void Explode()
         {
-            Debug.Log("Nuoli räjähti!");
 
-            // Haetaan kaikki viholliset räjähdyksen alueelta
-            Collider[] hitColliders = Physics.OverlapSphere(transform.position, explosionRadius);
-            foreach (Collider hitCollider in hitColliders)
-            {
-                EnemyHealth enemy = hitCollider.GetComponent<EnemyHealth>();
-                if (enemy != null && !enemy.isDead)
-                {
-                    // Välitetään vahinko räjähtävälle alueelle (esim. 20 % vahingosta)
-                    Skill explosiveSkill = skill.Clone(); // Tee kopio alkuperäisestä skillistä
-                    explosiveSkill.baseDamage = Mathf.RoundToInt(skill.baseDamage * 0.2f);
-                    Debug.Log("Explosive damagea tulossa : " + explosiveSkill.baseDamage);
-                    enemy.TakeDamage(explosiveSkill, isCrit);
-                }
-            }
 
-            // Lisää viive räjähdyksen jälkeen
+            //Destroy(gameObject); // Poistetaan projektiili
             StartCoroutine(ExplosiveDelay());
         }
 
-        IEnumerator ExplosiveDelay()
+    IEnumerator ExplosiveDelay()
+    {
+        Debug.Log("EXPLOSION DELAY!!");
+
+        // Viivästys ennen räjähdyksen jälkeisiä toimintoja
+        yield return new WaitForSeconds(0.05f); // 0.1 sekunnin viive ennen räjähdystä
+
+        // Ladataan räjähdysanimaatio (tässä voidaan käyttää parametrina saatua prefabia)
+        if (hitEffect != null)
         {
-            Debug.Log("EXPLOSION DELAY!!");
-
-            // Viivästys ennen räjähdyksen jälkeisiä toimintoja
+            Debug.Log("Mitä helve");
+            Debug.Log("RÄjähdyksen nimi :  " + hitEffect);
+            GameObject explosionInstance = Instantiate(hitEffect, target.position, Quaternion.identity);
+            explosionInstance.transform.SetParent(target);
             
 
-            // Ladataan räjähdysanimaatio
-            GameObject explosionEffect = Resources.Load<GameObject>("Explosions/Explosion2");
-            Debug.Log("Tässä toimii ?");
-            if (explosionEffect != null)
+            if (explosionInstance != null)
             {
-                Debug.Log("Explosion prefab löytyi!");
-
-                // Instansioidaan räjähdysanimaatio
-                GameObject explosionInstance = Instantiate(explosionEffect, target.position, Quaternion.identity);
-                explosionInstance.transform.SetParent(target);
-
-                // Varmistetaan, että instansiointi on onnistunut
-                if (explosionInstance != null)
-                {
-                    Debug.Log("Räjähdysanimaatio aloitettu!");
-                    Destroy(explosionInstance, 1.4f); // Räjähdysinstanssi tuhotaan 5 sekunnin kuluttua
-                }
-                else
-                {
-                    Debug.Log("Räjähdysanimaatio ei onnistunut instansioimaan!");
-                }
+                Destroy(explosionInstance, 1.3f); // Räjähdysinstanssi poistetaan 1.3 sekunnin kuluttua
             }
-            
             else
             {
-                Debug.Log("Explosion prefabia ei löytynyt!");
+                Debug.Log("Räjähdysanimaatio ei onnistunut instansioimaan!");
             }
-            Debug.Log("Toimiiko lopussa");
-            yield return new WaitForSeconds(0.1f); // 0.3 sekunnin viive
         }
+        else
+        {
+            Debug.Log("Explosion prefabia ei löytynyt!");
+        }
+        Debug.Log("Metodi loppu");
+        Destroy(gameObject);
+    }
     
 
 }

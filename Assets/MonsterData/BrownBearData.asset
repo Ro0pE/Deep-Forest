@@ -13,13 +13,14 @@ MonoBehaviour:
   m_Name: BrownBearData
   m_EditorClassIdentifier: 
   monsterName: Brown Bear
-  minLevel: 3
-  maxLevel: 5
+  minLevel: 2
+  maxLevel: 8
+  baseAtk: 3
   prefabPath: BrownBear
   enemySprite: {fileID: 21300000, guid: 6054318fc678eef4e97655493b73c580, type: 3}
   enemyElement: 2
-  baseHealth: 15
-  experiencePoints: 25
+  baseHealth: 25
+  experiencePoints: 15
   damageModifiersList:
   - element: 0
     modifier: 1.5
@@ -29,10 +30,13 @@ MonoBehaviour:
   - itemName: Minor Healing Potion
     dropChance: 666
     itemType: Potion
+    quantity: 2
   - itemName: Minor Mana Potion
     dropChance: 666
     itemType: Potion
+    quantity: 4
   - itemName: Bow
     dropChance: 155
     itemType: Equipment
+    quantity: 1
   killQuestName: 

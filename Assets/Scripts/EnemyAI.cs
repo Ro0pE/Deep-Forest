@@ -13,7 +13,6 @@ public class EnemyAI : MonoBehaviour
     public float wanderInterval = 2f; // Vaeltamisen aikaväli
     public LayerMask playerLayer; // Pelaajan kerros
     public LayerMask groundLayer; // Maatason tarkistuskerros
-    public float attackDamage = 5f; // Hyökkäysvoima
     public float groundCheckDistance = 1.5f; // Maan tarkistuksen etäisyys
     public float attackCooldown = 1.5f; // Hyökkäysväli
     public float walkSpeed = 7f; // Oletusnopeus vaeltamiseen
@@ -32,7 +31,9 @@ public class EnemyAI : MonoBehaviour
     public float distanceToPlayer; 
     public bool isChasingPlayer = false;
     public bool isWandering = false;
-    
+    private Coroutine attackCoroutine;
+    public bool isOnCooldown = false;
+    public bool isCasting = false;
 
     public void Start()
     {
@@ -41,6 +42,11 @@ public class EnemyAI : MonoBehaviour
         playerHealth = player.GetComponent<PlayerHealth>();
         enemyHealth = GetComponent<EnemyHealth>();
         animator = GetComponent<Animator>();
+        if (animator == null)
+        {
+            Debug.Log("Animatori löytykin lapsesta");
+            animator = GetComponentInChildren<Animator>();
+        }
         wanderTimer = wanderInterval;
         isAttacking = false; // Vihollinen ei hyökkää alussa
 
@@ -48,33 +54,29 @@ public class EnemyAI : MonoBehaviour
 
     public void Update()
     {
-        if (enemyHealth.isStunned)
-        {
+        distanceToPlayer = Vector3.Distance(transform.position, playerHealth.transform.position);
+
+        if (enemyHealth.isStunned || enemyHealth.isDead || isCasting)
             return;
-        }
-       
+
         distanceToPlayer = Vector3.Distance(player.position, transform.position);
 
-        if (distanceToPlayer <= attackRange && !isAttacking)
+        if (distanceToPlayer <= attackRange)
         {
-            StartCoroutine(DelayedAttack());
+            StartAttacking();
         }
         else if (distanceToPlayer <= detectionRange)
         {
-            if (enemyHealth.isDead != true)
-            {
-
-                    ChasePlayer(distanceToPlayer);
-                
-                
-            }
-            
+            ChasePlayer(distanceToPlayer);
+            StopAttacking(); // Varmista ettei hyökkäys jatku, jos pelaaja poistui hyökkäysetäisyydeltä
         }
         else
         {
+            StopAttacking(); // Pelaaja liian kaukana
             Wander();
         }
     }
+
 
     private void UpdatePositionToGround()
     {
@@ -89,27 +91,45 @@ public class EnemyAI : MonoBehaviour
         }
     }
 
-public virtual IEnumerator DelayedAttack()
-{
-    Vector3 directionToPlayer = (player.position - transform.position).normalized;
-    Quaternion targetRotation = Quaternion.LookRotation(directionToPlayer);
-    transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * 25f); // Aseta kääntymisnopeus tarvittaessa
-    animator.SetBool("isAttacking", true);
-    animator.SetBool("isWalking", false);
-    animator.SetBool("isRunning", false);
-    isAttacking = true; // Aseta hyökkäystila true
-    
-    AttackPlayer();
-    yield return new WaitForSeconds(attackCooldown); // Voit vähentää tai poistaa tämän testataksesi
-   
+    public virtual void StartAttacking()
+    {
+ 
+      
+        if (!isOnCooldown)
+        {
+            attackCoroutine = StartCoroutine(AttackLoop());
+          
+        }
+    }
+    private IEnumerator CooldownRoutine()
+    {
+        isOnCooldown = true;
+        yield return new WaitForSeconds(attackCooldown);
+        isOnCooldown = false;
+    }
 
-    isAttacking = false; // Palauta hyökkäystila false
-    animator.SetBool("isAttacking", false);
-}
+
+    public virtual void StopAttacking()
+    {
+        if (attackCoroutine != null)
+        {
+            StopCoroutine(attackCoroutine);
+            attackCoroutine = null;
+        }
+
+        isAttacking = false;
+        agent.isStopped = false;
+        animator.ResetTrigger("isAttacking");
+        animator.SetBool("isAttacking", false);
+    }
+
 
     public virtual void AttackPlayer()
     {
-
+        Debug.Log("Attack");
+        animator.SetTrigger("isAttacking");
+        isAttacking = true;
+        isOnCooldown = true;
 
         float distanceToPlayer = Vector3.Distance(player.position, transform.position);
         
@@ -134,64 +154,73 @@ public virtual IEnumerator DelayedAttack()
                     }
                     else
                     {
-                        playerHealth.TakeDamage((attackDamage));
+                        playerHealth.TakeDamage((enemyHealth.attackDamage));
                     }
                 }
             }
         }
+
          
     }
-
-public virtual void ChasePlayer(float distanceToPlayer)
-{
-    if (player == null) return;
-
-    isWandering = false;
-    isChasingPlayer = true;
-    detectionRange = 70;
-    agent.speed = runSpeed;
-    animator.SetBool("isRunning", true);
-
-    // Päivitä reitti säännöllisesti, ei vain kun path on "stale"
-    agent.SetDestination(player.position);
-
-    // Hyökkäyslogiikka
-    if (distanceToPlayer <= attackRange)
+    public virtual IEnumerator AttackLoop()
     {
-        if (!isAttacking)
-        {
-            animator.SetBool("isRunning", false);
-            agent.isStopped = true;  // Pysäytä agentti siistimmin
-            StartCoroutine(DelayedAttack());
-        }
-    }
-    // Jatka pelaajan seuraamista
-    else if (distanceToPlayer <= detectionRange)
-    {
-        // Pidä agentti liikkeellä
-        agent.isStopped = false;
-        agent.SetDestination(player.position);
-    }
-    else
-    {
-        // Pelaaja liian kaukana
-        if (agent.hasPath)
-        {
-            agent.ResetPath();
-        }
+        if (isOnCooldown) yield break;
+
+        isAttacking = true;
+        isOnCooldown = true;
+
+        animator.SetBool("isAttacking", true);
         animator.SetBool("isRunning", false);
-        isChasingPlayer = false;
+        animator.SetBool("isWalking", false);
+        agent.isStopped = true;
+
+        Vector3 directionToPlayer = (player.position - transform.position).normalized;
+        Quaternion targetRotation = Quaternion.LookRotation(directionToPlayer);
+        transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * 25f);
+
+        AttackPlayer(); // tehdään hyökkäys heti
+
+        // Käynnistä cooldown
+        StartCoroutine(CooldownRoutine());
+
+        yield return new WaitForSeconds(0.1f); // pieni odotus että ei spämmiä
+
+        isAttacking = false;
+        attackCoroutine = null;
     }
-}
 
 
 
 
+    public virtual void ChasePlayer(float distanceToPlayer)
+    {
+        //Debug.Log("Chasing");
+        if (player == null) return;
+
+        isWandering = false;
+        isChasingPlayer = true;
+        detectionRange = 70;
+        agent.speed = runSpeed;
+
+        animator.SetBool("isRunning", true);
+
+        // Jatka seuraamista
+        if (!agent.isStopped)
+        {
+            agent.SetDestination(player.position);
+        }
+        else
+        {
+            Debug.Log("agent is stopped, not chasing");
+        }
+            
+    }
 
 
 
     public virtual void Wander()
     {
+        //Debug.Log("Wandering");
         if (enemyHealth.isDead)
         {
             //Debug.Log("Cant wander while dead");

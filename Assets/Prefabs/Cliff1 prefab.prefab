@@ -8,6 +8,18 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 2726711363118641294, guid: 1415c8add87f433ea83c1f733d1671f3, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 3330217832464386657, guid: 1415c8add87f433ea83c1f733d1671f3, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 4132228187210201206, guid: 1415c8add87f433ea83c1f733d1671f3, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
     - target: {fileID: 5901609915621537468, guid: 1415c8add87f433ea83c1f733d1671f3, type: 3}
       propertyPath: m_LocalPosition.x
       value: 43.833717
@@ -51,6 +63,10 @@ PrefabInstance:
     - target: {fileID: 6533995593411013638, guid: 1415c8add87f433ea83c1f733d1671f3, type: 3}
       propertyPath: m_Name
       value: Cliff1 prefab
+      objectReference: {fileID: 0}
+    - target: {fileID: 6533995593411013638, guid: 1415c8add87f433ea83c1f733d1671f3, type: 3}
+      propertyPath: m_Layer
+      value: 7
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

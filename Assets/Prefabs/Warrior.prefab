@@ -278,7 +278,9 @@ MonoBehaviour:
   targetedEnemy: {fileID: 0}
   targetingRange: 80
   attackRange: 15
-  rangedAttackRange: 40
+  weaponRange: 0
+  buffRange: 0
+  baseRange: 5
   castingRange: 50
   critMultiplier: 2
   autoaAttackElement: 8
@@ -328,6 +330,7 @@ MonoBehaviour:
   defence: 0
   dodgeChance: 0
   takeDamageAmount: 0
+  buffManager: {fileID: 0}
   playerHealthBar: {fileID: 0}
   spawnPoint: {fileID: 0}
   audioSource: {fileID: 0}
@@ -16107,7 +16110,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 6, y: 21}
+  m_AnchoredPosition: {x: 6, y: 32.4}
   m_SizeDelta: {x: 200, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &1228925501699687863
@@ -16165,8 +16168,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 28
-  m_fontSizeBase: 28
+  m_fontSize: 32
+  m_fontSizeBase: 32
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18

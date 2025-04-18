@@ -177,11 +177,33 @@ public IEnumerator RemoveBuffUI(Buff buff, EnemyHealthBarBuff buffUIComponent)
             // Korostetaan kriittistä vielä kirkkaammalla sävyllä (valinnainen)
         if (isCritical)
         {
-            //newTextElement.text = $"{amount}"; 
-            newTextElement.color = new Color(1f, 0.2f, 0.6f); // Pinkki (RGB: 255, 51, 153)
-            newTextElement.fontSize = 55f;
+            newTextElement.color = new Color(1f, 0.92f, 0.016f); // Kirkas kulta/keltainen
+
+            // Kasvata fonttikokoa isommaksi
+            if (newTextElement.fontSize < 30f)
+            {
+                newTextElement.fontSize = 30f;
+            }
+            else
+            {
+                newTextElement.fontSize += 3f;
+            }
+
             newTextElement.fontStyle = FontStyles.Bold;
+
+            // Voimakkaampi musta outline
+            newTextElement.outlineColor = Color.black;
+            newTextElement.outlineWidth = 0.5f; // was 0.3f
+
+            // Terävämpi ja näkyvämpi varjo (Underlay)
+            newTextElement.fontMaterial = new Material(newTextElement.fontSharedMaterial);
+            newTextElement.fontMaterial.EnableKeyword("UNDERLAY_ON");
+            newTextElement.fontMaterial.SetColor("_UnderlayColor", Color.black);
+            newTextElement.fontMaterial.SetFloat("_UnderlaySoftness", 0.2f); // vähemmän blur
+            newTextElement.fontMaterial.SetFloat("_UnderlayOffsetX", 0.3f);
+            newTextElement.fontMaterial.SetFloat("_UnderlayOffsetY", -0.3f);
         }
+
         }
 
         StartCoroutine(MoveTextUp(newTextElement));
@@ -213,13 +235,13 @@ public IEnumerator RemoveBuffUI(Buff buff, EnemyHealthBarBuff buffUIComponent)
             Vector3 originalPosition = textElement.rectTransform.position;
 
             // Määritä offset arvot
-            float horizontalOffset = isNextRight ? 2f : -2f; // Siirtymä oikealle tai vasemmalle
-            float verticalOffset = 0f; // Siirtymä ylöspäin
+            float horizontalOffset = isNextRight ? 1f : -1f; // Siirtymä oikealle tai vasemmalle
+            float verticalOffset = 1f; // Siirtymä ylöspäin
             Vector3 targetPosition = originalPosition + new Vector3(horizontalOffset, verticalOffset, 0);
             isNextRight = !isNextRight;
 
             float elapsedTime = 0;
-            float duration = 0.2f; // Kesto, kuinka nopeasti teksti liikkuu
+            float duration = 0.1f; // Kesto, kuinka nopeasti teksti liikkuu
 
             while (elapsedTime < duration)
             {

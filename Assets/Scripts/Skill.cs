@@ -35,6 +35,8 @@ public class Skill
     public Sprite skillIcon;
     public float baseDamage; // Perusvahinko tason 1 tasolla
     public float damagePerLevel; // Kuinka paljon vahinko kasvaa per taso
+    public float aoeDamage;
+    public float aoeDamagePerLevel;
     public int baseHeal;
     public float healPerLevel;
     public float cooldown;
@@ -127,6 +129,26 @@ public class Skill
             
         }
     }
+    public int aoeDmg
+    {
+        get
+        {
+            if (skillType == SkillType.Melee || skillType == SkillType.Ranged)
+            {
+               
+                return Mathf.RoundToInt((aoeDamage + (aoeDamagePerLevel * (skillLevel - 1))) * playerStats.totalWeaponDamage);
+            }
+            else if (skillType == SkillType.Spell)
+            {
+                return Mathf.RoundToInt((aoeDamage + (aoeDamagePerLevel * (skillLevel - 1))) * playerStats.magickAttack);
+            }
+            else
+            {
+                return Mathf.RoundToInt(aoeDamage + (aoeDamagePerLevel * (skillLevel - 1)));
+            }
+        }
+    }
+
 
     public int heal 
     {

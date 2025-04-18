@@ -1,76 +1,71 @@
 using UnityEngine;
 
+public enum ShooterType
+{
+    Player,
+    Enemy
+}
 public class Projectile : MonoBehaviour
 {
-    public float speed = 10f; // Projektiilin nopeus
-    public float lifetime = 1f; // Aika, jonka jälkeen projektiili tuhoutuu
+    public float speed = 10f;
+    public float lifetime = 3f;
+    private Transform target;
+    public ShooterType shooterType;
+    public int damage = 10;
+    private Transform targetHitPoint;
 
-    private Transform target; // Vihollinen, johon projektiili lentää
 
-    public void Initialize(Transform targetTransform)
+    public void Initialize(Transform hitPointTransform, ShooterType shooter)
     {
-        target = targetTransform; // Aseta kohde
+        targetHitPoint = hitPointTransform;
+        shooterType = shooter;
     }
 
     void Start()
     {
-        Destroy(gameObject, lifetime); // Tuhotaan projektiili automaattisesti tietyn ajan kuluttua
+        Destroy(gameObject, lifetime);
     }
+
     void Update()
     {
-        if (target != null)
+        if (targetHitPoint == null)
         {
-            // Lisätään korkeuden offset kohteeseen
-            Vector3 targetPosition = target.position;
-            targetPosition.y += 1.5f; // Lisää 1.5 yksikköä korkeutta, jotta projektiili osuu ylemmäs
-
-            // Tarkista, onko projektiili tarpeeksi lähellä kohdetta
-            if (Vector3.Distance(transform.position, targetPosition) <= 1.5f) // Säätöetäisyys 1.5
-            {
-                //Debug.Log("Projektiili osui kohteeseen!");
-                //Invoke("DestroyProjectile", 0.3f); // Tuhotaan 0.3 sekunnin kuluttua
-                Destroy(gameObject); // Tuhotaan, jos kohde katoaa
-                return;
-            }
-
-            // Liikuta projektiilia kohti kohteen korotettua sijaintia
-            transform.position = Vector3.MoveTowards(transform.position, targetPosition, speed * Time.deltaTime);
-
-            // Käännä projektiili kohti kohdetta
-            transform.LookAt(targetPosition);
+            Destroy(gameObject);
+            return;
         }
-        else
+
+        Vector3 targetPosition = targetHitPoint.position;
+
+        if (Vector3.Distance(transform.position, targetPosition) <= 0.1f)
         {
-            Destroy(gameObject); // Tuhotaan, jos kohde katoaa
+            Destroy(gameObject);
+            return;
         }
+
+        transform.position = Vector3.MoveTowards(transform.position, targetPosition, speed * Time.deltaTime);
+        transform.LookAt(targetPosition);
     }
-
-    // Metodi projektiilin tuhoamiseen
-    void DestroyProjectile()
-    {
-        Destroy(gameObject); // Tuhotaan projektiili
-    }
-
-
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("Enemy")) // Varmistetaan, että osutaan viholliseen
+        /*if (shooterType == ShooterType.Player && other.CompareTag("Enemy"))
         {
-            Debug.Log("Projektiili osui viholliseen!s");
-            Destroy(gameObject); // Tuhotaan projektiili
-            // Lisätoiminnallisuus: Viholliselle vahinkoa
             EnemyHealth enemyHealth = other.GetComponent<EnemyHealth>();
             if (enemyHealth != null)
             {
-                Debug.Log("osuma!");
-               //enemyHealth.TakeDamage(10); // Esimerkkiarvo vahingolle
+                enemyHealth.TakeDamage(damage);
             }
+            Destroy(gameObject); 
         }
-        else if (other.CompareTag("Player"))
+        else*/ if (shooterType == ShooterType.Enemy && other.CompareTag("Player"))
         {
-            Destroy(gameObject); // Tuhotaan, jos kohde katoaa
-            Debug.Log("pelaajaan osu");
+            PlayerHealth playerHealth = other.GetComponent<PlayerHealth>();
+            if (playerHealth != null)
+            {
+                Debug.Log("Osuu pelaajaan " + damage);
+                //playerHealth.TakeDamage(damage);
+            }
+            //Destroy(gameObject);
         }
     }
 }

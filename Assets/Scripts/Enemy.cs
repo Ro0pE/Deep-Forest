@@ -18,6 +18,9 @@ public class Enemy : EnemyHealth
         enemySprite = monsterData.enemySprite;
         enemyElement = monsterData.enemyElement;
         enemySprite = monsterData.enemySprite;
+        experiencePoints = monsterLevel * monsterData.experiencePoints;
+        maxHealth = monsterLevel * monsterData.baseHealth;
+        attackDamage = monsterLevel * monsterData.baseAtk;
 
 
         // Damage modifierit: Vahvuudet ja heikkoudet
@@ -75,6 +78,7 @@ public class Enemy : EnemyHealth
                     var newItem = Instantiate(item);  // Luo uusi instanssi
                     // Asetetaan lootData:sta otettu dropChance
                     newItem.dropChance = lootData.dropChance;
+                    newItem.quantity = lootData.quantity;
                     lootItems.Add(newItem);  // Lisää uusi instanssi loot-listaan
                     
                 }

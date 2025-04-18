@@ -318,7 +318,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_Sprite: {fileID: 10901, guid: 0000000000000000f000000000000000, type: 0}
-  m_Color: {r: 1, g: 0, b: 0, a: 1}
+  m_Color: {r: 0.16313633, g: 0.735849, b: 0.181016, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -360,7 +360,7 @@ Transform:
   m_GameObject: {fileID: 2088830110313442901}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0.7933534, z: -0, w: -0.60876137}
-  m_LocalPosition: {x: -776.65, y: 13.81, z: 758.65}
+  m_LocalPosition: {x: -776.65, y: 22.9, z: 758.65}
   m_LocalScale: {x: 1.5, y: 1.5, z: 1.5}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -404,12 +404,12 @@ BoxCollider:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 1
+  m_IsTrigger: 0
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 3.7252955, y: 5.4694605, z: 4.2119217}
-  m_Center: {x: -0.03128767, y: 2.348701, z: 0.13042855}
+  m_Size: {x: 3.7252958, y: 4.2712073, z: 4.2119217}
+  m_Center: {x: -0.031287666, y: 2.9478278, z: 0.13042848}
 --- !u!195 &336884569788884894
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -429,7 +429,7 @@ NavMeshAgent:
   m_AutoBraking: 0
   m_AutoRepath: 1
   m_Height: 4
-  m_BaseOffset: 0.1
+  m_BaseOffset: -0.3
   m_WalkableMask: 1
   m_ObstacleAvoidanceType: 4
 --- !u!114 &2033687967259112024
@@ -454,7 +454,7 @@ MonoBehaviour:
   combatText: {fileID: 7282429093549118899}
   healthBarParent: {fileID: 1481589494134815501}
   playerCamera: {fileID: 0}
-  healthBarOffset: {x: 0, y: 15, z: 0}
+  healthBarOffset: {x: 0, y: 17, z: 0}
   activeBuffIcons: []
 --- !u!114 &787079828974513531
 MonoBehaviour:
@@ -478,7 +478,6 @@ MonoBehaviour:
   groundLayer:
     serializedVersion: 2
     m_Bits: 128
-  attackDamage: 3
   groundCheckDistance: 1.5
   attackCooldown: 1.5
   walkSpeed: 5
@@ -496,6 +495,8 @@ MonoBehaviour:
   distanceToPlayer: 0
   isChasingPlayer: 0
   isWandering: 0
+  isOnCooldown: 0
+  isCasting: 0
 --- !u!114 &8892391023680685634
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -525,9 +526,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0fbb13be10948e7459ec53aaa02e1dca, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  hitPosition: {fileID: 0}
   targetIndicator: {fileID: 1715118936155210197}
   monsterName: Blopster
   monsterLevel: 0
+  attackDamage: 0
   enemyElement: 1
   elementSprites:
   - {fileID: 21300000, guid: b1e7ddba9686e764e87b228652221a61, type: 3}
@@ -584,6 +587,9 @@ MonoBehaviour:
   originalColor: {r: 0, g: 0, b: 0, a: 0}
   respawnTime: 35
   isBurning: 0
+  audioSource: {fileID: 0}
+  arrowHitEnemySound: {fileID: 0}
+  baseRunSpeed: 0
   monsterData: {fileID: 11400000, guid: f79861f3736883049b5c788c7c1aad4c, type: 2}
 --- !u!1 &2251519101906971203
 GameObject:
@@ -1088,7 +1094,7 @@ Transform:
   m_GameObject: {fileID: 6915948786915293079}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0.64, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -1133,7 +1139,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 10.1}
+  m_AnchoredPosition: {x: 0, y: 11.28}
   m_SizeDelta: {x: 250, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!223 &1307118934687162739
@@ -1658,7 +1664,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 6.500162, y: -34}
+  m_AnchoredPosition: {x: 6.500162, y: -4}
   m_SizeDelta: {x: 600, y: 300}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &3595444421998339853

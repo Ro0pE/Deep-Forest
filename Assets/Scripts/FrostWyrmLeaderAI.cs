@@ -7,6 +7,7 @@ public class FrostWyrmLeaderAI : EnemyAI
     public BuffDatabase buffDatabase;
     private BuffManager buffManager;
     public bool playerSlowed = false;
+ 
 
 
 
@@ -43,7 +44,7 @@ public class FrostWyrmLeaderAI : EnemyAI
                     {
                         // Hyökkäyksen suorittaminen
                         IcyTouch();
-                        playerHealth.TakeDamage(attackDamage);  // Vahingon tekeminen pelaajalle
+                        playerHealth.TakeDamage(enemyHealth.attackDamage);  // Vahingon tekeminen pelaajalle
                         Debug.Log("FrostWyrmLeader teki lisävahinkoa!");
                     }
                 }

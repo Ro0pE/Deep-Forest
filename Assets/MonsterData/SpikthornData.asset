@@ -13,13 +13,14 @@ MonoBehaviour:
   m_Name: SpikthornData
   m_EditorClassIdentifier: 
   monsterName: Spikthorn
-  minLevel: 3
-  maxLevel: 6
+  minLevel: 4
+  maxLevel: 9
+  baseAtk: 2
   prefabPath: Spikthorn
   enemySprite: {fileID: 21300000, guid: ec26a6c4c1a68754c900635119bb8c62, type: 3}
   enemyElement: 2
-  baseHealth: 11
-  experiencePoints: 20
+  baseHealth: 25
+  experiencePoints: 15
   damageModifiersList:
   - element: 0
     modifier: 1.5
@@ -29,7 +30,9 @@ MonoBehaviour:
   - itemName: Minor Healing Potion
     dropChance: 777
     itemType: Potion
+    quantity: 2
   - itemName: Minor Mana Potion
     dropChance: 555
     itemType: Potion
+    quantity: 3
   killQuestName: 

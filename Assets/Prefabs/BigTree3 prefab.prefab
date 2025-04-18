@@ -24,6 +24,14 @@ PrefabInstance:
       propertyPath: m_LODs.Array.data[2].screenRelativeHeight
       value: 0.072010785
       objectReference: {fileID: 0}
+    - target: {fileID: 3250319290864036611, guid: b301f4de14cf412c8857d8e228bdc19e, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 5250080241795016352, guid: b301f4de14cf412c8857d8e228bdc19e, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
     - target: {fileID: 5910586693816138041, guid: b301f4de14cf412c8857d8e228bdc19e, type: 3}
       propertyPath: m_LocalPosition.x
       value: 439.5
@@ -64,9 +72,21 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6398321414249761922, guid: b301f4de14cf412c8857d8e228bdc19e, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
     - target: {fileID: 6434887286772458371, guid: b301f4de14cf412c8857d8e228bdc19e, type: 3}
       propertyPath: m_Name
       value: BigTree3 prefab
+      objectReference: {fileID: 0}
+    - target: {fileID: 6434887286772458371, guid: b301f4de14cf412c8857d8e228bdc19e, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 8424148896754554221, guid: b301f4de14cf412c8857d8e228bdc19e, type: 3}
+      propertyPath: m_Layer
+      value: 7
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

@@ -5,206 +5,188 @@ using UnityEngine.UI;
 
 public class EmberWyrmLeaderAI : EnemyAI
 {
-    public PlayerMovement playerMovement;
     public BuffDatabase buffDatabase;
     private BuffManager buffManager;
-    public bool playerSlowed = false;
-    public Image castBar; // Viittaus CastBar-kuvakkeeseen
-    public TextMeshProUGUI castTimeText; // Viittaus CastBarin ajan näyttöön
+    public Image castBar;
+    public TextMeshProUGUI castTimeText;
     public TextMeshProUGUI castBarSkillText;
     public GameObject enemyCastBarPanel;
-    [Header("Fire Ball")]
-    public float fireBallCooldownTimer = 10f;
-    public float fireBallTimer = 0f;
-    public float fireBallChannelTime = 4f;
-    public bool isCastingFireBall = false;
-    public GameObject frostSpellPrefab;
-    public Transform castPoint; // Paikka, josta projektiili syntyy
-
-
+    public EnemySkillManager enemySkillManager;
+    public float fireBoltCooldown = 4f;
+    public float fireChargeCooldown = 15f;
+    public float fireBoltTimer;
+    public float fireChargeTimer;
+    public float fireBoltCastTime = 2f;
+    public float fireChargeCastTime = 1f;
+    public float fireBuffTimer;
+    public float fireBuffCooldown = 7f;
+    public float fireBuffCastTime = 1.5f;
 
 
     void Start()
     {
         base.Start();
-        buffManager = FindObjectOfType<BuffManager>();
-        playerMovement = FindObjectOfType<PlayerMovement>();
+        fireBoltTimer = fireBoltCooldown;
+        fireChargeTimer = fireChargeCooldown;
+        fireBuffTimer = fireBuffCooldown;
     }
+
     void Update()
     {
-        fireBallTimer += Time.deltaTime;
-        if (distanceToPlayer <= detectionRange)
-        {
-            
-            if (fireBallTimer >= fireBallCooldownTimer && !isCastingFireBall)
-            {
-                StartCoroutine(FireBallCasting());
-            }
-        } 
         base.Update();
-        
-   
-    }
 
-    public override void AttackPlayer()
-    {
-        // Mukautettu hyökkäyslogiikka
-        float distanceToPlayer = Vector3.Distance(player.position, transform.position);
-
-        if (distanceToPlayer <= attackRange) // Jos pelaaja on hyökkäysetäisyydellä
+        fireBoltTimer -= Time.deltaTime;
+        fireChargeTimer -= Time.deltaTime;
+        fireBuffTimer -= Time.deltaTime;
+        if (enemyHealth.isStunned || isCasting)
         {
-            Vector3 directionToPlayer = (player.position - transform.position).normalized;
-
-            Ray ray = new Ray(transform.position, directionToPlayer);
-            RaycastHit hit;
-
-            if (Physics.Raycast(ray, out hit, attackRange, playerLayer))
-            {
-                if (hit.collider.CompareTag("Player"))
-                {
-                    if (enemyHealth.isDead)
-                    {
-                        return;
-                    }
-                    else
-                    {
-                        // Hyökkäyksen suorittaminen
-                        
-                        playerHealth.TakeDamage(attackDamage);  // Vahingon tekeminen pelaajalle
-                        Debug.Log("FrostWyrmLeader teki lisävahinkoa!");
-                    }
-                }
-            }
+            return;
         }
-    }
+        float distanceToPlayer = Vector3.Distance(playerHealth.transform.position, transform.position);
 
-    public void ApplySlowEffect(float slowEffect)
-    {
-        Debug.Log("Apply slow");
-        float playerSlowedSpeed = playerMovement.moveSpeed * slowEffect;
-        playerMovement.SetPlayerSpeed(playerSlowedSpeed);
-    }
-
-    public void RemoveSlowEffect()
-    {
-        Debug.Log("Remove slow");
-        playerSlowed = false;
-        playerMovement.ReturnPlayerSpeed();
-    }
-
-    public void IcyTouch()
-    {
-        if (!playerSlowed)  // Varmistetaan, että hidastusta ei ole jo sovellettu
-        {
-            Buff slowBuffData = buffDatabase.GetBuffByName("Slow");
-            if (slowBuffData == null)
-            {
-                Debug.LogError("Slow buff not found in the BuffDatabase.");
-                return;
-            }
-
-            Buff slowBuff = new Buff(
-                slowBuffData.name,                // Buffin nimi
-                7,                                // Modattu kesto
-                slowBuffData.isStackable,         // Voiko pinota
-                slowBuffData.stacks,
-                slowBuffData.maxStacks,              // Pinojen määrä
-                slowBuffData.buffIcon,            // Kuvake
-                BuffType.Debuff,                  // Buffin tyyppi
-                slowBuffData.damage,
-                slowBuffData.effectText,
-                slowBuffData.effectValue,         // Hidastusprosentti
-                () => ApplySlowEffect(slowBuffData.effectValue),  // Efektin soveltaminen
-                RemoveSlowEffect                  // Efektin poistaminen
-            );
-
-            if (slowBuff == null)
-            {
-                Debug.LogError("Slow buff creation failed!");
-            }
-            else
-            {
-                buffManager.AddBuff(slowBuff);
-                playerSlowed = true;
-            }
-        }
-    }
-    public IEnumerator FireBallCasting()
-    {
-        Debug.Log("Casting fireball");
-        enemyCastBarPanel.SetActive(true);
-        animator.SetTrigger("isCasting");
-        enemyHealth.isInterrupted = false;
-        fireBallTimer = 0f;
-        isCastingFireBall = true;
-        //agent.isStopped = true;
-        agent.velocity = Vector3.zero; // Aseta nopeus nollaan
-        agent.acceleration = 0f;      // Estä hidastuva liike
-        castBarSkillText.text = "Fire Ball";
-        castBar.fillAmount = 1f;
-        castBar.gameObject.SetActive(true);
-        float elapsed = 0f;
-
-        // Kun castaus keskeytetään, estä debuffin asettaminen
-        while (elapsed < fireBallChannelTime && !enemyHealth.isInterrupted)
+        if (distanceToPlayer < detectionRange)
         {
             FacePlayer();
+            Enemy enemy = enemyHealth as Enemy;
 
-            elapsed += Time.deltaTime;
-            castBar.fillAmount = 1f - (elapsed / fireBallChannelTime); // Päivitä CastBar
-            if (castTimeText != null)
+            // Lähitaisteluetäisyys → käytetään vain basea ja debuffia
+            if (distanceToPlayer <= attackRange)
             {
-                castTimeText.text = $"{Mathf.Max(0f, fireBallChannelTime - elapsed):0.0} s"; // Näytä jäljellä oleva aika
+                if (fireBuffTimer <= 0f && enemy.monsterData.skills.Contains("Fire Debuff") && !isCasting)
+                {
+                    Debug.Log("Burning heartin aika (lähellä)");
+                    StartCoroutine(FireDebuff());
+                }
+
+                return; // Älä tee muita skillejä kun ollaan ihan lähellä
             }
 
+            // Etäisyys yli 25 yksikköä mutta vielä detect rangella
+            if (distanceToPlayer > 25f)
+            {
+                if (fireBoltTimer <= 0f && enemy.monsterData.skills.Contains("Fire Bolt") && !isCasting)
+                {
+                    Debug.Log("Fireboltin aika");
+                    StartCoroutine(CastFireBolt());
+                }
+
+                if (fireChargeTimer <= 0f && enemy.monsterData.skills.Contains("Fire Charge") && !isCasting)
+                {
+                    Debug.Log("Fire Chargen aika");
+                    enemySkillManager.ExecuteEnemySkill("Fire Charge", playerHealth, enemyHealth);
+                    fireChargeTimer = fireChargeCooldown;
+                }
+            }
+
+            // Fire Debuff toimii myös kauempana
+            if (fireBuffTimer <= 0f && enemy.monsterData.skills.Contains("Fire Debuff") && !isCasting)
+            {
+                Debug.Log("Burning heartin aika (kauempaa)");
+                StartCoroutine(FireDebuff());
+            }
+        }
+    }
+
+    private IEnumerator FireDebuff()
+    {
+        animator.SetTrigger("isCasting");
+        enemyCastBarPanel.SetActive(true);
+        agent.isStopped = true;
+        isCasting = true;
+        castBarSkillText.text = "Burning Heart";
+        castBar.fillAmount = 1f;
+        castBar.gameObject.SetActive(true);
+
+        float elapsed = 0f;
+        while (elapsed < fireBuffCastTime)
+        {
+            if (enemyHealth.isInterrupted)
+            {
+                castBar.gameObject.SetActive(false);
+                isCasting = false;
+                yield break; // Lopeta coroutine heti
+            }
+
+            elapsed += Time.deltaTime;
+            castBar.fillAmount = 1f - (elapsed / fireBuffCastTime);
+            if (castTimeText != null)
+            {
+                castTimeText.text = $"{Mathf.Max(0f, fireBuffCastTime - elapsed):0.0} s";
+            }
             yield return null;
         }
 
-        // Jos castaus keskeytettiin, estä debuffin asettaminen
-        if (enemyHealth.isInterrupted)
+        castBar.gameObject.SetActive(false);
+
+        if (!enemyHealth.isInterrupted)
         {
-            Debug.Log("SKILL INTERRUPTED WOHOO!!");
-            castBar.fillAmount = 1f;
-            castTimeText.text = "";
-            castBarSkillText.text = "Interrupted";
-            agent.isStopped = false;
-            agent.acceleration = 95f; // Palauta alkuperäinen kiihtyvyys
-            isCastingFireBall = false;
-            yield return new WaitForSeconds(1);
-            castBar.gameObject.SetActive(false);
-         
-            yield break; // Lopeta korutiini, jotta ei aseteta debuffia
+            enemySkillManager.ExecuteEnemySkill("Fire Debuff", playerHealth, enemyHealth);
+            fireBuffTimer = fireBuffCooldown;
         }
 
-        castBar.fillAmount = 0f;
-        castBarSkillText.text = "";
-        castBar.gameObject.SetActive(false);
+        isCasting = false;
         agent.isStopped = false;
-        agent.acceleration = 95f; // Palauta alkuperäinen kiihtyvyys
-        isCastingFireBall = false;
-        enemyCastBarPanel.SetActive(false);
-
-        // Aloita polttovahinko hyökkäys
-       
-        FireBall();
     }
 
-    public void FireBall()
+
+    private IEnumerator CastFireBolt()
     {
-        Debug.Log("Fireball Inc!");
-        Vector3 spawnPosition = castPoint.position + castPoint.forward * 0.5f + castPoint.up * 3.5f;
-        GameObject projectile = Instantiate(frostSpellPrefab, spawnPosition, Quaternion.identity);
-        projectile.GetComponent<Projectile>().Initialize(player.transform);
+        animator.SetTrigger("isCasting");
+        enemyCastBarPanel.SetActive(true);
+        agent.isStopped = true;
+        isCasting = true;
+        castBarSkillText.text = "Fire Bolt";
+        castBar.fillAmount = 1f;
+        castBar.gameObject.SetActive(true);
 
+        float elapsed = 0f;
+        while (elapsed < fireBoltCastTime)
+        {
+            if (enemyHealth.isInterrupted)
+            {
+                castBar.gameObject.SetActive(false);
+                isCasting = false;
+                yield break; // Keskeytä heti
+            }
+
+            elapsed += Time.deltaTime;
+            castBar.fillAmount = 1f - (elapsed / fireBoltCastTime);
+            if (castTimeText != null)
+            {
+                castTimeText.text = $"{Mathf.Max(0f, fireBoltCastTime - elapsed):0.0} s";
+            }
+            yield return null;
+        }
+
+        castBar.gameObject.SetActive(false);
+
+        // Jos ei keskeytetty, suorita skilli
+        if (!enemyHealth.isInterrupted)
+        {
+            enemySkillManager.ExecuteEnemySkill("Fire Bolt", playerHealth, enemyHealth);
+            fireBoltTimer = fireBoltCooldown;
+        }
+
+        isCasting = false;
+        agent.isStopped = false;
     }
-        void FacePlayer()
+
+
+
+    void FacePlayer()
     {
         Vector3 direction = (player.position - transform.position).normalized;
-        direction.y = 0; // Poistetaan pystysuuntainen komponentti, jotta vihollinen ei kallistu.
+        direction.y = 0;
         if (direction.magnitude > 0.1f)
         {
             Quaternion lookRotation = Quaternion.LookRotation(direction);
-            transform.rotation = Quaternion.Slerp(transform.rotation, lookRotation, Time.deltaTime * 10f); // Sulava käännös
+            transform.rotation = Quaternion.Slerp(transform.rotation, lookRotation, Time.deltaTime * 10f);
         }
+    }
+
+    bool CanSeePlayer()
+    {
+        // Esimerkki näkyvyystarkistus (voit käyttää omiasi)
+        return Vector3.Distance(transform.position, player.position) < 30f;
     }
 }

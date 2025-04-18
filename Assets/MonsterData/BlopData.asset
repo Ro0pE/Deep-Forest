@@ -15,11 +15,12 @@ MonoBehaviour:
   monsterName: Blop
   minLevel: 1
   maxLevel: 3
+  baseAtk: 3
   prefabPath: Blop
   enemySprite: {fileID: 21300000, guid: 63df9767b36fb9040bf1117522722c72, type: 3}
   enemyElement: 2
   baseHealth: 10
-  experiencePoints: 50
+  experiencePoints: 6888
   damageModifiersList:
   - element: 0
     modifier: 1.5
@@ -29,19 +30,26 @@ MonoBehaviour:
   - itemName: Minor Healing Potion
     dropChance: 66
     itemType: Potion
+    quantity: 3
   - itemName: Minor Mana Potion
     dropChance: 88
     itemType: Potion
+    quantity: 2
   - itemName: Bow
     dropChance: 66
     itemType: Equipment
+    quantity: 1
   - itemName: Gloo
     dropChance: 450
     itemType: Misc
+    quantity: 1
   - itemName: Lost Necklace
     dropChance: 999
     itemType: Misc
+    quantity: 1
   - itemName: Water Crystal
     dropChance: 777
     itemType: Misc
+    quantity: 1
   killQuestName: 
+  skills: []
