@@ -8,6 +8,8 @@ public class PlayerMovement : MonoBehaviour
     public bool isGrounded; // Onko pelaaja maassa?
     public float originalSpeed = 10f;
     public float castingMoveSpeed = 5f;
+    private float addedSpeed = 0f;
+    private float reducedSpeed = 0f;
     public LayerMask groundLayer; // Maan tarkistamiseen
 
     private CharacterController controller;
@@ -221,15 +223,34 @@ public class PlayerMovement : MonoBehaviour
 
     public void SetPlayerSpeed(float speed)
     {
-        Debug.Log("Setting up player speed");
-        moveSpeed = speed;
+        addedSpeed += speed; // Lisää buffien arvoa
+        UpdateMoveSpeed();
     }
 
-    public void ReturnPlayerSpeed()
+    public void ReducePlayerSpeed(float speed)
     {
-        Debug.Log("Returning player speed");
-        moveSpeed = originalSpeed;
+        reducedSpeed = speed; // Asetetaan suoraan, ei lisätä
+        UpdateMoveSpeed();
     }
+
+    public void ReturnPlayerSpeed(float speed) // Poistaa vain tietyn määrän debuffeista
+    {
+        reducedSpeed = 0; // Vähentää debuffeista annetun määrän
+        UpdateMoveSpeed();
+    }
+
+    public void ReturnSpeedBuff(float speed) // Poistaa vain tietyn määrän buffeista
+    {
+        addedSpeed -= speed; // Vähentää buffeista annetun määrän
+        UpdateMoveSpeed();
+    }
+
+    private void UpdateMoveSpeed()
+    {
+        moveSpeed = originalSpeed + addedSpeed - reducedSpeed;
+    }
+
+
 
     public bool IsPlayerGrounded()
     {

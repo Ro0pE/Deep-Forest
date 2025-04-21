@@ -159,7 +159,7 @@ public class PlayerHealth : MonoBehaviour
         animator.ResetTrigger("isHit");
     }
 
-    public void TakeDamage(float damage)
+    public void TakeDamage(float damage, string skillName = null)
     {
         if (checkDodge())
         {
@@ -202,7 +202,7 @@ public class PlayerHealth : MonoBehaviour
         StartCoroutine(ResetHitTrigger());
         }
     }
-    public void TakeSpellDamage(int damage)
+    public void TakeSpellDamage(int damage, string skillName = null)
     {
         float calculateDef = (defence/100) - 1; 
         takeDamageAmount = Mathf.RoundToInt(damage * Mathf.Abs(calculateDef));
@@ -217,7 +217,7 @@ public class PlayerHealth : MonoBehaviour
     
         
         // Näytetään damage teksti
-        playerHealthBar.ShowTextForDuration(playerHealthBar.takeDamageText, correctDamageText);
+        playerHealthBar.ShowTextForDuration(playerHealthBar.takeDamageText, correctDamageText, skillName);
 
         if (currentHealth <= 0)
         {
@@ -247,7 +247,7 @@ public class PlayerHealth : MonoBehaviour
     currentHealth = maxHealth;
     currentMana = maxMana;
 
-    Debug.Log("Player has respawned with full health and SP.");
+  
 
     // Annetaan pelaajalle pieni "invincibility frame" syntymän jälkeen
     //StartCoroutine(GrantTemporaryInvincibility());

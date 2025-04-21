@@ -57,12 +57,12 @@ public class Inventory : MonoBehaviour
         AddItemToInventoryByName("Frost Arrow", 1000);
         AddItemToInventoryByName("Shoulders of the bear", 1);
         AddItemToInventoryByName("Tunica Of Quickness", 1); 
-     /*   AddItemToInventoryByName("Novice Hat", 1);
+         AddItemToInventoryByName("Novice Hat", 1);
         AddItemToInventoryByName("Worn Shirt", 1);
         AddItemToInventoryByName("Training Sword", 1);
         AddItemToInventoryByName("Work Shoes", 1);
         AddItemToInventoryByName("Shoulders of the bear", 1);
-        AddItemToInventoryByName("Tunica Of Quickness", 1); */
+        AddItemToInventoryByName("Tunica Of Quickness", 1); 
     }
 
     // Async method to load the database

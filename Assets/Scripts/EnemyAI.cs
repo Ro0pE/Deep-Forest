@@ -126,7 +126,6 @@ public class EnemyAI : MonoBehaviour
 
     public virtual void AttackPlayer()
     {
-        Debug.Log("Attack");
         animator.SetTrigger("isAttacking");
         isAttacking = true;
         isOnCooldown = true;

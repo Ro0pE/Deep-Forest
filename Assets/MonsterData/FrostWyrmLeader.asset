@@ -10,21 +10,21 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d9da3110cd8b0874cb5d33bac446840d, type: 3}
-  m_Name: EmberWyrmLeader
+  m_Name: FrostWyrmLeader
   m_EditorClassIdentifier: 
-  monsterName: Ember Wyrm Leader
-  minLevel: 40
-  maxLevel: 40
+  monsterName: Frost Wyrm Leader
+  minLevel: 45
+  maxLevel: 45
   baseAtk: 40
-  prefabPath: EmberWyrmLeader
+  prefabPath: FrostWyrmLeader
   enemySprite: {fileID: 0}
-  enemyElement: 0
-  baseHealth: 500
-  experiencePoints: 20
+  enemyElement: 1
+  baseHealth: 950
+  experiencePoints: 100
   damageModifiersList: []
   lootItems: []
   killQuestName: 
   skills:
-  - Fire Bolt
-  - Fire Blast
-  - Fire Debuff
+  - Frost Charge
+  - Glacial Nova
+  - Icy Prison

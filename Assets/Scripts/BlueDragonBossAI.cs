@@ -257,12 +257,12 @@ public class BlueDragonBossAI : MonoBehaviour
     public void ApplySlowEffect(float slowEffect){
         Debug.Log("Apply slow");
         float playerSlowedSpeed = playerMovement.moveSpeed * slowEffect;
-        playerMovement.SetPlayerSpeed(playerSlowedSpeed);
+       // playerMovement.SetPlayerSpeed(playerSlowedSpeed);
     }
     public void RemoveSlowEffect(){
         Debug.Log("Remove slow");
         playerSlowed = false;
-        playerMovement.ReturnPlayerSpeed();
+       // playerMovement.ReturnPlayerSpeed();
     }
     public void IcyTouch()
     {

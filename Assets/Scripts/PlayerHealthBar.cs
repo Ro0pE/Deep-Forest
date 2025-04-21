@@ -106,108 +106,157 @@ public class PlayerHealthBar : MonoBehaviour
     }
 
     // Tämä metodi näyttää tekstin ja piilottaa sen 2 sekunnin kuluttua
-public void ShowTextForDuration(TextMeshProUGUI textElement, float amount)
+public void ShowTextForDuration(TextMeshProUGUI textElement, float amount, string skillName = null)
 {
-    if (amount == 0) return; // Jos arvo on 0, älä näytä tekstiä
+    if (amount == 0) return;
 
+    // DAMAGE
     if (textElement == playerHealthBar.takeDamageText)
     {
         TextMeshProUGUI newTextElement = Instantiate(takeDamageText, combatText);
         newTextElement.gameObject.SetActive(true);
         newTextElement.text = $"{amount:F0}";
         newTextElement.color = Color.red;
-        StartCoroutine(MoveTextUp(newTextElement));
-        StartCoroutine(HideTextAfterDelay(newTextElement));
+
+        float damageScale = Mathf.Clamp(amount, 1f, 10000f);
+        float fontSize = Mathf.Lerp(18f, 50f, (damageScale - 1f) / (10000f - 1f));
+        newTextElement.fontSize = fontSize;
+
+        if (!string.IsNullOrEmpty(skillName))
+        {
+            newTextElement.text = $"{newTextElement.text} <color=#FFFFFF>(</color><color=#FFA500>{skillName}</color><color=#FFFFFF>)</color>";
+        }
+
+        StartCoroutine(MoveTextUp(newTextElement, amount));
+        StartCoroutine(HideTextAfterDelay(newTextElement, amount));
     }
-    else
-    { 
-        if (textElement == hpRegenText && amount > 0)
+
+    // HP REGEN
+    else if (textElement == hpRegenText && amount > 0)
+    {
+        TextMeshProUGUI newTextElement = Instantiate(hpRegenText, combatText);
+        newTextElement.text = $"+{amount:F0}";
+        newTextElement.color = Color.green;
+
+        float regenScale = Mathf.Clamp(amount, 1f, 10000f);
+        float fontSize = Mathf.Lerp(18f, 50f, (regenScale - 1f) / (10000f - 1f));
+        newTextElement.fontSize = fontSize;
+
+        if (!string.IsNullOrEmpty(skillName))
         {
-            TextMeshProUGUI newTextElement = Instantiate(hpRegenText, combatText);
-            newTextElement.text = $"+{amount:F0}"; // Lisätään "+" vain jos arvo > 0
-            newTextElement.gameObject.SetActive(true);
-            StartCoroutine(MoveTextUp(newTextElement));
-            StartCoroutine(HideRegenAfterDelay(newTextElement));
+            newTextElement.text = $"<color=#FFFFFF>(</color><color=#FFA500>{skillName}</color><color=#FFFFFF>)</color> {newTextElement.text}";
         }
-        if (textElement == manaRegenText && amount > 0)
+
+        newTextElement.gameObject.SetActive(true);
+        StartCoroutine(MoveTextUp(newTextElement, amount));
+        StartCoroutine(HideRegenAfterDelay(newTextElement, amount));
+    }
+
+    // MANA REGEN
+    else if (textElement == manaRegenText && amount > 0)
+    {
+        TextMeshProUGUI newTextElement = Instantiate(manaRegenText, combatText);
+        newTextElement.text = $"+{amount:F0}";
+        newTextElement.color = new Color(0.2f, 0.6f, 1f); // Mana-väritys
+
+        float regenScale = Mathf.Clamp(amount, 1f, 10000f);
+        float fontSize = Mathf.Lerp(18f, 50f, (regenScale - 1f) / (10000f - 1f));
+        newTextElement.fontSize = fontSize;
+
+        if (!string.IsNullOrEmpty(skillName))
         {
-            TextMeshProUGUI newTextElement = Instantiate(manaRegenText, combatText);
-            newTextElement.text = $"+{amount:F0}"; 
-            newTextElement.gameObject.SetActive(true);
-            StartCoroutine(MoveTextUp(newTextElement));
-            StartCoroutine(HideRegenAfterDelay(newTextElement));
+            newTextElement.text = $"<color=#FFFFFF>(</color><color=#FFA500>{skillName}</color><color=#FFFFFF>)</color> {newTextElement.text}";
         }
+
+        newTextElement.gameObject.SetActive(true);
+        StartCoroutine(MoveTextUp(newTextElement, amount));
+        StartCoroutine(HideRegenAfterDelay(newTextElement, amount));
     }
 }
 
-    private IEnumerator HideRegenAfterDelay(TextMeshProUGUI textElement)
+
+
+    private IEnumerator HideRegenAfterDelay(TextMeshProUGUI textElement, float amount)
     {
-        // Odottaa 3 sekuntia ja piilottaa sitten tekstin
-        yield return new WaitForSeconds(1f);
+        // Skaalaa viive amountin mukaan (1 -> 0.5s, 1000 -> 2.5s)
+        float duration = Mathf.Lerp(2.5f, 4.5f, Mathf.Clamp(amount, 0f, 10000f) / 10000f);
+
+        yield return new WaitForSeconds(duration);
         
         // Piilota teksti
         textElement.gameObject.SetActive(false);
+
+        // Tuhotaan, jos ei ole alkuperäinen prefab
         if (textElement != hpRegenText && textElement.transform.parent == combatText)
         {
             Destroy(textElement.gameObject);
         }
+
         if (textElement != manaRegenText && textElement.transform.parent == combatText)
         {
             Destroy(textElement.gameObject);
         }
-
-
     }
 
-private IEnumerator HideTextAfterDelay(TextMeshProUGUI textElement)
-{
-    // Odottaa 3 sekuntia ja piilottaa sitten tekstin
-    yield return new WaitForSeconds(0.45f);
-    
-    // Piilota teksti
-    textElement.gameObject.SetActive(false);
 
-    // Tuhotaan tekstielementti, jos se on instanssi eikä alkuperäinen (takeDamageText)
-    if (textElement != takeDamageText && textElement.transform.parent == combatText)
+    private IEnumerator HideTextAfterDelay(TextMeshProUGUI textElement, float amount)
     {
-        Destroy(textElement.gameObject);
+        float duration = Mathf.Lerp(2.5f, 4.5f, Mathf.Clamp(amount, 0f, 10000f) / 10000f);
+        yield return new WaitForSeconds(duration);
+
+        textElement.gameObject.SetActive(false);
+
+        if (textElement != takeDamageText && textElement.transform.parent == combatText)
+        {
+            Destroy(textElement.gameObject);
+        }
+    }
+
+private IEnumerator MoveTextUp(TextMeshProUGUI textElement, float amount)
+{
+    if (textElement != null)
+    {
+        // Satunnainen lähtösiirto, jotta tekstit eivät ole täysin päällekkäin
+        float initialYOffset = Random.Range(-2f, 2f);
+        float initialXOffset = Random.Range(-1f, 1f);
+
+        Vector3 originalPosition = textElement.rectTransform.position + new Vector3(initialXOffset, initialYOffset, 0f);
+
+        float horizontalOffset = Random.Range(-2f, 2f);
+        float verticalOffset = Random.Range(8f, 15f);
+
+        float duration = 2f;
+        Vector3 targetPosition = originalPosition + new Vector3(horizontalOffset, verticalOffset, 0);
+
+        float elapsedTime = 0f;
+        Color originalColor = textElement.color;
+
+        while (elapsedTime < duration)
+        {
+            if (textElement == null)
+                yield break;
+
+            float t = elapsedTime / duration;
+            textElement.rectTransform.position = Vector3.Lerp(originalPosition, targetPosition, t);
+
+            if (elapsedTime > 1f)
+            {
+                float fadeT = (elapsedTime - 1f) / 1f;
+                textElement.color = new Color(originalColor.r, originalColor.g, originalColor.b, Mathf.Lerp(1f, 0f, fadeT));
+            }
+            else
+            {
+                textElement.color = originalColor;
+            }
+
+            elapsedTime += Time.deltaTime;
+            yield return null;
+        }
+
+        textElement.color = new Color(originalColor.r, originalColor.g, originalColor.b, 0f);
     }
 }
 
-    // Liikuttaa Take Damage -tekstiä ylöspäin hitaasti
-    private IEnumerator MoveTextUp(TextMeshProUGUI textElement)
-    {
-        if (textElement != null)
-            {
-                Vector3 originalPosition = textElement.rectTransform.position;
 
-                // Määritä offset arvot
-                float horizontalOffset = isNextRight ? 4f : -4f; // Siirtymä oikealle tai vasemmalle
-                float verticalOffset = 1.5f; // Siirtymä ylöspäin
-                Vector3 targetPosition = originalPosition + new Vector3(horizontalOffset, verticalOffset, 0);
-                isNextRight = !isNextRight;
-
-                float elapsedTime = 0;
-                float duration = 3.2f; // Kesto, kuinka nopeasti teksti liikkuu
-
-                while (elapsedTime < duration)
-                {
-                    if (textElement == null)
-                    {
-                        yield break; // Lopetetaan, jos objekti on tuhottu
-                    }
-
-                    textElement.rectTransform.position = Vector3.Lerp(originalPosition, targetPosition, elapsedTime / duration);
-                    elapsedTime += Time.deltaTime;
-                    yield return null;
-                }
-
-                // Lopullinen tarkistus
-                if (textElement != null)
-                {
-                    textElement.rectTransform.position = targetPosition;
-                }
-            }
-        }
 
 }

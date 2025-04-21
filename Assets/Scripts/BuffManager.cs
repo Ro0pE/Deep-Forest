@@ -17,8 +17,10 @@ public class BuffManager : MonoBehaviour
     public PlayerMovement playerMovement;
     public PlayerAttack playerAttack;
 
+
     private void Start()
     {
+
         playerAttack = GetComponent<PlayerAttack>();
         playerHealth = GetComponent<PlayerHealth>();
         playerMovement = GetComponent<PlayerMovement>();
@@ -26,13 +28,19 @@ public class BuffManager : MonoBehaviour
 
 public void AddBuff(Buff buff)
 {
+
     Buff existingBuff = activeBuffs.Find(b => b.name == buff.name);
     
     if (existingBuff != null)
     {
+    
         if (buff.isStackable)
         {
-            existingBuff.stacks++;
+            if (existingBuff.stacks < existingBuff.maxStacks)
+            {
+               
+                existingBuff.stacks++;
+            }
             existingBuff.duration = buff.duration;
             existingBuff.applyEffect();
             UpdateEffectText(existingBuff);
@@ -46,15 +54,16 @@ public void AddBuff(Buff buff)
     }
     else
     {
-        Debug.Log("Buff nimi : " + buff.name);
-        Debug.Log("Details: " + buff);
+       
+        
+    
         activeBuffs.Add(buff);
         buff.applyEffect();
         UpdateEffectText(buff);
 
         if (buff.isStackable)
         {
-            buff.stacks = 1; // Aloita yhdellä stackilla
+           // buff.stacks = 1; // Aloita yhdellä stackilla
         }
 
         // Luo ja tallenna UI-elementti

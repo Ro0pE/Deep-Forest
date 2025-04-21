@@ -117,14 +117,15 @@ private void RemoveBleedEffect(EnemyHealth targetEnemy, Skill skill)
 }
     private void ApplyWindrunnerEffect(Skill skill)
     {
-        windrunnerSpeed = playerMovement.originalSpeed * 2f;
+        windrunnerSpeed = playerMovement.originalSpeed * 1f;
         playerMovement.SetPlayerSpeed(windrunnerSpeed);
         
     }
 
     private void RemoveWindrunnerEffect(Skill skill)
     {
-        playerMovement.ReturnPlayerSpeed();
+        windrunnerSpeed = playerMovement.originalSpeed * 1f;
+        playerMovement.ReturnSpeedBuff(windrunnerSpeed);
     }
 private void ApplySlowEffect(EnemyHealth targetEnemy)
 {
